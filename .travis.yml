@@ -1,4 +1,8 @@
 language: java
-sudo: false
-jdk: oraclejdk8
-install: true
+podfile: discovery-service/.travis.yml
+env: SAMPLE=discovery
+
+matrix:
+  include:
+  - podfile: discovery-service/Podfile
+    env: SAMPLE=Discover

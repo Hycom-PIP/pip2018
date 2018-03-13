@@ -3,5 +3,6 @@ language: java
 matrix:
   include:
     env: SAMPLE=discovery-service
+    env: SAMPLE=edge-service
 before_install:
   -cd $SAMPLE

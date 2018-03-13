@@ -4,5 +4,5 @@ env: SAMPLE=discovery
 
 matrix:
   include:
-  - podfile: discovery-service/Podfile
+  - podfile: discovery-service/.travis.yml
     env: SAMPLE=Discover

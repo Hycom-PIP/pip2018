@@ -19,6 +19,8 @@ zuul:
     hello:
       path: /hello/**
       serviceId: hello-service
+#  include-debug-header: true
+
 
 ribbon:
   eureka:
@@ -28,7 +30,7 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-    registerWithEureka: true
+    registerWithEureka: false
 
 server:
   port: 8765

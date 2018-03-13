@@ -1,7 +1,8 @@
 language: java
+install: true
 
 matrix:
   include:
-    env: SAMPLE=edge-service
+    env: SAMPLE=discovery-service
 before_install:
   -cd $SAMPLE

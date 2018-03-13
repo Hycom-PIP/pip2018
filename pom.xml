@@ -15,6 +15,28 @@
 		<artifactId>spring-cloud-starter-parent</artifactId>
 		<version>Brixton.RELEASE</version>
 	</parent>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<finalName>helloworld</finalName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<properties>
 		<spring.boot>1.4.2.RELEASE</spring.boot>

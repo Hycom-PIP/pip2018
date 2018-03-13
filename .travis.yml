@@ -1,8 +1,7 @@
 language: java
-podfile: discovery-service/.travis.yml
-env: SAMPLE=discovery
 
 matrix:
   include:
-  - podfile: discovery-service/.travis.yml
-    env: SAMPLE=Discover
+    env: SAMPLE=discovery-service
+before_install:
+  -cd $SAMPLE

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.hycom.ip2017.searchengine.hello.service.HelloService;
 
 @RestController
-@RequestMapping("/hello")
 public class HelloController {
 
     @Autowired

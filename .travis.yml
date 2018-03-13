@@ -2,8 +2,7 @@ language: java
 
 matrix:
   include:
-    -
-      env: SAMPLE=discovery-service
+    - env: SAMPLE=discovery-service
 
 before_install:
   - cd $SAMPLE

@@ -1,7 +1,12 @@
 language: java
-sudo: false
-jdk: oraclejdk8
-install: true
-deploy:
-  on:
-    repo: Hycom-PIP/pip2018/discovery-service
+cache:
+  - bundler
+  - cocoapods
+
+matrix:
+  include:
+    - podfile: discovery-service/Podfile
+      env: SAMPLE=Discovery-service
+
+before_install:
+  - cd $SAMPLE

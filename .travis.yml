@@ -1,11 +1,8 @@
 language: java
-cache:
-  - bundler
-  - cocoapods
 
 matrix:
   include:
-    - podfile: discovery-service/Podfile
+    - 
       env: SAMPLE=Discovery-service
 
 before_install:

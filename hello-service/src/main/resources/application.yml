@@ -1,4 +1,10 @@
 spring:
+  profiles:
+    active: development
+---
+
+spring:
+  profiles: development
   application:
     name: hello-service
 

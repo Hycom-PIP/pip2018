@@ -1,9 +1,15 @@
-info:
-  component: Edge Server
+spring:
+  profiles:
+    active: development
+---
 
 spring:
+  profiles: development
   application:
     name: gateway-server
+
+info:
+  component: Edge Server
 
 endpoints:
   restart:

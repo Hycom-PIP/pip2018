@@ -1,8 +1,16 @@
 language: java
+sudo: false
+install: true
+jdk: oraclejdk8
 
-matrix:
+jobs:
   include:
-    - env: SAMPLE=edge-service
+  - stage: Discovery Service
+    env: SAMPLE=discovery-service
+  - stage: Edge Service
+    env: SAMPLE=edge-service
+  - stage: Hello Service
+    env: SAMPLE=hello-service
 
 before_install:
-  - cd $SAMPLE
+- cd $SAMPLE

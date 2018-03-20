@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>pl.hycom.ip-2018</groupId>
-    <artifactId>search-engine</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	<groupId>pl.hycom.ip-2017</groupId>
+	<artifactId>search-engine</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-    <name>search-engine</name>
+	<name>search-engine</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-netflix</artifactId>
-                <version>1.4.3.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-netflix</artifactId>
+				<version>1.4.3.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
@@ -35,28 +35,38 @@
                 <artifactId>springfox-swagger2</artifactId>
                 <version>2.8.0</version>
             </dependency>
+		</dependencies>
+	</dependencyManagement>
 
-        </dependencies>
-    </dependencyManagement>
 
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>1.5.2.RELEASE</version>
+					<executions>
+						<execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+					<configuration>
+                        <executable>true</executable>
+                    </configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>2.0.0.RELEASE</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-
-    <modules>
-        <module>edge-service</module>
-        <module>discovery-service</module>
-        <module>hello-service</module>
-    </modules>
+	<modules>
+		<module>edge-service</module>
+		<module>discovery-service</module>
+		<module>hello-service</module>
+	</modules>
 
 
 </project>
+

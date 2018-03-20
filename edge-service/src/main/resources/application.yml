@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: development
+    active: production
 ---
 
 spring:
@@ -9,10 +9,10 @@ spring:
 
 spring:
   profiles: production
+
 zuul:
-  ignored-patterns:
-    - /**/swagger-ui.html/**
-    - /swagger-ui.html/**
+  ignoredPatterns: /**/swagger-ui.html/**, /swagger-ui.html/**, /**/v2/api-docs/**
+
 ---
 
 spring:

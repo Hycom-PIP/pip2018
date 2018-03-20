@@ -1,4 +1,4 @@
-package pl.hycom.ip2017.searchengine.hello.service;
+package pl.hycom.ip2018.searchengine.hello.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

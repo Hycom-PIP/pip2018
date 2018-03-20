@@ -5,6 +5,17 @@ spring:
 
 spring:
   profiles: development
+---
+
+spring:
+  profiles: production
+zuul:
+  ignored-patterns:
+    - /**/swagger-ui.html/**
+    - /swagger-ui.html/**
+---
+
+spring:
   application:
     name: gateway-server
 
@@ -25,8 +36,6 @@ zuul:
     hello:
       path: /hello/**
       serviceId: hello-service
-#  include-debug-header: true
-
 
 ribbon:
   eureka:

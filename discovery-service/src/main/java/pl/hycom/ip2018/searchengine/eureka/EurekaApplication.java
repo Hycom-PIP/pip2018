@@ -1,4 +1,4 @@
-package pl.hycom.ip2017.searchengine.eureka;
+package pl.hycom.ip2018.searchengine.eureka;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

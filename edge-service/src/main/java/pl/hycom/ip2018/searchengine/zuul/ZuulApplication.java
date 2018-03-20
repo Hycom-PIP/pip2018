@@ -1,4 +1,4 @@
-package pl.hycom.ip2017.searchengine.zuul;
+package pl.hycom.ip2018.searchengine.zuul;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

@@ -5,6 +5,11 @@ spring:
 
 spring:
   profiles: development
+---
+
+spring:
+  profiles: production
+---
 
 server:
     port: ${PORT:8761}

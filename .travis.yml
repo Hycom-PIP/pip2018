@@ -11,6 +11,9 @@ jobs:
     env: SAMPLE=edge-service
   - stage: Hello Service
     env: SAMPLE=hello-service
+  - stage: Main Project
+    env: SAMPLE=./
+    script: mvn test -B
 
 before_install:
 - cd $SAMPLE

@@ -5,6 +5,13 @@ spring:
 
 spring:
   profiles: development
+---
+
+spring:
+  profiles: production
+---
+
+spring:
   application:
     name: hello-service
 

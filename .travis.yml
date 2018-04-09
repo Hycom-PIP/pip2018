@@ -16,4 +16,7 @@ jobs:
     script: mvn test -B
 
 before_install:
-- cd $SAMPLE
+ - cd $SAMPLE
+
+script:
+ - mvn test

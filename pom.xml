@@ -72,6 +72,7 @@
 		<module>discovery-service</module>
 		<module>hello-service</module>
 		<module>google-search-service</module>
+		<module>wikipedia-search-service</module>
 	</modules>
 
 

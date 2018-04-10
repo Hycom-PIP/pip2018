@@ -19,4 +19,4 @@ before_install:
  - cd $SAMPLE
 
 script:
- - ant test
+ - mvn test

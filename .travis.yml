@@ -13,4 +13,7 @@ jobs:
     env: MODULE_DIR=hello-service
 
 before_install:
-- cd $MODULE_DIR
+ - cd $MODULE_DIR
+
+script:
+ - mvn test

@@ -36,6 +36,9 @@ zuul:
     hello:
       path: /hello/**
       serviceId: hello-service
+    googlesearch:
+      path: /googlesearch/**
+      serviceId: google-search-service
 
 ribbon:
   eureka:

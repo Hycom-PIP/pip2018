@@ -53,16 +53,19 @@ public class ResponsePropertiesExtractor {
             String link = (String) tempMap.get(linkKey);
             String snippet = (String) tempMap.get(snippetKey);
             Map pageMap = (Map) tempMap.get(pageMapKey);
-            List<Map> metaTags = (List<Map>) pageMap.get(metaTagsKey);
             String articleModifiedTime = null;
+            if (pageMap != null) {
+                List<Map> metaTags = (List<Map>) pageMap.get(metaTagsKey);
+                articleModifiedTime = null;
 
-            if (metaTags != null) {
-                List tempResult = metaTags
-                        .stream()
-                        .filter(o -> o.get(articleModifiedTimeKey) != null)
-                        .collect(Collectors.toList());
-                if (!tempResult.isEmpty()) {
-                    articleModifiedTime = (String) tempResult.get(0);
+                if (metaTags != null) {
+                    List tempResult = metaTags
+                            .stream()
+                            .filter(o -> o.get(articleModifiedTimeKey) != null)
+                            .collect(Collectors.toList());
+                    if (!tempResult.isEmpty()) {
+                        articleModifiedTime = (String) tempResult.get(0);
+                    }
                 }
             }
 

@@ -2,9 +2,9 @@ package pl.hycom.ip2018.searchengine.googlesearch.model;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import pl.hycom.ip2018.searchengine.googlesearch.util.ISOStringDateTypeAdapter;
+import pl.hycom.ip2018.searchengine.googlesearch.util.ISOStringZonedDateTimeTypeAdapter;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 public class Result {
 
@@ -16,7 +16,7 @@ public class Result {
     @SerializedName("snippet")
     private String snippet;
 
-    //@JsonAdapter(ISOStringDateTypeAdapter.class)
+    //@JsonAdapter(ISOStringZonedDateTimeTypeAdapter.class)
     @SerializedName("article:modified_time")
     private String timestamp;
 

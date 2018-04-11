@@ -4,5 +4,11 @@ import pl.hycom.ip2018.searchengine.googlesearch.model.AbstractGoogleSearchRespo
 
 public interface GoogleSearch {
 
-    AbstractGoogleSearchResponse test(String query);
+    /**
+     * Returns response wrapped in our type
+     *
+     * @param query search parameter from user
+     * @return AbstractGoogleSearchResponse
+     */
+    AbstractGoogleSearchResponse getResponseFromGoogleByQuery(String query);
 }

@@ -47,7 +47,7 @@ public class DefaultGoogleSearch implements GoogleSearch {
      * @return AbstractGoogleSearchResponse
      */
     @Override
-    public AbstractGoogleSearchResponse test(String query) {
+    public AbstractGoogleSearchResponse getResponseFromGoogleByQuery(String query) {
 
         logger.info("Requesting searching results for {}", query);
         AbstractGoogleSearchResponse result;

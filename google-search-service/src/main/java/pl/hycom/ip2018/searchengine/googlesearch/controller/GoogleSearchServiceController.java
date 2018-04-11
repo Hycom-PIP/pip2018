@@ -22,7 +22,7 @@ public class GoogleSearchServiceController {
      * @return AbstractGoogleSearchResponse
      */
     @RequestMapping(value = "/test1/{query}", method = GET)
-    public AbstractGoogleSearchResponse test1(@PathVariable String query) {
-        return googleSearch.test(query);
+    public AbstractGoogleSearchResponse getResponseFromGoogle(@PathVariable String query) {
+        return googleSearch.getResponseFromGoogleByQuery(query);
     }
 }

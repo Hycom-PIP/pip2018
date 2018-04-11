@@ -16,9 +16,9 @@ public class Result {
     @SerializedName("snippet")
     private String snippet;
 
-    @JsonAdapter(ISOStringDateTypeAdapter.class)
+    //@JsonAdapter(ISOStringDateTypeAdapter.class)
     @SerializedName("article:modified_time")
-    private Date timestamp;
+    private String timestamp;
 
     @SerializedName("link")
     private String url;
@@ -47,11 +47,11 @@ public class Result {
         this.snippet = snippet;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 

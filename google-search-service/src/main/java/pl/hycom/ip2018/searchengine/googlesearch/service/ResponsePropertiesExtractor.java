@@ -2,10 +2,7 @@ package pl.hycom.ip2018.searchengine.googlesearch.service;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ResponsePropertiesExtractor {
@@ -49,30 +46,24 @@ public class ResponsePropertiesExtractor {
 
         for (Map tempMap : tempList) {
             Map<String, String> singleItem = new LinkedHashMap<>();
-            String title = (String) tempMap.get(titleKey);
-            String link = (String) tempMap.get(linkKey);
-            String snippet = (String) tempMap.get(snippetKey);
-            Map pageMap = (Map) tempMap.get(pageMapKey);
-            String articleModifiedTime = null;
-            if (pageMap != null) {
-                List<Map> metaTags = (List<Map>) pageMap.get(metaTagsKey);
-                articleModifiedTime = null;
-
-                if (metaTags != null) {
-                    List tempResult = metaTags
+            singleItem.put(titleKey, (String) tempMap.get(titleKey));
+            singleItem.put(linkKey, (String) tempMap.get(linkKey));
+            singleItem.put(snippetKey, (String) tempMap.get(snippetKey));
+            Optional<Map> pageMapOpt = Optional.of((Map) tempMap.get(pageMapKey));
+            pageMapOpt.ifPresent(pageMap -> {
+                Optional<List<Map>> metaTagsOpt = Optional.of((List<Map>) pageMap.get(metaTagsKey));
+                metaTagsOpt.ifPresent(metaTags -> {
+                    List<Map> tempResult = metaTags
                             .stream()
                             .filter(o -> o.get(articleModifiedTimeKey) != null)
                             .collect(Collectors.toList());
                     if (!tempResult.isEmpty()) {
-                        articleModifiedTime = (String) tempResult.get(0);
+                        singleItem.put(articleModifiedTimeKey, (String) tempResult
+                                .get(0)
+                                .get(articleModifiedTimeKey));
                     }
-                }
-            }
-
-            singleItem.put(titleKey, title);
-            singleItem.put(linkKey, link);
-            singleItem.put(snippetKey, snippet);
-            singleItem.put(articleModifiedTimeKey, articleModifiedTime);
+                });
+            });
             items.add(singleItem);
         }
         result.put(itemsKey, items);

@@ -7,37 +7,33 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class ISOStringDateTypeAdapter extends TypeAdapter<Date> {
+public class ISOStringZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
 
-    private static final String ISO_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
-
-    private final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(ISO_DATE_FORMAT, Locale.getDefault());
+    private final DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     @Override
-    public void write(JsonWriter out, Date value) throws IOException {
+    public void write(JsonWriter out, ZonedDateTime value) throws IOException {
         if (value == null) {
             out.nullValue();
             return;
         }
-        String dateFormatAsString = SIMPLE_DATE_FORMAT.format(value);
+        String dateFormatAsString = value.format(formatter);
         out.value(dateFormatAsString);
     }
 
     @Override
-    public Date read(JsonReader in) throws IOException {
+    public ZonedDateTime read(JsonReader in) throws IOException {
         if (in.peek() == JsonToken.NULL) {
             in.nextNull();
             return null;
         }
         String json = in.nextString();
         try {
-            return SIMPLE_DATE_FORMAT.parse(json);
-        } catch (ParseException e) {
+            return ZonedDateTime.parse(json);
+        } catch (Exception e) {
             throw new JsonSyntaxException(json, e);
         }
     }

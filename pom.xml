@@ -73,6 +73,7 @@
 		<module>hello-service</module>
 		<module>google-search-service</module>
 		<module>wikipedia-search-service</module>
+		<module>local-search-service</module>
 	</modules>
 
 

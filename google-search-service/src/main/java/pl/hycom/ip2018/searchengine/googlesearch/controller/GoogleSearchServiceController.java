@@ -30,6 +30,6 @@ public class GoogleSearchServiceController {
      */
     @RequestMapping(value = "/res/{query}", method = GET)
     public ProviderResponse getResponseFromGoogle(@PathVariable String query) throws GoogleSearchException {
-        return googleSearch.getResponseFromGoogleByQuery(query);
+        return googleSearch.getResponse(query);
     }
 }

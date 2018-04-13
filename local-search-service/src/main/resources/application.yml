@@ -33,5 +33,9 @@ eureka:
 
 rest:
   api:
-    localPath: E:\working_directory\ip\data\
+    localPath: C:\Users\Durszlak\Desktop\Uczelnia\Hy\pip2018\
     infoLanguage: en
+
+
+
+

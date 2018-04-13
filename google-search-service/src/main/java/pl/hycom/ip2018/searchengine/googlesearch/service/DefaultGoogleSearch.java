@@ -35,7 +35,7 @@ public class DefaultGoogleSearch implements GoogleSearch {
      * @return GoogleSearchResponse
      */
     @Override
-    public GoogleSearchResponse getResponseFromGoogleByQuery(String query) throws GoogleSearchException {
+    public GoogleSearchResponse getResponse(String query) throws GoogleSearchException {
 
         if (log.isInfoEnabled()) {
             log.info("Requesting searching results for {}", query);

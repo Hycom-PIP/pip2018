@@ -36,6 +36,12 @@ zuul:
     hello:
       path: /hello/**
       serviceId: hello-service
+    googlesearch:
+      path: /googlesearch/**
+      serviceId: google-search-service
+    wikisearch:
+      path: /wikisearch/**
+      serviceId: wikipedia-search-service
 
 ribbon:
   eureka:

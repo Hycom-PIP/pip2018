@@ -6,14 +6,14 @@ jdk: oraclejdk8
 jobs:
   include:
   - stage: Discovery Service
-    env: SAMPLE=discovery-service
+    env: MODULE_DIR=discovery-service
   - stage: Edge Service
-    env: SAMPLE=edge-service
+    env: MODULE_DIR=edge-service
   - stage: Hello Service
-    env: SAMPLE=hello-service
-  - stage: Main Project
-    env: SAMPLE=./
-    script: mvn test -B
+    env: MODULE_DIR=hello-service
 
 before_install:
-- cd $SAMPLE
+ - cd $MODULE_DIR
+
+script:
+ - mvn test

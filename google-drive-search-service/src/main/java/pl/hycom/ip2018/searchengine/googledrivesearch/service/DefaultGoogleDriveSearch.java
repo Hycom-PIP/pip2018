@@ -1,6 +1,5 @@
 package pl.hycom.ip2018.searchengine.googledrivesearch.service;
 
-import com.google.api.services.drive.Drive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriTemplate;
 import pl.hycom.ip2018.searchengine.googledrivesearch.model.AbstractGoogleDriveSearchResponse;
 
+import java.awt.*;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
 import java.util.Map;
@@ -32,6 +34,12 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
     @Value("${rest.api.fields}")
     private String fields;
 
+    @Value("${rest.api.authUrl}")
+    private String authUrl;
+
+    @Value("${rest.api.clientId}")
+    private String clientId;
+
     @Autowired
     private JsonResponse jsonResponse;
 
@@ -39,12 +47,14 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
     private ResponsePropertiesExtractor responsePropertiesExtractor;
 
     @Override
-    public AbstractGoogleDriveSearchResponse getResponseFromGoogleDriveFromDriveByQuery(Drive drive, String query) {
+    public AbstractGoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(String query) {
 
         logger.info("Requesting searching results for {}", query);
         AbstractGoogleDriveSearchResponse result;
 
         try {
+//            URI authUri = new UriTemplate(authUrl).expand(clientId);
+
             URI uri = new UriTemplate(baseUrl).expand(size, query, fields);
             Map response = jsonResponse.getAsMap(uri);
             Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromResponse(response);
@@ -69,25 +79,4 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
 
         return result;
     }
-
-//    public void listFiles() {
-//        try {
-//            Drive service = getDriveService();
-//            FileList result = service.files().list()
-//                    .setPageSize(10)
-//                    .setFields("nextPageToken, files(id, name)")
-//                    .execute();
-//            List<File> files = result.getFiles();
-//            if (files == null || files.size() == 0) {
-//                System.out.println("No files found.");
-//            } else {
-//                System.out.println("Files:");
-//                for (File file : files) {
-//                    System.out.printf("%s (%s)\n", file.getName(), file.getId());
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }

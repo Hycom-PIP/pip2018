@@ -9,6 +9,8 @@ import pl.hycom.ip2018.searchengine.googledrivesearch.model.AbstractGoogleDriveS
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.GoogleDriveAuth;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.GoogleDriveSearch;
 
+import javax.servlet.http.HttpServletResponse;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
@@ -21,7 +23,6 @@ public class GoogleDriveSearchController {
 
     @RequestMapping(value = "/res/{query}", method = GET)
     public AbstractGoogleDriveSearchResponse getResponseFromGoogleDrive(@PathVariable String query) {
-        Drive drive = googleDriveAuth.getDriveService();
-        return googleDriveSearch.getResponseFromGoogleDriveFromDriveByQuery(drive, query);
+        return googleDriveSearch.getResponseFromGoogleDriveByQuery(query);
     }
 }

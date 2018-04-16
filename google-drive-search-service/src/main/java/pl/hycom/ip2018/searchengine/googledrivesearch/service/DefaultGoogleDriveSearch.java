@@ -23,6 +23,15 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
     @Value("${rest.api.baseUrl}")
     private String baseUrl;
 
+    @Value("${rest.api.size}")
+    private String size;
+
+    @Value("${rest.api.pageToken}")
+    private String pageToken;
+
+    @Value("${rest.api.fields}")
+    private String fields;
+
     @Autowired
     private JsonResponse jsonResponse;
 
@@ -36,7 +45,7 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
         AbstractGoogleDriveSearchResponse result;
 
         try {
-            URI uri = new UriTemplate(baseUrl).expand(query);
+            URI uri = new UriTemplate(baseUrl).expand(size, query, fields);
             Map response = jsonResponse.getAsMap(uri);
             Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromResponse(response);
             String fromSimpleMapToJson = jsonResponse.getAsString(simpleMap);

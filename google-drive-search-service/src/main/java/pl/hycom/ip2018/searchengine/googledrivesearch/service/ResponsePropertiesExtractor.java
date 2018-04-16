@@ -9,17 +9,26 @@ import java.util.Map;
 
 public class ResponsePropertiesExtractor {
 
-    @Value("${prop.googledrive.query}")
-    private String query;
+    @Value("${prop.googledrive.kind}")
+    private String kind;
 
-    @Value("${prop.googledrive.header}")
-    private String header;
+    @Value("${prop.googledrive.nextPageToken}")
+    private String nextPageToken;
 
-    @Value("${prop.googledrive.snippet}")
-    private String snippet;
+    @Value("${prop.googledrive.incompleteSearch}")
+    private String incompleteSearch;
 
-    @Value("${prop.googledrive.timestamp}")
-    private String timestamp;
+    @Value("${prop.googledrive.files}")
+    private String files;
+
+    @Value("${prop.googledrive.id}")
+    private String id;
+
+    @Value("${prop.googledrive.name}")
+    private String name;
+
+    @Value("${prop.googledrive.webViewLink}")
+    private String webViewLink;
 
     @Value("${prop.googledrive.url}")
     private String url;
@@ -27,27 +36,28 @@ public class ResponsePropertiesExtractor {
     @Value("${prop.googledrive.defaultUrl}")
     private String defaultUrl;
 
-    public Map makeSimpleMapFromResponse(Map response) throws ClassCastException{
+    public Map<String, List<Map<String, String>>> makeSimpleMapFromResponse(Map response) throws ClassCastException{
 
-        Map<String, List<Map<String, String>>> result = new LinkedHashMap<>();
-        List<Map<String, String>> items = new ArrayList<>();
-        List<Map> tempList = (List<Map>) response.get(query);
+        Map<String, List<Map<String, String>>> extractedResult = new LinkedHashMap<>();
 
-        for (Map tempMap : tempList) {
-            items.add(extract(tempMap));
+        List<Map<String, String>> kindSection = (List<Map<String, String>>) response.get(kind);
+        List<Map<String, String>> nextPageTokenSection = (List<Map<String, String>>) response.get(nextPageToken);
+        List<Map<String, String>> incompleteSearchSection = (List<Map<String, String>>) response.get(incompleteSearch);
+
+        List<Map<String, String>> extractedFiles = new ArrayList<>();
+        List<Map> filesSection = (List<Map>) response.get(files);
+
+        for (Map fileMap : filesSection) {
+            Map<String, String> singleItem = new LinkedHashMap<>();
+            singleItem.put(id, (String) fileMap.get(id));
+            singleItem.put(name, (String) fileMap.get(name));
+            singleItem.put(webViewLink, (String) fileMap.get(webViewLink));
+            extractedFiles.add(singleItem);
         }
-        result.put(query, items);
-        return result;
-    }
-
-    private Map<String, String> extract(Map<String, String> response) {
-
-        Map<String, String> singleExtractedResponse = new LinkedHashMap<>();
-        singleExtractedResponse.put(header, response.get(header));
-        singleExtractedResponse.put(snippet, response.get(snippet));
-        singleExtractedResponse.put(timestamp, response.get(timestamp));
-        singleExtractedResponse.put(url, defaultUrl +  response.get(header)); //TODO: do sprawdzenia, raczej źle
-
-        return singleExtractedResponse;
+        extractedResult.put(kind, kindSection);
+        extractedResult.put(nextPageToken, nextPageTokenSection);
+        extractedResult.put(incompleteSearch, incompleteSearchSection);
+        extractedResult.put(files, extractedFiles);
+        return extractedResult;
     }
 }

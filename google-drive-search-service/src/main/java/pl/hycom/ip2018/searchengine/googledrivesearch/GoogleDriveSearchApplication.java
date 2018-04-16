@@ -11,6 +11,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.JsonResponse;
+import pl.hycom.ip2018.searchengine.googledrivesearch.service.ResponsePropertiesExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,11 @@ public class GoogleDriveSearchApplication {
     @Bean
     public JsonResponse jsonResponse() {
         return new JsonResponse();
+    }
+
+    @Bean
+    public ResponsePropertiesExtractor responsePropertiesExtractor() {
+        return new ResponsePropertiesExtractor();
     }
 
     private SimpleClientHttpRequestFactory clientHttpRequestFactory() {

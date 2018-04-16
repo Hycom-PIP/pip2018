@@ -25,7 +25,6 @@ import java.util.List;
 
 @Service
 public class DefaultGoogleDriveAuth implements GoogleDriveAuth {
-//    private static final String APPLICATION_NAME = "GoogleDriveSearchEngine\t";
 
     /** Directory to store user credentials for this application. */
     private static final java.io.File DATA_STORE_DIR = new java.io.File(
@@ -60,7 +59,13 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth {
     }
 
     @Override
-    public Credential authorize() {
+    public Drive getDriveService() {
+        Credential credential = authorize();
+        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                .build();
+    }
+
+    private Credential authorize() {
         Credential credential = null;
         try {
             InputStream in =
@@ -82,32 +87,4 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth {
         }
         return credential;
     }
-
-//    public void listFiles() {
-//        try {
-//            Drive service = getDriveService();
-//            FileList result = service.files().list()
-//                    .setPageSize(10)
-//                    .setFields("nextPageToken, files(id, name)")
-//                    .execute();
-//            List<File> files = result.getFiles();
-//            if (files == null || files.size() == 0) {
-//                System.out.println("No files found.");
-//            } else {
-//                System.out.println("Files:");
-//                for (File file : files) {
-//                    System.out.printf("%s (%s)\n", file.getName(), file.getId());
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private Drive getDriveService() {
-//        Credential credential = authorize();
-//        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-//                .setApplicationName(APPLICATION_NAME)
-//                .build();
-//    }
 }

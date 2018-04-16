@@ -13,10 +13,10 @@ spring:
 
 spring:
   application:
-    name: google-search-service
+    name: google-drive-search-service
 
 server:
-  port: ${PORT:4444}
+  port: ${PORT:2301}
 
 eureka:
   client:

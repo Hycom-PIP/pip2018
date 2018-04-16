@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Class for extract useful data from google api response
+ */
 public class ResponsePropertiesExtractor {
 
     @Value("${prop.google.itemsKey}")
@@ -49,9 +52,9 @@ public class ResponsePropertiesExtractor {
             singleItem.put(titleKey, (String) tempMap.get(titleKey));
             singleItem.put(linkKey, (String) tempMap.get(linkKey));
             singleItem.put(snippetKey, (String) tempMap.get(snippetKey));
-            Optional<Map> pageMapOpt = Optional.of((Map) tempMap.get(pageMapKey));
+            Optional<Map> pageMapOpt = Optional.ofNullable((Map) tempMap.get(pageMapKey));
             pageMapOpt.ifPresent(pageMap -> {
-                Optional<List<Map>> metaTagsOpt = Optional.of((List<Map>) pageMap.get(metaTagsKey));
+                Optional<List<Map>> metaTagsOpt = Optional.ofNullable((List<Map>) pageMap.get(metaTagsKey));
                 metaTagsOpt.ifPresent(metaTags -> {
                     List<Map> tempResult = metaTags
                             .stream()

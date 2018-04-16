@@ -11,6 +11,9 @@ import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.Map;
 
+/**
+ * Class for managing responses
+ */
 public class JsonResponse {
 
     @Autowired

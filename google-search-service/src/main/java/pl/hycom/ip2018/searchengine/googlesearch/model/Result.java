@@ -6,6 +6,9 @@ import pl.hycom.ip2018.searchengine.googlesearch.util.ISOStringZonedDateTimeType
 
 import java.time.ZonedDateTime;
 
+/**
+ * Part of {@link AbstractGoogleSearchResponse} describes searching results
+ */
 public class Result {
 
     private String provider = "google";

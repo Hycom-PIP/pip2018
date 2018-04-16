@@ -9,7 +9,11 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
+/**
+ * Date Converter
+ */
 public class ISOStringZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
@@ -20,7 +24,7 @@ public class ISOStringZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime
             out.nullValue();
             return;
         }
-        String dateFormatAsString = value.format(formatter);
+        String dateFormatAsString = value.truncatedTo(ChronoUnit.SECONDS).format(formatter);
         out.value(dateFormatAsString);
     }
 

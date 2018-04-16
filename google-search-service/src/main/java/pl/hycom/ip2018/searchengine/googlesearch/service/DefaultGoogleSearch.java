@@ -11,9 +11,14 @@ import org.springframework.web.util.UriTemplate;
 import pl.hycom.ip2018.searchengine.googlesearch.model.AbstractGoogleSearchResponse;
 
 import java.net.URI;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementation of {@link GoogleSearch} to get data by query
+ */
 @Service
 public class DefaultGoogleSearch implements GoogleSearch {
 
@@ -28,8 +33,11 @@ public class DefaultGoogleSearch implements GoogleSearch {
     @Value("${rest.api.language}")
     private String language;
 
-    @Value("${rest.api.start}")
-    private String start;
+    @Value("${rest.api.resultsMultiplier}")
+    private String resultsMultiplier;
+
+    @Value("${prop.google.itemsKey}")
+    private String itemsKey;
 
     @Value("${rest.api.baseUrl}")
     private String baseUrl;
@@ -50,32 +58,32 @@ public class DefaultGoogleSearch implements GoogleSearch {
     public AbstractGoogleSearchResponse getResponseFromGoogleByQuery(String query) {
 
         logger.info("Requesting searching results for {}", query);
-        AbstractGoogleSearchResponse result;
+        AbstractGoogleSearchResponse result = null;
 
         try {
-            URI url = new UriTemplate(baseUrl).expand(apiKey, engineId, language, query, start);
-            Map response = jsonResponse.getAsMap(url);
-            Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromResponse(response);
-            String fromSimpleMapToJson = jsonResponse.getAsString(simpleMap);
+            List<Map<String, List<Map<String, String>>>> partialMaps = new ArrayList<>();
+            for (int i = 0; i < Integer.parseInt(resultsMultiplier); i++) {
+                URI url = new UriTemplate(baseUrl).expand(apiKey, engineId, language, query, i * 10 + 1);
+                Map response = jsonResponse.getAsMap(url);
+                partialMaps.add(responsePropertiesExtractor.makeSimpleMapFromResponse(response));
+            }
+            String fromSimpleMapToJson = jsonResponse.getAsString(joinMaps(partialMaps));
             result = jsonResponse.getAsObject(fromSimpleMapToJson, AbstractGoogleSearchResponse.TYPE);
-            result.setCode(200);
-            result.setMessage("OK");
-            result.setDate(new Date());
         } catch (ResourceAccessException
                 | HttpClientErrorException e) {
             logger.error("Searching results for {} are not available from Google", query);
-            result = new AbstractGoogleSearchResponse();
-            result.setCode(500);
-            result.setMessage("Internal Server Error");
-            result.setDate(new Date());
         } catch (ClassCastException e) {
             logger.error("Google changed their API");
-            result = new AbstractGoogleSearchResponse();
-            result.setCode(500);
-            result.setMessage("Google changed their API");
-            result.setDate(new Date());
         }
 
+        return result;
+    }
+
+    private Map joinMaps(List<Map<String, List<Map<String, String>>>> partialMaps) {
+        List<Map<String, String>> subResult = new ArrayList<>();
+        partialMaps.forEach(oneRes -> subResult.addAll(oneRes.get(itemsKey)));
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put(itemsKey, subResult);
         return result;
     }
 }

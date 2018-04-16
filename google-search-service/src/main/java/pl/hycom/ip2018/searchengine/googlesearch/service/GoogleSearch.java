@@ -2,6 +2,9 @@ package pl.hycom.ip2018.searchengine.googlesearch.service;
 
 import pl.hycom.ip2018.searchengine.googlesearch.model.AbstractGoogleSearchResponse;
 
+/**
+ * Interface specify usage of google api
+ */
 public interface GoogleSearch {
 
     /**

@@ -12,7 +12,6 @@ public class FileChecker {
     private static final Integer THRESHOLD = 95;
 
     /**
-     *
      * @param file input File
      * @return answer file is plain text or binary
      * @throws IOException could have been thrown if file refers to null space on physical disc
@@ -41,6 +40,6 @@ public class FileChecker {
                 other++;
             }
         }
-        return 100 * other / (ascii + other) > THRESHOLD;
+        return other != 0 && 100 * other / (ascii + other) > THRESHOLD;
     }
 }

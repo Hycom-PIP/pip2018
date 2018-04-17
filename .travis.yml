@@ -23,5 +23,4 @@ addons:
 
 script:
  - mvn test
- - mvn sonar:sonar
- - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+ - mvn sonar:sonar -Dsonar.branch

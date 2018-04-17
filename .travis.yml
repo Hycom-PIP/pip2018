@@ -23,5 +23,5 @@ addons:
 
 script:
  - mvn test
- - sonar-scanner
+ - sonar-scanner -Dsonar.branch
  - mvn sonar:sonar -Dsonar.branch

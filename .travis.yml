@@ -19,7 +19,7 @@ addons:
   sonarcloud:
     organization: "hycom-pip"
     token:
-      secure: 8c8cd60936858ad29039d8e29a8dad33bcc27b81
+      secure: "8c8cd60936858ad29039d8e29a8dad33bcc27b81"
 
 script:
  - mvn test

@@ -45,9 +45,9 @@ public class ResponsePropertiesExtractor {
 
         Map<String, List<Map<String, String>>> result = new LinkedHashMap<>();
         List<Map<String, String>> items = new ArrayList<>();
-        List<Map> tempList = (List<Map>) response.get(itemsKey);
+        Optional<List<Map>> tempListOpt = Optional.ofNullable((List<Map>) response.get(itemsKey));
 
-        for (Map tempMap : tempList) {
+        tempListOpt.ifPresent(tempList -> tempList.forEach(tempMap -> {
             Map<String, String> singleItem = new LinkedHashMap<>();
             singleItem.put(titleKey, (String) tempMap.get(titleKey));
             singleItem.put(linkKey, (String) tempMap.get(linkKey));
@@ -68,7 +68,7 @@ public class ResponsePropertiesExtractor {
                 });
             });
             items.add(singleItem);
-        }
+        }));
         result.put(itemsKey, items);
         return result;
     }

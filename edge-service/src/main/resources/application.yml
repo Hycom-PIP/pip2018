@@ -42,6 +42,9 @@ zuul:
     wikisearch:
       path: /wikisearch/**
       serviceId: wikipedia-search-service
+    localsearch:
+      path: /localsearch/**
+      serviceId: local-search-service
 
 ribbon:
   eureka:

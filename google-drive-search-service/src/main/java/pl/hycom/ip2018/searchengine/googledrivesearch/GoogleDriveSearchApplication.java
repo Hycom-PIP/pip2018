@@ -2,6 +2,7 @@ package pl.hycom.ip2018.searchengine.googledrivesearch;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -12,7 +13,11 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.JsonResponse;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.ResponsePropertiesExtractor;
+import pl.hycom.ip2018.searchengine.googledrivesearch.servlet.GoogleDriveServlet;
+import pl.hycom.ip2018.searchengine.googledrivesearch.servlet.GoogleDriveServletCallback;
 
+import javax.servlet.Servlet;
+import javax.servlet.ServletRegistration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +51,19 @@ public class GoogleDriveSearchApplication {
     @Bean
     public ResponsePropertiesExtractor responsePropertiesExtractor() {
         return new ResponsePropertiesExtractor();
+    }
+
+    @Bean
+    public ServletRegistrationBean googleDriveServlet() {
+        ServletRegistrationBean bean = new ServletRegistrationBean(new GoogleDriveServlet(), "/res/*");
+        bean.setLoadOnStartup(1);
+        return bean;
+    }
+
+    @Bean ServletRegistrationBean googleDriveServletCallback() {
+        ServletRegistrationBean bean = new ServletRegistrationBean(new GoogleDriveServletCallback(), "/res/*");
+        bean.setLoadOnStartup(2);
+        return bean;
     }
 
     private SimpleClientHttpRequestFactory clientHttpRequestFactory() {

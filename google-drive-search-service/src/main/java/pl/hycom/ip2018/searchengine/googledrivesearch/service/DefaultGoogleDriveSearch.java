@@ -53,8 +53,6 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
         AbstractGoogleDriveSearchResponse result;
 
         try {
-//            URI authUri = new UriTemplate(authUrl).expand(clientId);
-
             URI uri = new UriTemplate(baseUrl).expand(size, query, fields);
             Map response = jsonResponse.getAsMap(uri);
             Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromResponse(response);

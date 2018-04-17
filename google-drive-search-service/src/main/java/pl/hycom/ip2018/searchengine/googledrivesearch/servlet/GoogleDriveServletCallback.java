@@ -33,19 +33,22 @@ public class GoogleDriveServletCallback extends AbstractAuthorizationCodeCallbac
         }
     }
 
-    @Value("${rest.api.clientId}")
-    private String clientId;
+    private static final String CLIENT_ID = "178672516058-es1quiku6b4fpq8d0k9nmf18b0d44orb.apps.googleusercontent.com";
 
-    @Value("${rest.api.clientSecret}")
-    private String clientSecret;
+    private static final String CLIENT_SECRET = "Gitp72Kc0GhQHcmlteRMeMcD";
 
     @Override
     protected AuthorizationCodeFlow initializeFlow() throws ServletException, IOException {
         return new GoogleAuthorizationCodeFlow.Builder(
-                new NetHttpTransport(), JacksonFactory.getDefaultInstance(),
-                clientId, clientSecret,
-                Collections.singleton(DriveScopes.DRIVE_APPS_READONLY)).setDataStoreFactory(
-                DATA_STORE_FACTORY).setAccessType("offline").build();
+                new NetHttpTransport(),
+                JacksonFactory.getDefaultInstance(),
+                CLIENT_ID,
+                CLIENT_SECRET,
+                Collections
+                        .singleton(DriveScopes.DRIVE_APPS_READONLY))
+                        .setDataStoreFactory(DATA_STORE_FACTORY)
+                        .setAccessType("offline")
+                        .build();
     }
 
     @Override

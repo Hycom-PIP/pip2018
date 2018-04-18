@@ -4,10 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import pl.hycom.ip2018.searchengine.googlesearch.converter.GoogleResponseConverter;
-import pl.hycom.ip2018.searchengine.googlesearch.model.AbstractGoogleSearchResponse;
+import pl.hycom.ip2018.searchengine.googlesearch.model.GoogleSearchResponse;
 import pl.hycom.ip2018.searchengine.googlesearch.googlemodel.GoogleResponse;
 
 import java.net.URI;
@@ -46,10 +45,10 @@ public class DefaultGoogleSearch implements GoogleSearch {
      * Returns response wrapped in our type
      *
      * @param query search parameter from user
-     * @return AbstractGoogleSearchResponse
+     * @return GoogleSearchResponse
      */
     @Override
-    public AbstractGoogleSearchResponse getResponseFromGoogleByQuery(String query) {
+    public GoogleSearchResponse getResponseFromGoogleByQuery(String query) {
 
         logger.info("Requesting searching results for {}", query);
         try {
@@ -66,8 +65,8 @@ public class DefaultGoogleSearch implements GoogleSearch {
         }
     }
 
-    private AbstractGoogleSearchResponse join(List<GoogleResponse> partialList) {
-        AbstractGoogleSearchResponse result = new AbstractGoogleSearchResponse();
+    private GoogleSearchResponse join(List<GoogleResponse> partialList) {
+        GoogleSearchResponse result = new GoogleSearchResponse();
         result.setResults(new ArrayList<>());
         partialList.forEach(partial ->
                 result.getResults().addAll(googleResponseConverter.convert(partial).getResults())

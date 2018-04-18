@@ -5,9 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.hycom.ip2018.searchengine.localsearch.model.AbstractLocalSearchResponse;
+import pl.hycom.ip2018.searchengine.localsearch.model.LocalSearchResponse;
 import pl.hycom.ip2018.searchengine.localsearch.model.Result;
 import pl.hycom.ip2018.searchengine.localsearch.util.ZonedDateTimeStringConverter;
+import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -53,13 +54,13 @@ public class DefaultLocalSearch implements LocalSearch {
      * @return object representation of response
      */
     @Override
-    public AbstractLocalSearchResponse getResponseFromLocalByQuery(String query) {
+    public LocalSearchResponse getResponseFromLocalByQuery(String query) {
 
         logger.info("Requesting searching results for {}", query);
-        AbstractLocalSearchResponse response = null;
+        LocalSearchResponse response = null;
         try {
-            response = new AbstractLocalSearchResponse();
-            List<Result> items = new ArrayList<>();
+            response = new LocalSearchResponse();
+            List<SimpleResult> items = new ArrayList<>();
 
             // Get recursively all files in root
             List<Path> paths = Files.walk(Paths.get(mainPath)).collect(Collectors.toList());

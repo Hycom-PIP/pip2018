@@ -1,22 +1,15 @@
 package pl.hycom.ip2018.searchengine.googlesearch.model;
 
 import lombok.Data;
+import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
 
 /**
- * Part of {@link AbstractGoogleSearchResponse} describes searching results
+ * Part of {@link GoogleSearchResponse} describes searching results
  */
 @Data
-public class Result {
+public class Result extends SimpleResult {
 
     private static final String PROVIDER = "google";
 
     private String provider = PROVIDER;
-
-    private String header;
-
-    private String snippet;
-
-    private String timestamp;
-
-    private String url;
 }

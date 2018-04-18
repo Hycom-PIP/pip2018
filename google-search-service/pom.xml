@@ -42,6 +42,11 @@
             <version>1.16.20</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>pl.hycom.ip-2018</groupId>
+            <artifactId>provider-contract</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,22 +1,23 @@
 package pl.hycom.ip2018.searchengine.googlesearch.converter;
 
 import org.springframework.core.convert.converter.Converter;
-import pl.hycom.ip2018.searchengine.googlesearch.model.AbstractGoogleSearchResponse;
+import pl.hycom.ip2018.searchengine.googlesearch.model.GoogleSearchResponse;
 import pl.hycom.ip2018.searchengine.googlesearch.model.Result;
 import pl.hycom.ip2018.searchengine.googlesearch.googlemodel.GoogleMetaTag;
 import pl.hycom.ip2018.searchengine.googlesearch.googlemodel.GooglePageMap;
 import pl.hycom.ip2018.searchengine.googlesearch.googlemodel.GoogleResponse;
+import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class GoogleResponseConverter implements Converter<GoogleResponse, AbstractGoogleSearchResponse> {
+public class GoogleResponseConverter implements Converter<GoogleResponse, GoogleSearchResponse> {
 
     @Override
-    public AbstractGoogleSearchResponse convert(GoogleResponse googleResponse) {
-        AbstractGoogleSearchResponse result = new AbstractGoogleSearchResponse();
-        List<Result> simpleItems = new ArrayList<>();
+    public GoogleSearchResponse convert(GoogleResponse googleResponse) {
+        GoogleSearchResponse result = new GoogleSearchResponse();
+        List<SimpleResult> simpleItems = new ArrayList<>();
 
         Optional.ofNullable(googleResponse)
                 .map(GoogleResponse::getResults)

@@ -1,26 +1,24 @@
 package pl.hycom.ip2018.searchengine.googlesearch;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import pl.hycom.ip2018.searchengine.googlesearch.converter.GoogleResponseConverter;
+import pl.hycom.ip2018.searchengine.googlesearch.service.DefaultGoogleSearch;
+import pl.hycom.ip2018.searchengine.googlesearch.service.GoogleSearch;
 import pl.hycom.ip2018.searchengine.googlesearch.service.JsonResponse;
-import pl.hycom.ip2018.searchengine.googlesearch.service.ResponsePropertiesExtractor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * IoC Container processed it to generate beans
  */
 @Configuration
 public class GoogleSearchConfiguration {
+
+    @Bean
+    public GoogleSearch googleSearch() {
+        return new DefaultGoogleSearch();
+    }
 
     /**
      * Rest Template Bean for receiving data from API
@@ -29,30 +27,11 @@ public class GoogleSearchConfiguration {
      */
     @Bean
     public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
-        HttpMessageConverter formHttpMessageConverter = new FormHttpMessageConverter();
-        HttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
-        HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
-        List<HttpMessageConverter<?>> converters = new ArrayList<>();
-        converters.add(formHttpMessageConverter);
-        converters.add(stringHttpMessageConverter);
-        converters.add(jacksonConverter);
-        restTemplate.setMessageConverters(converters);
-        return restTemplate;
+        return new RestTemplate(clientHttpRequestFactory());
     }
 
     private SimpleClientHttpRequestFactory clientHttpRequestFactory() {
         return new SimpleClientHttpRequestFactory();
-    }
-
-    /**
-     * Gson Bean for operations on json
-     *
-     * @return Gson
-     */
-    @Bean
-    public Gson gson() {
-        return new GsonBuilder().create();
     }
 
     /**
@@ -65,14 +44,8 @@ public class GoogleSearchConfiguration {
         return new JsonResponse();
     }
 
-    /**
-     * Response Properties Extractor for changing huge google response
-     * to small Map which we need
-     *
-     * @return ResponsePropertiesExtractor
-     */
     @Bean
-    public ResponsePropertiesExtractor responsePropertiesExtractor() {
-        return new ResponsePropertiesExtractor();
+    public GoogleResponseConverter googleResponseConverter() {
+        return new GoogleResponseConverter();
     }
 }

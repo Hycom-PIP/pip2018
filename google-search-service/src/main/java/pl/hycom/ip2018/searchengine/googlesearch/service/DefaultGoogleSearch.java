@@ -5,21 +5,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.util.UriTemplate;
+import pl.hycom.ip2018.searchengine.googlesearch.converter.GoogleResponseConverter;
 import pl.hycom.ip2018.searchengine.googlesearch.model.AbstractGoogleSearchResponse;
+import pl.hycom.ip2018.searchengine.googlesearch.googlemodel.GoogleResponse;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Implementation of {@link GoogleSearch} to get data by query
  */
-@Service
 public class DefaultGoogleSearch implements GoogleSearch {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultGoogleSearch.class);
@@ -36,9 +33,6 @@ public class DefaultGoogleSearch implements GoogleSearch {
     @Value("${rest.api.resultsMultiplier}")
     private String resultsMultiplier;
 
-    @Value("${prop.google.itemsKey}")
-    private String itemsKey;
-
     @Value("${rest.api.baseUrl}")
     private String baseUrl;
 
@@ -46,7 +40,7 @@ public class DefaultGoogleSearch implements GoogleSearch {
     private JsonResponse jsonResponse;
 
     @Autowired
-    private ResponsePropertiesExtractor responsePropertiesExtractor;
+    private GoogleResponseConverter googleResponseConverter;
 
     /**
      * Returns response wrapped in our type
@@ -58,32 +52,26 @@ public class DefaultGoogleSearch implements GoogleSearch {
     public AbstractGoogleSearchResponse getResponseFromGoogleByQuery(String query) {
 
         logger.info("Requesting searching results for {}", query);
-        AbstractGoogleSearchResponse result = null;
-
         try {
-            List<Map<String, List<Map<String, String>>>> partialMaps = new ArrayList<>();
+            List<GoogleResponse> partialList = new ArrayList<>();
             for (int i = 0; i < Integer.parseInt(resultsMultiplier); i++) {
                 URI url = new UriTemplate(baseUrl).expand(apiKey, engineId, language, query, i * 10 + 1);
-                Map response = jsonResponse.getAsMap(url);
-                partialMaps.add(responsePropertiesExtractor.makeSimpleMapFromResponse(response));
+                GoogleResponse response = jsonResponse.invoke(url, GoogleResponse.class);
+                partialList.add(response);
             }
-            String fromSimpleMapToJson = jsonResponse.getAsString(joinMaps(partialMaps));
-            result = jsonResponse.getAsObject(fromSimpleMapToJson, AbstractGoogleSearchResponse.TYPE);
-        } catch (ResourceAccessException
-                | HttpClientErrorException e) {
+            return join(partialList);
+        } catch (Exception e) {
             logger.error("Searching results for {} are not available from Google", query);
-        } catch (ClassCastException e) {
-            logger.error("Google changed their API");
+            return null;
         }
-
-        return result;
     }
 
-    private Map joinMaps(List<Map<String, List<Map<String, String>>>> partialMaps) {
-        List<Map<String, String>> subResult = new ArrayList<>();
-        partialMaps.forEach(oneRes -> subResult.addAll(oneRes.get(itemsKey)));
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put(itemsKey, subResult);
+    private AbstractGoogleSearchResponse join(List<GoogleResponse> partialList) {
+        AbstractGoogleSearchResponse result = new AbstractGoogleSearchResponse();
+        result.setResults(new ArrayList<>());
+        partialList.forEach(partial ->
+                result.getResults().addAll(googleResponseConverter.convert(partial).getResults())
+        );
         return result;
     }
 }

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.hycom.ip2018.searchengine.localsearch.exception.LocalSearchRuntimeException;
 import pl.hycom.ip2018.searchengine.localsearch.model.LocalSearchResponse;
 import pl.hycom.ip2018.searchengine.localsearch.model.Result;
 import pl.hycom.ip2018.searchengine.localsearch.util.ZonedDateTimeStringConverter;
@@ -16,6 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +63,6 @@ public class DefaultLocalSearch implements LocalSearch {
         LocalSearchResponse response = null;
         try {
             response = new LocalSearchResponse();
-            List<SimpleResult> items = new ArrayList<>();
 
             // Get recursively all files in root
             List<Path> paths = Files.walk(Paths.get(mainPath)).collect(Collectors.toList());
@@ -79,30 +81,63 @@ public class DefaultLocalSearch implements LocalSearch {
                 }
             });
 
-            // Get results from directories
-            items.addAll(getDirectoriesResults(paths, query));
+            // Split readable files, binaries and plain texts
+            List<Path> readableBinariesFiles = new ArrayList<>();
+            List<Path> readablePlainTextsFiles = new ArrayList<>();
 
-            // Get results from readable binaries
-            items.addAll(getBinariesResults(readableFiles, query));
+            // intensive operation but parallel
+            readableFiles.parallelStream().forEach(read->{
+                if (fileChecker.isBinaryFile(read.toFile())) {
+                    readableBinariesFiles.add(read);
+                } else {
+                    readablePlainTextsFiles.add(read);
+                }
+            });
 
-            // Get results from readable plain text files
-            items.addAll(getPlainTextResults(readableFiles, query));
-
-            // Get results from not readable files
-            items.addAll(getNotReadableResults(notReadableFiles, query));
-
-            response.setResults(items);
-        } catch (IOException e) {
+            response.setResults(getFileResultsAsync(query,
+                    paths, notReadableFiles, readableBinariesFiles, readablePlainTextsFiles));
+        } catch (IOException | InterruptedException | ExecutionException | LocalSearchRuntimeException e) {
             logger.error("Searching results for {} are not available from Local", query);
         }
         return response;
+    }
+
+    private List<SimpleResult> getFileResultsAsync(String query,
+                                                   List<Path> paths,
+                                                   List<Path> notReadableFiles,
+                                                   List<Path> readableBinariesFiles,
+                                                   List<Path> readablePlainTextsFiles)
+            throws InterruptedException, ExecutionException {
+
+        // Get results from directories
+        CompletableFuture<List<Result>> directories
+                = CompletableFuture.supplyAsync(() -> getDirectoriesResults(paths, query));
+        // Get results from readable binaries
+        CompletableFuture<List<Result>> readableBinaries
+                = CompletableFuture.supplyAsync(() -> getBinariesResults(readableBinariesFiles, query));
+        // Get results from readable plain text files
+        CompletableFuture<List<Result>> readablePlainTexts
+                = CompletableFuture.supplyAsync(() -> getPlainTextResults(readablePlainTextsFiles, query));
+        // Get results from not readable files
+        CompletableFuture<List<Result>> notReadable
+                = CompletableFuture.supplyAsync(() -> getNotReadableResults(notReadableFiles, query));
+
+        CompletableFuture.allOf(directories, readableBinaries, readablePlainTexts, notReadable).get();
+
+        List<SimpleResult> items = new ArrayList<>();
+        items.addAll(directories.get());
+        items.addAll(readableBinaries.get());
+        items.addAll(readablePlainTexts.get());
+        items.addAll(notReadable.get());
+
+        return items;
     }
 
     /**
      * Get not readable results which contains query
      *
      * @param notReadableFiles files we can not read but still can contains query in name
-     * @param query we are searching for
+     * @param query            we are searching for
      * @return Results List
      */
     private List<Result> getNotReadableResults(List<Path> notReadableFiles, String query) {
@@ -115,19 +150,12 @@ public class DefaultLocalSearch implements LocalSearch {
      * Get results for readable text files
      *
      * @param readableFiles files we can read
-     * @param query we are searching for
+     * @param query         we are searching for
      * @return Results List
-     * @throws IOException could have been thrown if any file disappear
      */
-    private List<Result> getPlainTextResults(List<Path> readableFiles, String query) throws IOException {
+    private List<Result> getPlainTextResults(List<Path> readableFiles, String query) {
         List<Result> result = new ArrayList<>();
-        List<Path> plain = new ArrayList<>();
-        for (Path o : readableFiles) {
-            if (!fileChecker.isBinaryFile(o.toFile())) {
-                plain.add(o);
-            }
-        }
-        for (Path text : plain) {
+        for (Path text : readableFiles) {
             String snippet = getSnippet(text, query);
             if (!snippet.isEmpty()) {
                 result.add(getResultByPath(text, snippet));
@@ -142,20 +170,12 @@ public class DefaultLocalSearch implements LocalSearch {
      * Get results for binaries which can contain query in name
      *
      * @param readableFiles files we can read
-     * @param query we are searching for
+     * @param query         we are searching for
      * @return Results List
-     * @throws IOException could have been thrown if any file disappear
      */
-    private List<Result> getBinariesResults(List<Path> readableFiles, String query) throws IOException {
+    private List<Result> getBinariesResults(List<Path> readableFiles, String query) {
         List<Result> result = new ArrayList<>();
-        List<Path> binaries = new ArrayList<>();
-        for (Path o : readableFiles) {
-            if (fileChecker.isBinaryFile(o.toFile())) {
-                binaries.add(o);
-            }
-        }
-        getFilesByQuery(binaries, query).forEach(bin -> result.add(getResultByPath(bin, binFileInfo))
-        );
+        getFilesByQuery(readableFiles, query).forEach(bin -> result.add(getResultByPath(bin, binFileInfo)));
         return result;
     }
 
@@ -175,7 +195,7 @@ public class DefaultLocalSearch implements LocalSearch {
     /**
      * Convert information from File and snippet to Result
      *
-     * @param path path to File
+     * @param path    path to File
      * @param snippet description for File
      * @return Result
      */
@@ -190,6 +210,7 @@ public class DefaultLocalSearch implements LocalSearch {
 
     /**
      * Get simple name from File
+     *
      * @param path path to File
      * @return String
      */
@@ -201,49 +222,51 @@ public class DefaultLocalSearch implements LocalSearch {
     /**
      * Get snippet according to Confluence Documentation
      *
-     * @param path path to file
+     * @param path  path to file
      * @param query we are searching for
      * @return String
-     * @throws IOException could be thrown if any file disappear
      */
-    private String getSnippet(Path path, String query) throws IOException {
-        List<String> lines = Files.readAllLines(path);
-        int all = lines.size();
-        int counter = 0;
-        boolean found = false;
-        for (String line : lines) {
-            if (containsIgnoreCase(line, query)) {
-                found = true;
-                break;
+    private String getSnippet(Path path, String query) {
+        try {
+            List<String> lines = Files.readAllLines(path);
+            int all = lines.size();
+            int counter = 0;
+            boolean found = false;
+            for (String line : lines) {
+                if (containsIgnoreCase(line, query)) {
+                    found = true;
+                    break;
+                }
+                counter++;
             }
-            counter++;
-        }
-        if (!found) return "";
-        if (counter == 0 && all == 1) {
-            return lines.get(0);
-        }
-        if (counter > 0 && counter < all - 1) {
-            return new StringBuilder()
-                    .append(lines.get(counter - 1)).append("\n")
-                    .append(lines.get(counter)).append("\n")
-                    .append(lines.get(counter + 1)).toString();
-        }
-        if (all == 2) {
-            return new StringBuilder()
-                    .append(lines.get(0)).append("\n")
-                    .append(lines.get(1)).toString();
-        }
-        if (counter == 0) {
-            return new StringBuilder()
-                    .append(lines.get(0)).append("\n")
-                    .append(lines.get(1)).append("\n")
-                    .append(lines.get(2)).toString();
-        }
-        if (counter == all - 1) {
-            return new StringBuilder()
-                    .append(lines.get(all - 3)).append("\n")
-                    .append(lines.get(all - 2)).append("\n")
-                    .append(lines.get(all - 1)).toString();
+            if (!found) return "";
+            if (counter == 0 && all == 1) {
+                return lines.get(0);
+            }
+            if (counter > 0 && counter < all - 1) {
+                return new StringBuilder()
+                        .append(lines.get(counter - 1)).append("\n")
+                        .append(lines.get(counter)).append("\n")
+                        .append(lines.get(counter + 1)).toString();
+            }
+            if (all == 2) {
+                return new StringBuilder()
+                        .append(lines.get(0)).append("\n")
+                        .append(lines.get(1)).toString();
+            }
+            if (counter == 0) {
+                return new StringBuilder()
+                        .append(lines.get(0)).append("\n")
+                        .append(lines.get(1)).append("\n")
+                        .append(lines.get(2)).toString();
+            }
+            if (counter == all - 1) {
+                return new StringBuilder()
+                        .append(lines.get(all - 3)).append("\n")
+                        .append(lines.get(all - 2)).append("\n")
+                        .append(lines.get(all - 1)).toString();
+            }
+        } catch (Exception ignored) {
         }
         return "";
     }
@@ -252,7 +275,7 @@ public class DefaultLocalSearch implements LocalSearch {
      * Get files which contain query
      *
      * @param regulars files
-     * @param query we are searching for
+     * @param query    we are searching for
      * @return Paths List
      */
     private List<Path> getFilesByQuery(List<Path> regulars, String query) {

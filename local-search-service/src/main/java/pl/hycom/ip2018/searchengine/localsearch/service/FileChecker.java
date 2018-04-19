@@ -1,6 +1,6 @@
 package pl.hycom.ip2018.searchengine.localsearch.service;
 
-import pl.hycom.ip2018.searchengine.localsearch.exception.LocalSearchRuntimeException;
+import pl.hycom.ip2018.searchengine.localsearch.exception.LocalSearchIOException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +44,7 @@ public class FileChecker {
             }
             return other != 0 && 100 * other / (ascii + other) > THRESHOLD;
         } catch (IOException ignored) {
-            throw new LocalSearchRuntimeException();
+            throw new LocalSearchIOException();
         }
     }
 }

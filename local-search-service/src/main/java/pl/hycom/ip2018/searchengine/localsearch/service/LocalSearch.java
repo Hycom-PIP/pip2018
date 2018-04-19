@@ -1,5 +1,6 @@
 package pl.hycom.ip2018.searchengine.localsearch.service;
 
+import pl.hycom.ip2018.searchengine.localsearch.exception.LocalSearchException;
 import pl.hycom.ip2018.searchengine.localsearch.model.LocalSearchResponse;
 
 /**
@@ -13,5 +14,5 @@ public interface LocalSearch {
      * @param query we are searching for
      * @return object representation of response
      */
-    LocalSearchResponse getResponseFromLocalByQuery(String query);
+    LocalSearchResponse getResponseFromLocalByQuery(String query) throws LocalSearchException;
 }

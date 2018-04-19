@@ -1,12 +1,10 @@
 package pl.hycom.ip2018.searchengine.localsearch.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import pl.hycom.ip2018.searchengine.localsearch.exception.LocalSearchRuntimeException;
+import pl.hycom.ip2018.searchengine.localsearch.exception.LocalSearchException;
+import pl.hycom.ip2018.searchengine.localsearch.exception.LocalSearchIOException;
 import pl.hycom.ip2018.searchengine.localsearch.model.LocalSearchResponse;
 import pl.hycom.ip2018.searchengine.localsearch.model.Result;
 import pl.hycom.ip2018.searchengine.localsearch.util.ZonedDateTimeStringConverter;
@@ -56,15 +54,12 @@ public class DefaultLocalSearch implements LocalSearch {
      * @return object representation of response
      */
     @Override
-    public LocalSearchResponse getResponseFromLocalByQuery(String query) {
+    public LocalSearchResponse getResponseFromLocalByQuery(String query) throws LocalSearchException {
 
         if (log.isInfoEnabled()) {
             log.info("Requesting searching results for {}", query);
         }
-        LocalSearchResponse response = null;
         try {
-            response = new LocalSearchResponse();
-
             // Get recursively all files in root
             List<Path> paths = Files.walk(Paths.get(mainPath)).collect(Collectors.toList());
 
@@ -95,14 +90,16 @@ public class DefaultLocalSearch implements LocalSearch {
                 }
             });
 
+            LocalSearchResponse response = new LocalSearchResponse();
             response.setResults(getFileResultsAsync(query,
                     paths, notReadableFiles, readableBinariesFiles, readablePlainTextsFiles));
-        } catch (IOException | InterruptedException | ExecutionException | LocalSearchRuntimeException e) {
+            return response;
+        } catch (IOException | InterruptedException | ExecutionException | LocalSearchIOException e) {
             if (log.isErrorEnabled()) {
                 log.error("Searching results for {} are not available from Local", query);
             }
+            throw new LocalSearchException();
         }
-        return response;
     }
 
     private List<SimpleResult> getFileResultsAsync(String query,
@@ -158,14 +155,16 @@ public class DefaultLocalSearch implements LocalSearch {
      */
     private List<Result> getPlainTextResults(List<Path> readableFiles, String query) {
         List<Result> result = new ArrayList<>();
-        for (Path text : readableFiles) {
+
+        // parallel to be faster skrrr pop pop
+        readableFiles.parallelStream().forEach(text->{
             String snippet = getSnippet(text, query);
             if (!snippet.isEmpty()) {
                 result.add(getResultByPath(text, snippet));
             } else if (containsIgnoreCase(getNameFromPath(text), query)) { // TODO refactor
                 result.add(getResultByPath(text, noQueryInInfo));
             }
-        }
+        });
         return result;
     }
 

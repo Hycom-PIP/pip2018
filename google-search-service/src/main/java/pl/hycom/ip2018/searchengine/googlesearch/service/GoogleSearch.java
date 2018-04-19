@@ -1,5 +1,6 @@
 package pl.hycom.ip2018.searchengine.googlesearch.service;
 
+import pl.hycom.ip2018.searchengine.googlesearch.exception.GoogleSearchException;
 import pl.hycom.ip2018.searchengine.googlesearch.model.GoogleSearchResponse;
 
 /**
@@ -13,5 +14,5 @@ public interface GoogleSearch {
      * @param query search parameter from user
      * @return GoogleSearchResponse
      */
-    GoogleSearchResponse getResponseFromGoogleByQuery(String query);
+    GoogleSearchResponse getResponseFromGoogleByQuery(String query) throws GoogleSearchException;
 }

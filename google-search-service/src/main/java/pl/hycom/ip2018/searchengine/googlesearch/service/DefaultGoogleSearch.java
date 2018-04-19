@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriTemplate;
 import pl.hycom.ip2018.searchengine.googlesearch.converter.GoogleResponseConverter;
+import pl.hycom.ip2018.searchengine.googlesearch.exception.GoogleSearchException;
 import pl.hycom.ip2018.searchengine.googlesearch.model.GoogleSearchResponse;
 import pl.hycom.ip2018.searchengine.googlesearch.googlemodel.GoogleResponse;
 
@@ -46,7 +47,7 @@ public class DefaultGoogleSearch implements GoogleSearch {
      * @return GoogleSearchResponse
      */
     @Override
-    public GoogleSearchResponse getResponseFromGoogleByQuery(String query) {
+    public GoogleSearchResponse getResponseFromGoogleByQuery(String query) throws GoogleSearchException {
 
         if (log.isInfoEnabled()) {
             log.info("Requesting searching results for {}", query);
@@ -63,7 +64,7 @@ public class DefaultGoogleSearch implements GoogleSearch {
             if (log.isErrorEnabled()) {
                 log.error("Searching results for {} are not available from Google", query);
             }
-            return null;
+            throw new GoogleSearchException();
         }
     }
 

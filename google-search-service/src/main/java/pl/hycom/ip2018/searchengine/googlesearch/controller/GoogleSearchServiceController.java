@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.hycom.ip2018.searchengine.googlesearch.exception.GoogleSearchException;
 import pl.hycom.ip2018.searchengine.googlesearch.model.GoogleSearchResponse;
 import pl.hycom.ip2018.searchengine.googlesearch.service.GoogleSearch;
 import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
@@ -28,10 +29,7 @@ public class GoogleSearchServiceController {
      * @return GoogleSearchResponse
      */
     @RequestMapping(value = "/res/{query}", method = GET)
-    public ResponseEntity<ProviderResponse> getResponseFromGoogle(@PathVariable String query) {
-        GoogleSearchResponse result = googleSearch.getResponseFromGoogleByQuery(query);
-        return result == null
-                ? ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
-                : ResponseEntity.ok(result);
+    public ProviderResponse getResponseFromGoogle(@PathVariable String query) throws GoogleSearchException {
+        return googleSearch.getResponseFromGoogleByQuery(query);
     }
 }

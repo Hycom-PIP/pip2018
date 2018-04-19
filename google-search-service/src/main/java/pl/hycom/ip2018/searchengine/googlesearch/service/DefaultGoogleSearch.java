@@ -1,7 +1,6 @@
 package pl.hycom.ip2018.searchengine.googlesearch.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriTemplate;
@@ -16,9 +15,8 @@ import java.util.List;
 /**
  * Implementation of {@link GoogleSearch} to get data by query
  */
+@Slf4j
 public class DefaultGoogleSearch implements GoogleSearch {
-
-    private static final Logger logger = LoggerFactory.getLogger(DefaultGoogleSearch.class);
 
     @Value("${rest.api.apiKey}")
     private String apiKey;
@@ -50,7 +48,9 @@ public class DefaultGoogleSearch implements GoogleSearch {
     @Override
     public GoogleSearchResponse getResponseFromGoogleByQuery(String query) {
 
-        logger.info("Requesting searching results for {}", query);
+        if (log.isInfoEnabled()) {
+            log.info("Requesting searching results for {}", query);
+        }
         try {
             List<GoogleResponse> partialList = new ArrayList<>();
             for (int i = 0; i < Integer.parseInt(resultsMultiplier); i++) {
@@ -60,7 +60,9 @@ public class DefaultGoogleSearch implements GoogleSearch {
             }
             return join(partialList);
         } catch (Exception e) {
-            logger.error("Searching results for {} are not available from Google", query);
+            if (log.isErrorEnabled()) {
+                log.error("Searching results for {} are not available from Google", query);
+            }
             return null;
         }
     }

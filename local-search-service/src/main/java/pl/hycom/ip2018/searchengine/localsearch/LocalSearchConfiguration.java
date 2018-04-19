@@ -2,7 +2,9 @@ package pl.hycom.ip2018.searchengine.localsearch;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pl.hycom.ip2018.searchengine.localsearch.service.DefaultLocalSearch;
 import pl.hycom.ip2018.searchengine.localsearch.service.FileChecker;
+import pl.hycom.ip2018.searchengine.localsearch.service.LocalSearch;
 import pl.hycom.ip2018.searchengine.localsearch.util.ZonedDateTimeStringConverter;
 
 /**
@@ -10,6 +12,11 @@ import pl.hycom.ip2018.searchengine.localsearch.util.ZonedDateTimeStringConverte
  */
 @Configuration
 public class LocalSearchConfiguration {
+
+    @Bean
+    public LocalSearch localSearch() {
+        return new DefaultLocalSearch();
+    }
 
     /**
      * File Checker Bean to check if file is plain text or binary

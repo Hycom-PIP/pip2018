@@ -1,5 +1,6 @@
 package pl.hycom.ip2018.searchengine.localsearch.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,8 @@ import java.util.stream.Collectors;
 /**
  * Implementation of {@link LocalSearch} to get data by query
  */
-@Service
+@Slf4j
 public class DefaultLocalSearch implements LocalSearch {
-
-    private static final Logger logger = LoggerFactory.getLogger(DefaultLocalSearch.class);
 
     @Value("${rest.api.localPath}")
     private String mainPath;
@@ -59,7 +58,9 @@ public class DefaultLocalSearch implements LocalSearch {
     @Override
     public LocalSearchResponse getResponseFromLocalByQuery(String query) {
 
-        logger.info("Requesting searching results for {}", query);
+        if (log.isInfoEnabled()) {
+            log.info("Requesting searching results for {}", query);
+        }
         LocalSearchResponse response = null;
         try {
             response = new LocalSearchResponse();
@@ -86,7 +87,7 @@ public class DefaultLocalSearch implements LocalSearch {
             List<Path> readablePlainTextsFiles = new ArrayList<>();
 
             // intensive operation but parallel
-            readableFiles.parallelStream().forEach(read->{
+            readableFiles.parallelStream().forEach(read -> {
                 if (fileChecker.isBinaryFile(read.toFile())) {
                     readableBinariesFiles.add(read);
                 } else {
@@ -97,7 +98,9 @@ public class DefaultLocalSearch implements LocalSearch {
             response.setResults(getFileResultsAsync(query,
                     paths, notReadableFiles, readableBinariesFiles, readablePlainTextsFiles));
         } catch (IOException | InterruptedException | ExecutionException | LocalSearchRuntimeException e) {
-            logger.error("Searching results for {} are not available from Local", query);
+            if (log.isErrorEnabled()) {
+                log.error("Searching results for {} are not available from Local", query);
+            }
         }
         return response;
     }

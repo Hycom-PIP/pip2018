@@ -1,5 +1,8 @@
 package pl.hycom.ip2018.searchengine.googledrivesearch.service;
 
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -76,5 +80,24 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
         }
 
         return result;
+    }
+
+    @Override
+    public FileList listFiles(Drive service) {
+        FileList result = null;
+        try {
+            result = service.files().list()
+                    .setPageSize(Integer.getInteger(size))
+                    .setFields(fields)
+                    .execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public List<File> getFiles(FileList fileList) {
+        return fileList.getFiles();
     }
 }

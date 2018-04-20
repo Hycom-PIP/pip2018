@@ -2,7 +2,7 @@ package pl.hycom.ip2018.searchengine.localsearch.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import pl.hycom.ip2018.searchengine.localsearch.exception.LocalSearchException;
 import pl.hycom.ip2018.searchengine.localsearch.exception.LocalSearchIOException;
 import pl.hycom.ip2018.searchengine.localsearch.model.LocalSearchResponse;
@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -26,26 +27,17 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DefaultLocalSearch implements LocalSearch {
 
-    @Value("${rest.api.localPath}")
-    private String mainPath;
-
-    @Value("${prop.local.dirFile}")
-    private String dirFileInfo;
-
-    @Value("${prop.local.binFile}")
-    private String binFileInfo;
-
-    @Value("${prop.local.noQueryIn}")
-    private String noQueryInInfo;
-
-    @Value("${prop.local.canNotRead}")
-    private String notReadable;
+    @Autowired
+    private Environment environment;
 
     @Autowired
     private FileChecker fileChecker;
 
     @Autowired
     private ZonedDateTimeStringConverter converter;
+
+    @Autowired
+    private ResourceBundle resourceBundle;
 
     /**
      * Returns response wrapped in our type
@@ -61,7 +53,7 @@ public class DefaultLocalSearch implements LocalSearch {
         }
         try {
             // Get recursively all files in root
-            List<Path> paths = Files.walk(Paths.get(mainPath)).collect(Collectors.toList());
+            List<Path> paths = Files.walk(Paths.get(environment.getProperty("rest.api.localPath"))).collect(Collectors.toList());
 
             // Get regular files from paths (not directory)
             List<Path> regulars = paths.stream().filter(Files::isRegularFile).collect(Collectors.toList());
@@ -142,7 +134,8 @@ public class DefaultLocalSearch implements LocalSearch {
      */
     private List<Result> getNotReadableResults(List<Path> notReadableFiles, String query) {
         List<Result> result = new ArrayList<>();
-        getFilesByQuery(notReadableFiles, query).forEach(path -> result.add(getResultByPath(path, notReadable)));
+        getFilesByQuery(notReadableFiles, query)
+                .forEach(path -> result.add(getResultByPath(path, resourceBundle.getString("prop.local.canNotRead"))));
         return result;
     }
 
@@ -157,12 +150,12 @@ public class DefaultLocalSearch implements LocalSearch {
         List<Result> result = new ArrayList<>();
 
         // parallel to be faster skrrr pop pop
-        readableFiles.parallelStream().forEach(text->{
+        readableFiles.parallelStream().forEach(text -> {
             String snippet = getSnippet(text, query);
             if (!snippet.isEmpty()) {
                 result.add(getResultByPath(text, snippet));
             } else if (containsIgnoreCase(getNameFromPath(text), query)) { // TODO refactor
-                result.add(getResultByPath(text, noQueryInInfo));
+                result.add(getResultByPath(text, resourceBundle.getString("prop.local.noQueryIn")));
             }
         });
         return result;
@@ -177,7 +170,8 @@ public class DefaultLocalSearch implements LocalSearch {
      */
     private List<Result> getBinariesResults(List<Path> readableFiles, String query) {
         List<Result> result = new ArrayList<>();
-        getFilesByQuery(readableFiles, query).forEach(bin -> result.add(getResultByPath(bin, binFileInfo)));
+        getFilesByQuery(readableFiles, query).
+                forEach(bin -> result.add(getResultByPath(bin, resourceBundle.getString("prop.local.binFile"))));
         return result;
     }
 
@@ -190,7 +184,8 @@ public class DefaultLocalSearch implements LocalSearch {
      */
     private List<Result> getDirectoriesResults(List<Path> paths, String query) {
         List<Result> result = new ArrayList<>();
-        getDirectoriesByQuery(paths, query).forEach(dir -> result.add(getResultByPath(dir, dirFileInfo)));
+        getDirectoriesByQuery(paths, query).
+                forEach(dir -> result.add(getResultByPath(dir, resourceBundle.getString("prop.local.dirFile"))));
         return result;
     }
 
@@ -318,7 +313,7 @@ public class DefaultLocalSearch implements LocalSearch {
      * @return String
      */
     private String toShortPath(Path path) {
-        int beginning = mainPath.length();
+        int beginning = environment.getProperty("rest.api.localPath").length();
         return path.toString().substring(path.toString().length() == beginning - 1
                 ? beginning - 1
                 : beginning);

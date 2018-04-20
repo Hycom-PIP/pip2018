@@ -2,7 +2,7 @@ package pl.hycom.ip2018.searchengine.googlesearch.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.web.util.UriTemplate;
 import pl.hycom.ip2018.searchengine.googlesearch.converter.GoogleResponseConverter;
 import pl.hycom.ip2018.searchengine.googlesearch.exception.GoogleSearchException;
@@ -19,26 +19,14 @@ import java.util.List;
 @Slf4j
 public class DefaultGoogleSearch implements GoogleSearch {
 
-    @Value("${rest.api.apiKey}")
-    private String apiKey;
-
-    @Value("${rest.api.engineId}")
-    private String engineId;
-
-    @Value("${rest.api.language}")
-    private String language;
-
-    @Value("${rest.api.resultsMultiplier}")
-    private String resultsMultiplier;
-
-    @Value("${rest.api.baseUrl}")
-    private String baseUrl;
-
     @Autowired
     private JsonResponse jsonResponse;
 
     @Autowired
     private GoogleResponseConverter googleResponseConverter;
+
+    @Autowired
+    private Environment environment;
 
     /**
      * Returns response wrapped in our type
@@ -54,8 +42,17 @@ public class DefaultGoogleSearch implements GoogleSearch {
         }
         try {
             List<GoogleResponse> partialList = new ArrayList<>();
-            for (int i = 0; i < Integer.parseInt(resultsMultiplier); i++) {
-                URI url = new UriTemplate(baseUrl).expand(apiKey, engineId, language, query, i * 10 + 1);
+
+            int temp = Integer.parseInt(environment.getProperty("rest.api.resultsMultiplier"));
+            for (int i = 0; i < temp; i++) {
+
+                URI url = new UriTemplate(environment.getProperty("rest.api.baseUrl"))
+                        .expand(environment.getProperty("rest.api.apiKey"),
+                                environment.getProperty("rest.api.engineId"),
+                                environment.getProperty("rest.api.language"),
+                                query,
+                                i * 10 + 1);
+
                 GoogleResponse response = jsonResponse.invoke(url, GoogleResponse.class);
                 partialList.add(response);
             }

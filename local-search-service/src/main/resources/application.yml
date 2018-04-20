@@ -29,3 +29,8 @@ eureka:
   ribbon:
     eureka:
       enabled: true
+---
+
+rest:
+  api:
+    localPath: E:\working_directory\ip\data\

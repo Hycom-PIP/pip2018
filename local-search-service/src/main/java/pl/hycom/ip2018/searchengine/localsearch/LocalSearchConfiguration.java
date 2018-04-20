@@ -7,6 +7,9 @@ import pl.hycom.ip2018.searchengine.localsearch.service.FileChecker;
 import pl.hycom.ip2018.searchengine.localsearch.service.LocalSearch;
 import pl.hycom.ip2018.searchengine.localsearch.util.ZonedDateTimeStringConverter;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 /**
  * IoC Container processed it to generate beans
  */
@@ -36,5 +39,10 @@ public class LocalSearchConfiguration {
     @Bean
     public ZonedDateTimeStringConverter zonedDateTimeStringConverter() {
         return new ZonedDateTimeStringConverter();
+    }
+
+    @Bean
+    public ResourceBundle resourceBundle() {
+        return ResourceBundle.getBundle("messages", Locale.ENGLISH);
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface GoogleDriveSearch {
 
-    AbstractGoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(String query);
-    FileList listFiles(Drive service);
+    AbstractGoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query);
+    FileList listFiles(Drive service, String queryWord);
     List<File> getFiles(FileList fileList);
 }

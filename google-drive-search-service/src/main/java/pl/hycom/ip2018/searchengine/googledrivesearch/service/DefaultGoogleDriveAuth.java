@@ -48,7 +48,7 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
      * at ~/.credentials/drive-java-quickstart
      */
     private static final List<String> SCOPES =
-            Arrays.asList(DriveScopes.DRIVE_METADATA_READONLY);
+            Arrays.asList(DriveScopes.DRIVE);
 
     static {
         try {
@@ -72,6 +72,7 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
             // Build flow and trigger user authorization request.
             GoogleAuthorizationCodeFlow flow  = new GoogleAuthorizationCodeFlow.Builder(
                     HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+                    .setScopes(SCOPES)
                     .setDataStoreFactory(DATA_STORE_FACTORY)
                     .setAccessType("offline")
                     .build();
@@ -90,32 +91,4 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }
-
-//    public void listFiles() {
-//        try {
-//            Drive service = getDriveService();
-//            FileList result = service.files().list()
-//                    .setPageSize(10)
-//                    .setFields("nextPageToken, files(id, name)")
-//                    .execute();
-//            List<File> files = result.getFiles();
-//            if (files == null || files.size() == 0) {
-//                System.out.println("No files found.");
-//            } else {
-//                System.out.println("Files:");
-//                for (File file : files) {
-//                    System.out.printf("%s (%s)\n", file.getName(), file.getId());
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private Drive getDriveService() {
-//        Credential credential = getCredential();
-//        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-//                .setApplicationName(APPLICATION_NAME)
-//                .build();
-//    }
 }

@@ -6,7 +6,7 @@ public class Result {
 
     private String provider = "googledrive";
 
-    @SerializedName("title")
+    @SerializedName("header")
     private String header;
 
     @SerializedName("snippet")

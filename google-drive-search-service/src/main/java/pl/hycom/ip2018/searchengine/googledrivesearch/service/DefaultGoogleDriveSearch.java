@@ -10,13 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.UriTemplate;
 import pl.hycom.ip2018.searchengine.googledrivesearch.model.AbstractGoogleDriveSearchResponse;
 
-import java.awt.*;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -51,15 +47,15 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
     private ResponsePropertiesExtractor responsePropertiesExtractor;
 
     @Override
-    public AbstractGoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(String query) {
+    public AbstractGoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query) {
 
         logger.info("Requesting searching results for {}", query);
         AbstractGoogleDriveSearchResponse result;
-
         try {
-            URI uri = new UriTemplate(baseUrl).expand(size, query, fields);
-            Map response = jsonResponse.getAsMap(uri);
-            Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromResponse(response);
+            FileList fileList = listFiles(service, query);
+//            URI uri = new UriTemplate(baseUrl).expand(size, query, fields);
+//            Map response = jsonResponse.getAsMap(uri);
+            Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromFileList(service, fileList);
             String fromSimpleMapToJson = jsonResponse.getAsString(simpleMap);
             result = jsonResponse.getAsObject(fromSimpleMapToJson, AbstractGoogleDriveSearchResponse.TYPE);
             result.setCode(200);
@@ -83,22 +79,23 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
     }
 
     @Override
-    public FileList listFiles(Drive service) {
+    public FileList listFiles(Drive service, String queryWord) {
         FileList result = null;
-//        try {
-//            result = service.files().list()
-//                    .setPageSize(Integer.getInteger(size))
-//                    .setFields(fields)
-//                    .execute();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            String q = "fullText contains '%s'";
+            result = service.files().list()
+                    .setPageSize(Integer.getInteger(size))
+                    .setFields(fields)
+                    .setQ(String.format(q, queryWord))
+                    .execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 
     @Override
     public List<File> getFiles(FileList fileList) {
-//        return fileList.getFiles();
-        return null;
+        return fileList.getFiles();
     }
 }

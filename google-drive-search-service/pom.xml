@@ -59,11 +59,11 @@
             <artifactId>google-oauth-client-servlet</artifactId>
             <version>1.23.0</version>
         </dependency><!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-drive -->
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-drive</artifactId>
-            <version>v2-rev65-1.13.2-beta</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.google.apis</groupId>-->
+            <!--<artifactId>google-api-services-drive</artifactId>-->
+            <!--<version>v2-rev65-1.13.2-beta</version>-->
+        <!--</dependency>-->
         <!-- https://mvnrepository.com/artifact/com.google.http-client/google-http-client -->
         <dependency>
             <groupId>com.google.http-client</groupId>

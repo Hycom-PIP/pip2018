@@ -8,10 +8,9 @@ import java.util.List;
 
 public class AbstractGoogleDriveSearchResponse {
 
-    public static final Type TYPE = new TypeToken<AbstractGoogleDriveSearchResponse>() {
-    }.getType();
+    public static final Type TYPE = new TypeToken<AbstractGoogleDriveSearchResponse>() {}.getType();
 
-    @SerializedName("results")
+    @SerializedName("files")
     private List<Result> results;
 
     private int code;

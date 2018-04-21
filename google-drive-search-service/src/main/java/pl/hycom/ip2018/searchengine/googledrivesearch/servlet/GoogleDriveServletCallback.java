@@ -18,16 +18,17 @@ public class GoogleDriveServletCallback extends AbstractAuthorizationCodeCallbac
 
     @Override
     protected AuthorizationCodeFlow initializeFlow() throws ServletException, IOException {
-        return new GoogleAuthorizationCodeFlow.Builder(
-                new NetHttpTransport(),
-                JacksonFactory.getDefaultInstance(),
-                ServletUtils.CLIENT_ID,
-                ServletUtils.CLIENT_SECRET,
-                Collections
-                        .singleton(DriveScopes.DRIVE_APPS_READONLY))
-                        .setDataStoreFactory(ServletUtils.DATA_STORE_FACTORY)
-                        .setAccessType("offline")
-                        .build();
+        return null;
+//        return new GoogleAuthorizationCodeFlow.Builder(
+//                new NetHttpTransport(),
+//                JacksonFactory.getDefaultInstance(),
+//                ServletUtils.CLIENT_ID,
+//                ServletUtils.CLIENT_SECRET,
+//                Collections
+//                        .singleton(DriveScopes.DRIVE_APPS_READONLY))
+//                        .setDataStoreFactory(ServletUtils.DATA_STORE_FACTORY)
+//                        .setAccessType("offline")
+//                        .build();
     }
 
     @Override

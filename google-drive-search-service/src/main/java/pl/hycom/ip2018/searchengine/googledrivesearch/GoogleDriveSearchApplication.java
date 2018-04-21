@@ -1,5 +1,7 @@
 package pl.hycom.ip2018.searchengine.googledrivesearch;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -29,16 +31,18 @@ public class GoogleDriveSearchApplication {
 
     @Bean
     public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
-        HttpMessageConverter formHttpMessageConverter = new FormHttpMessageConverter();
-        HttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
-        HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
+        RestTemplate restTemplate = new RestTemplate(new SimpleClientHttpRequestFactory());
         List<HttpMessageConverter<?>> converters = new ArrayList<>();
-        converters.add(formHttpMessageConverter);
-        converters.add(stringHttpMessageConverter);
-        converters.add(jacksonConverter);
+        converters.add(new FormHttpMessageConverter());
+        converters.add(new StringHttpMessageConverter());
+        converters.add(new MappingJackson2HttpMessageConverter());
         restTemplate.setMessageConverters(converters);
         return restTemplate;
+    }
+
+    @Bean
+    public Gson gson() {
+        return new GsonBuilder().create();
     }
 
     @Bean
@@ -51,18 +55,18 @@ public class GoogleDriveSearchApplication {
         return new ResponsePropertiesExtractor();
     }
 
-    @Bean
-    public ServletRegistrationBean googleDriveServlet() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new GoogleDriveServlet(), "/res/*");
-        bean.setLoadOnStartup(1);
-        return bean;
-    }
-
-    @Bean ServletRegistrationBean googleDriveServletCallback() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new GoogleDriveServletCallback(), "/res/*");
-        bean.setLoadOnStartup(2);
-        return bean;
-    }
+//    @Bean
+//    public ServletRegistrationBean googleDriveServlet() {
+//        ServletRegistrationBean bean = new ServletRegistrationBean(new GoogleDriveServlet(), "/res/*");
+//        bean.setLoadOnStartup(1);
+//        return bean;
+//    }
+//
+//    @Bean ServletRegistrationBean googleDriveServletCallback() {
+//        ServletRegistrationBean bean = new ServletRegistrationBean(new GoogleDriveServletCallback(), "/res/*");
+//        bean.setLoadOnStartup(2);
+//        return bean;
+//    }
 
     private SimpleClientHttpRequestFactory clientHttpRequestFactory() {
         return new SimpleClientHttpRequestFactory();

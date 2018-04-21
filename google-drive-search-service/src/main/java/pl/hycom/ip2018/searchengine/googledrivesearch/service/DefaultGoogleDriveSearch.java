@@ -85,19 +85,20 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
     @Override
     public FileList listFiles(Drive service) {
         FileList result = null;
-        try {
-            result = service.files().list()
-                    .setPageSize(Integer.getInteger(size))
-                    .setFields(fields)
-                    .execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            result = service.files().list()
+//                    .setPageSize(Integer.getInteger(size))
+//                    .setFields(fields)
+//                    .execute();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return result;
     }
 
     @Override
     public List<File> getFiles(FileList fileList) {
-        return fileList.getFiles();
+//        return fileList.getFiles();
+        return null;
     }
 }

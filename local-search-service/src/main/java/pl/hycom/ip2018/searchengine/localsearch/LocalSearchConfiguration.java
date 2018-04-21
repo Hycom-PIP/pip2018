@@ -1,7 +1,9 @@
 package pl.hycom.ip2018.searchengine.localsearch;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import pl.hycom.ip2018.searchengine.localsearch.service.DefaultLocalSearch;
 import pl.hycom.ip2018.searchengine.localsearch.service.FileChecker;
 import pl.hycom.ip2018.searchengine.localsearch.service.LocalSearch;
@@ -15,6 +17,13 @@ import java.util.ResourceBundle;
  */
 @Configuration
 public class LocalSearchConfiguration {
+
+    private final Environment environment;
+
+    @Autowired
+    public LocalSearchConfiguration(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public LocalSearch localSearch() {
@@ -43,6 +52,7 @@ public class LocalSearchConfiguration {
 
     @Bean
     public ResourceBundle resourceBundle() {
-        return ResourceBundle.getBundle("messages", Locale.ENGLISH);
+        return ResourceBundle.getBundle("messages",
+                Locale.forLanguageTag(environment.getProperty("rest.api.infoLanguage")));
     }
 }

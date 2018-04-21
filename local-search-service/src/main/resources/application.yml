@@ -34,3 +34,4 @@ eureka:
 rest:
   api:
     localPath: E:\working_directory\ip\data\
+    infoLanguage: en

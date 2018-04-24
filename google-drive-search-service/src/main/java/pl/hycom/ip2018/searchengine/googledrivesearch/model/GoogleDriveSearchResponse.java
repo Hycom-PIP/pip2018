@@ -1,17 +1,13 @@
 package pl.hycom.ip2018.searchengine.googledrivesearch.model;
 
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
-public class AbstractGoogleDriveSearchResponse {
+public class GoogleDriveSearchResponse extends ProviderResponse{
 
-    public static final Type TYPE = new TypeToken<AbstractGoogleDriveSearchResponse>() {}.getType();
-
-    @SerializedName("files")
-    private List<Result> results;
+    public static final Type TYPE = new TypeToken<GoogleDriveSearchResponse>() {}.getType();
 
     private int code;
 
@@ -21,14 +17,6 @@ public class AbstractGoogleDriveSearchResponse {
 
     public static Type getTYPE() {
         return TYPE;
-    }
-
-    public List<Result> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
     }
 
     public int getCode() {

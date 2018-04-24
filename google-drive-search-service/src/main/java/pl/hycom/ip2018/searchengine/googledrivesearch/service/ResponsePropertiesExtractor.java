@@ -1,19 +1,12 @@
 package pl.hycom.ip2018.searchengine.googledrivesearch.service;
 
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.util.DateTime;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.google.api.services.drive.model.File;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,8 +14,8 @@ import java.util.Map;
 
 public class ResponsePropertiesExtractor {
 
-    @Value("${prop.googledrive.files}")
-    private String files;
+    @Value("${prop.googledrive.results}")
+    private String results;
 
     @Value("${prop.googledrive.header}")
     private String header;
@@ -68,12 +61,12 @@ public class ResponsePropertiesExtractor {
         for (File file : filesList) {
             Map<String, String> singleItem = new LinkedHashMap<>();
             singleItem.put(header, file.getName());
-            singleItem.put(snippet, createSnippet(service, file)); //TODO: zrobic snippet, poki co nie pobiera zawartosci pliku
+            singleItem.put(snippet, createSnippet(service, file));
             singleItem.put(timestamp, file.getModifiedTime().toString());
             singleItem.put(url, file.getWebViewLink());
             extractedFiles.add(singleItem);
         }
-        extractedResult.put(files, extractedFiles);
+        extractedResult.put(results, extractedFiles);
         return extractedResult;
     }
 
@@ -102,20 +95,8 @@ public class ResponsePropertiesExtractor {
     private String createSnippetFromFileContent(Drive service, File file) {
         String snippet;
         try {
-//                String url = file.getWebViewLink();
-//                HttpResponse response = service
-//                        .getRequestFactory()
-//                        .buildGetRequest(new GenericUrl(url))
-//                        .execute();
-//                InputStream stream = response.getContent();
-//                snippet = stream.toString();
-
             InputStream stream = service.files().get(file.getId()).executeMedia().getContent();
             snippet = stream.toString();
-//            OutputStream outputStream = new ByteArrayOutputStream();
-//            service.files().export(file.getId(), file.getMimeType()).executeMediaAndDownloadTo(outputStream);
-////            service.files().get(file.getId()).executeMediaAndDownloadTo(outputStream);
-//            snippet = outputStream.toString();
         } catch (IOException e) {
             snippet = "<ERROR: Nie udało się odczytać zawartości pliku.>";
             e.printStackTrace();

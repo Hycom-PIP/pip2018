@@ -1,8 +1,9 @@
 package pl.hycom.ip2018.searchengine.googledrivesearch.model;
 
 import com.google.gson.annotations.SerializedName;
+import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
 
-public class Result {
+public class Result extends SimpleResult {
 
     private String provider = "googledrive";
 

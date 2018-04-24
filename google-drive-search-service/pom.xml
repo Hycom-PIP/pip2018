@@ -89,6 +89,11 @@
             <artifactId>google-api-services-sqladmin</artifactId>
             <version>v1beta4-rev53-1.23.0</version>
         </dependency>
+        <dependency>
+            <groupId>pl.hycom.ip-2018</groupId>
+            <artifactId>provider-contract</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 

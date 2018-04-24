@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
-import pl.hycom.ip2018.searchengine.googledrivesearch.model.AbstractGoogleDriveSearchResponse;
+import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchResponse;
 
 import java.io.IOException;
 import java.util.Date;
@@ -47,29 +47,27 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
     private ResponsePropertiesExtractor responsePropertiesExtractor;
 
     @Override
-    public AbstractGoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query) {
+    public GoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query) {
 
         logger.info("Requesting searching results for {}", query);
-        AbstractGoogleDriveSearchResponse result;
+        GoogleDriveSearchResponse result;
         try {
             FileList fileList = listFiles(service, query);
-//            URI uri = new UriTemplate(baseUrl).expand(size, query, fields);
-//            Map response = jsonResponse.getAsMap(uri);
             Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromFileList(service, fileList);
             String fromSimpleMapToJson = jsonResponse.getAsString(simpleMap);
-            result = jsonResponse.getAsObject(fromSimpleMapToJson, AbstractGoogleDriveSearchResponse.TYPE);
+            result = jsonResponse.getAsObject(fromSimpleMapToJson, GoogleDriveSearchResponse.TYPE);
             result.setCode(200);
             result.setMessage("OK");
             result.setDate(new Date().toString());
         } catch (ResourceAccessException | HttpClientErrorException e) {
             logger.error("Searching results for {} are not available from Google Drive", query);
-            result = new AbstractGoogleDriveSearchResponse();
+            result = new GoogleDriveSearchResponse();
             result.setCode(500);
             result.setMessage("Internal Server Error");
             result.setDate(new Date().toString());
         } catch (ClassCastException e) {
             logger.error("Google Drive changed their API");
-            result = new AbstractGoogleDriveSearchResponse();
+            result = new GoogleDriveSearchResponse();
             result.setCode(500);
             result.setMessage("Wikipedia changed their API");
             result.setDate(new Date().toString());

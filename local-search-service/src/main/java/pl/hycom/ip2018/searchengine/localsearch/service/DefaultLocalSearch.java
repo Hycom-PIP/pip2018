@@ -46,7 +46,7 @@ public class DefaultLocalSearch implements LocalSearch {
      * @return object representation of response
      */
     @Override
-    public LocalSearchResponse getResponseFromLocalByQuery(String query) throws LocalSearchException {
+    public LocalSearchResponse getResponse(String query) throws LocalSearchException {
 
         if (log.isInfoEnabled()) {
             log.info("Requesting searching results for {}", query);

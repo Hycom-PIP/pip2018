@@ -35,22 +35,28 @@ endpoints:
 zuul:
   prefix: /api
   routes:
-    hello:
-      path: /hello/**
-      serviceId: hello-service
     googlesearch:
       path: /googlesearch/**
       serviceId: google-search-service
     wikisearch:
       path: /wikisearch/**
       serviceId: wikipedia-search-service
+    aggregate:
+      path: /aggregate/**
+      serviceId: aggregate-service
     localsearch:
       path: /localsearch/**
       serviceId: local-search-service
 
+    threadPool:
+        useSeparateThreadPools: true
+
+
 ribbon:
-  eureka:
-    enabled: true
+    ConnectTimeout: 120000
+    ReadTimeout: 120000
+    eureka:
+         enabled: true
 
 eureka:
   client:

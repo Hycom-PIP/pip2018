@@ -69,6 +69,7 @@
 
 	<modules>
 		<module>provider-contract</module>
+		<module>hello-service</module>
 		<module>edge-service</module>
 		<module>discovery-service</module>
 		<module>google-search-service</module>

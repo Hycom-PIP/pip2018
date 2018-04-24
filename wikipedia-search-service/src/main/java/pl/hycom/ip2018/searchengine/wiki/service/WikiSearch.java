@@ -1,14 +1,15 @@
 package pl.hycom.ip2018.searchengine.wiki.service;
-import pl.hycom.ip2018.searchengine.wiki.model.AbstractWikiSearchResponse;
+import pl.hycom.ip2018.searchengine.wiki.exception.WikipediaException;
+import pl.hycom.ip2018.searchengine.wiki.model.WikiSearchResponse;
 
 /**
  * Interface specifying a usage of WikiSearch.
  */
-public interface WikiSearch {
+public interface WikiSearch{
     /**
      * By submitting a query, we receive a ready answer in the format of our data model
      * @param query we are searching for
-     * @return AbstractWikiSearchResponse object with mapped data from HTTP response
+     * @return WikiSearchResponse object with mapped data from HTTP response
      */
-    AbstractWikiSearchResponse getResponseByQuery(String query);
+    WikiSearchResponse getResponse(String query) throws WikipediaException;
 }

@@ -1,81 +1,76 @@
 package pl.hycom.ip2018.searchengine.googlesearch.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.ResourceAccessException;
+import org.springframework.core.env.Environment;
 import org.springframework.web.util.UriTemplate;
-import pl.hycom.ip2018.searchengine.googlesearch.model.AbstractGoogleSearchResponse;
+import pl.hycom.ip2018.searchengine.googlesearch.converter.GoogleResponseConverter;
+import pl.hycom.ip2018.searchengine.googlesearch.exception.GoogleSearchException;
+import pl.hycom.ip2018.searchengine.googlesearch.model.GoogleSearchResponse;
+import pl.hycom.ip2018.searchengine.googlesearch.googlemodel.GoogleResponse;
 
 import java.net.URI;
-import java.util.Date;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-@Service
+/**
+ * Implementation of {@link GoogleSearch} to get data by query
+ */
+@Slf4j
 public class DefaultGoogleSearch implements GoogleSearch {
-
-    private static final Logger logger = LoggerFactory.getLogger(DefaultGoogleSearch.class);
-
-    @Value("${rest.api.apiKey}")
-    private String apiKey;
-
-    @Value("${rest.api.engineId}")
-    private String engineId;
-
-    @Value("${rest.api.language}")
-    private String language;
-
-    @Value("${rest.api.start}")
-    private String start;
-
-    @Value("${rest.api.baseUrl}")
-    private String baseUrl;
 
     @Autowired
     private JsonResponse jsonResponse;
 
     @Autowired
-    private ResponsePropertiesExtractor responsePropertiesExtractor;
+    private GoogleResponseConverter googleResponseConverter;
+
+    @Autowired
+    private Environment environment;
 
     /**
      * Returns response wrapped in our type
      *
      * @param query search parameter from user
-     * @return AbstractGoogleSearchResponse
+     * @return GoogleSearchResponse
      */
     @Override
-    public AbstractGoogleSearchResponse getResponseFromGoogleByQuery(String query) {
+    public GoogleSearchResponse getResponse(String query) throws GoogleSearchException {
 
-        logger.info("Requesting searching results for {}", query);
-        AbstractGoogleSearchResponse result;
-
-        try {
-            URI url = new UriTemplate(baseUrl).expand(apiKey, engineId, language, query, start);
-            Map response = jsonResponse.getAsMap(url);
-            Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromResponse(response);
-            String fromSimpleMapToJson = jsonResponse.getAsString(simpleMap);
-            result = jsonResponse.getAsObject(fromSimpleMapToJson, AbstractGoogleSearchResponse.TYPE);
-            result.setCode(200);
-            result.setMessage("OK");
-            result.setDate(new Date());
-        } catch (ResourceAccessException
-                | HttpClientErrorException e) {
-            logger.error("Searching results for {} are not available from Google", query);
-            result = new AbstractGoogleSearchResponse();
-            result.setCode(500);
-            result.setMessage("Internal Server Error");
-            result.setDate(new Date());
-        } catch (ClassCastException e) {
-            logger.error("Google changed their API");
-            result = new AbstractGoogleSearchResponse();
-            result.setCode(500);
-            result.setMessage("Google changed their API");
-            result.setDate(new Date());
+        if (log.isInfoEnabled()) {
+            log.info("Requesting searching results for {}", query);
         }
+        try {
+            List<GoogleResponse> partialList = new ArrayList<>();
 
+            int temp = Integer.parseInt(environment.getProperty("rest.api.resultsMultiplier"));
+            for (int i = 0; i < temp; i++) {
+
+                URI url = new UriTemplate(environment.getProperty("rest.api.baseUrl"))
+                        .expand(environment.getProperty("rest.api.apiKey"),
+                                environment.getProperty("rest.api.engineId"),
+                                environment.getProperty("rest.api.language"),
+                                query,
+                                i * 10 + 1);
+
+                GoogleResponse response = jsonResponse.invoke(url, GoogleResponse.class);
+                partialList.add(response);
+            }
+            return join(partialList);
+        } catch (Exception e) {
+            if (log.isErrorEnabled()) {
+                log.error("Searching results for {} are not available from Google", query);
+            }
+            throw new GoogleSearchException();
+        }
+    }
+
+    private GoogleSearchResponse join(List<GoogleResponse> partialList) {
+        GoogleSearchResponse result = new GoogleSearchResponse();
+        result.setResults(new ArrayList<>());
+        partialList.forEach(partial ->
+                result.getResults().addAll(googleResponseConverter.convert(partial).getResults())
+        );
         return result;
     }
 }

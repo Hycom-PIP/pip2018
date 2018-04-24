@@ -12,15 +12,17 @@ spring:
 
 zuul:
   ignoredPatterns: /**/swagger-ui.html/**, /swagger-ui.html/**, /**/v2/api-docs/**
-
 ---
+
+info:
+  component: Edge Server
 
 spring:
   application:
     name: gateway-server
 
-info:
-  component: Edge Server
+server:
+  port: ${PORT:8765}
 
 endpoints:
   restart:
@@ -33,25 +35,30 @@ endpoints:
 zuul:
   prefix: /api
   routes:
-    hello:
-      path: /hello/**
-      serviceId: hello-service
     googlesearch:
       path: /googlesearch/**
       serviceId: google-search-service
     wikisearch:
       path: /wikisearch/**
       serviceId: wikipedia-search-service
+    aggregate:
+      path: /aggregate/**
+      serviceId: aggregate-service
+    localsearch:
+      path: /localsearch/**
+      serviceId: local-search-service
+
+    threadPool:
+        useSeparateThreadPools: true
+
 
 ribbon:
-  eureka:
-    enabled: true
+    ConnectTimeout: 120000
+    ReadTimeout: 120000
+    eureka:
+         enabled: true
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-    registerWithEureka: false
-
-server:
-  port: 8765
+      defaultZone: ${EUREKA_URL:http://localhost:8761}/eureka/

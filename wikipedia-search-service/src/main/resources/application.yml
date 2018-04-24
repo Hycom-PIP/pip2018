@@ -26,6 +26,13 @@ eureka:
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
 
-  ribbon:
-    eureka:
-      enabled: true
+ribbon:
+  eureka:
+    enabled: true
+
+rest:
+  api:
+    srLimit: 1
+    srInterWiki: true
+    defaultUrl: pl.wikipedia.org/wiki/
+    baseUrl: https://pl.wikipedia.org/w/api.php?action=query&list=search&srlimit={srLimit}&format=json&srinterwiki={srInterWiki}&srsearch={phrase}

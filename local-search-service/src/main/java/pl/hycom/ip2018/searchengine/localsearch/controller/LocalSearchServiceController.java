@@ -31,6 +31,6 @@ public class LocalSearchServiceController {
      */
     @RequestMapping(value = "/res/{query}", method = GET)
     public ProviderResponse getResponseFromLocal(@PathVariable String query) throws LocalSearchException {
-        return defaultLocalSearch.getResponseFromLocalByQuery(query);
+        return defaultLocalSearch.getResponse(query);
     }
 }

@@ -1,4 +1,4 @@
-package pl.hycom.ip2018.searchengine.wiki.swagger;
+package pl.hycom.ip2018.searchengine.aggregate.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("pl.hycom.ip2018.searchengine.wiki.controller"))
+                .apis(RequestHandlerSelectors.basePackage("pl.hycom.ip2018.searchengine.aggregate.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

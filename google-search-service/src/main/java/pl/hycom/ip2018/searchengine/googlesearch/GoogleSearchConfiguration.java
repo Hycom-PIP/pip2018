@@ -27,11 +27,7 @@ public class GoogleSearchConfiguration {
      */
     @Bean
     public RestTemplate restTemplate() {
-        return new RestTemplate(clientHttpRequestFactory());
-    }
-
-    private SimpleClientHttpRequestFactory clientHttpRequestFactory() {
-        return new SimpleClientHttpRequestFactory();
+        return new RestTemplate(new SimpleClientHttpRequestFactory());
     }
 
     /**

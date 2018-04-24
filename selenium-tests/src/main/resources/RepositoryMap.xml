@@ -3,7 +3,7 @@
     <windows>
         <driver id="googlechrome">
             <version id="2.38">
-                <bitrate thirtytwobit="true" sixtyfourbit="true">
+                <bitrate sixtyfourbit="true">
                     <filelocation>https://chromedriver.storage.googleapis.com/2.38/chromedriver_win32.zip
                     </filelocation>
                     <hash>913f2233ad1de3ef32c597d10688ef2fef2333d5</hash>

@@ -29,6 +29,8 @@
                     <rootStandaloneServerDirectory>./webdrivers/binaries</rootStandaloneServerDirectory>
                     <downloadedZipFileDirectory>./webdrivers/zips</downloadedZipFileDirectory>
                     <customRepositoryMap>./src/main/resources/RepositoryMap.xml</customRepositoryMap>
+                    <thirtyTwoBitBinaries>false</thirtyTwoBitBinaries>
+                    <sixtyFourBitBinaries>true</sixtyFourBitBinaries>
                 </configuration>
                 <executions>
                     <execution>
@@ -58,6 +60,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+        </dependency>
+
     </dependencies>
 
 

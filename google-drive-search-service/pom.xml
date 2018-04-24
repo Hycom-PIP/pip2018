@@ -83,6 +83,12 @@
             <version>6.2.5</version>
             <scope>provided</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-sqladmin -->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-sqladmin</artifactId>
+            <version>v1beta4-rev53-1.23.0</version>
+        </dependency>
 
     </dependencies>
 

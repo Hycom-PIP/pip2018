@@ -5,6 +5,7 @@ import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInsta
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -15,14 +16,18 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.DriveScopes;
 import org.springframework.stereotype.Service;
 import pl.hycom.ip2018.searchengine.googledrivesearch.GoogleDriveSearchApplication;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
@@ -47,8 +52,9 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
      * If modifying these scopes, delete your previously saved credentials
      * at ~/.credentials/drive-java-quickstart
      */
-    private static final List<String> SCOPES =
-            Arrays.asList(DriveScopes.DRIVE);
+    private static final Set<String> SCOPES =
+            DriveScopes.all()
+            ;
 
     static {
         try {
@@ -63,26 +69,30 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
     @Override
     public Credential getCredential() {
         Credential credential = null;
+        GoogleCredential googleCredential = null;
         try {
-            InputStream in =
-                    GoogleDriveSearchApplication.class.getResourceAsStream("/client_secret.json");
-            GoogleClientSecrets clientSecrets =
-                    GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+//            InputStream in =
+//                    GoogleDriveSearchApplication.class.getResourceAsStream("/client_secret.json");
+//            GoogleClientSecrets clientSecrets =
+//                    GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+//
+//            // Build flow and trigger user authorization request.
+//            GoogleAuthorizationCodeFlow flow  = new GoogleAuthorizationCodeFlow.Builder(
+//                    HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+//                    .setDataStoreFactory(DATA_STORE_FACTORY)
+//                    .setAccessType("offline")
+//                    .build();
+//
+//            credential = new AuthorizationCodeInstalledApp(
+//                    flow, new LocalServerReceiver()).authorize("user");
 
-            // Build flow and trigger user authorization request.
-            GoogleAuthorizationCodeFlow flow  = new GoogleAuthorizationCodeFlow.Builder(
-                    HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                    .setScopes(SCOPES)
-                    .setDataStoreFactory(DATA_STORE_FACTORY)
-                    .setAccessType("offline")
-                    .build();
-
-            credential = new AuthorizationCodeInstalledApp(
-                    flow, new LocalServerReceiver()).authorize("user");
+            InputStream in = GoogleDriveSearchApplication.class.getResourceAsStream("/service_account_secret.json");
+            googleCredential = GoogleCredential.fromStream(in)
+                    .createScoped(Collections.singleton(DriveScopes.DRIVE));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return credential;
+        return googleCredential;
     }
 
     @Override

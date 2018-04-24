@@ -88,6 +88,7 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
                     .setFields(fields)
                     .setQ(String.format(q, queryWord))
                     .execute();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

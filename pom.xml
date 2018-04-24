@@ -75,6 +75,7 @@
 		<module>wikipedia-search-service</module>
 		<module>local-search-service</module>
 		<module>provider-contract</module>
+		<module>selenium-tests</module>
 	</modules>
 
 

@@ -12,6 +12,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class created to extract properties from response obtained from Google Drive API.
+ */
 public class ResponsePropertiesExtractor {
 
     @Value("${prop.googledrive.results}")
@@ -53,8 +56,13 @@ public class ResponsePropertiesExtractor {
     @Value("${prop.googledrive.size}")
     private String size;
 
+    /**
+     * Makes map response from FileList obtained from Drive API
+     * @param service Drive service that manages files in Drive
+     * @param response object of model that specifies how to parse into the JSON when working with Drive API
+     * @return map containing field header and its content
+     */
     public Map<String, List<Map<String, String>>> makeSimpleMapFromFileList(Drive service, FileList response) {
-
         Map<String, List<Map<String, String>>> extractedResult = new LinkedHashMap<>();
         List<File> filesList = response.getFiles();
         List<Map<String, String>> extractedFiles = new ArrayList<>();

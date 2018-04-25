@@ -11,6 +11,9 @@ import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchRes
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * Implementation of {@link GoogleDriveSearch} to get data by query
+ */
 @Slf4j
 public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
 
@@ -23,6 +26,13 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
     @Autowired
     private Environment environment;
 
+    /**
+     * Returns response wrapped in our type
+     * @param service Drive service that manages files in Drive
+     * @param query user searched phrase
+     * @return GoogleDriveSearchResponse
+     * @throws GoogleDriveSearchException thrown in case of Internal Server Error
+     */
     @Override
     public GoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query) throws GoogleDriveSearchException {
         if (log.isInfoEnabled()) {

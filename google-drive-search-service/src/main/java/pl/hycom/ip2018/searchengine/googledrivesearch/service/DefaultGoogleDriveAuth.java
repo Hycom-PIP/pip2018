@@ -15,17 +15,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 
+/**
+ * Implementation of {@link GoogleDriveAuth} to obtain Google Drive auth.
+ */
 @Slf4j
 public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
-        private static final String APPLICATION_NAME = "GoogleDriveSearchEngine\t";
 
-    /** Global instance of the JSON factory. */
-    private static final JsonFactory JSON_FACTORY =
-            JacksonFactory.getDefaultInstance();
-
-    /** Global instance of the HTTP transport. */
+    private static final String APPLICATION_NAME = "GoogleDriveSearchEngine\t";
+    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static NetHttpTransport HTTP_TRANSPORT;
-
     private static final String SERVICE_ACCOUNT_SECRET = "/service_account_secret.json";
 
     static {
@@ -37,11 +35,26 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
         }
     }
 
+    /**
+     * Returns Drive service that manages files in Drive
+     * including uploading, downloading, searching, detecting changes, and updating sharing permissions.
+     * @return Drive
+     */
+    @Override
+    public Drive getAuthDriveService() {
+        Credential googleCredential = getCredential();
+        if (log.isInfoEnabled()) {
+            log.info("Building a new authorized API client service.");
+        }
+        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, googleCredential)
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+    }
+
     private Credential getCredential() {
         if (log.isInfoEnabled()) {
             log.info("Requesting google credentials");
         }
-
         GoogleCredential googleCredential = null;
         try {
             InputStream in = GoogleDriveSearchApplication.class.getResourceAsStream(SERVICE_ACCOUNT_SECRET);
@@ -54,16 +67,5 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
             e.printStackTrace();
         }
         return googleCredential;
-    }
-
-    @Override
-    public Drive getAuthDriveService() {
-        Credential googleCredential = getCredential();
-        if (log.isInfoEnabled()) {
-            log.info("Building a new authorized API client service.");
-        }
-        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, googleCredential)
-                .setApplicationName(APPLICATION_NAME)
-                .build();
     }
 }

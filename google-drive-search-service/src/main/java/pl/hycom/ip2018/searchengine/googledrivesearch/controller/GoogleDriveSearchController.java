@@ -6,12 +6,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.hycom.ip2018.searchengine.googledrivesearch.exception.GoogleDriveSearchException;
-import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchResponse;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.GoogleDriveAuth;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.GoogleDriveSearch;
+import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+/**
+ * Class marked as controller, method returns json objects
+ */
 @RestController
 public class GoogleDriveSearchController {
 
@@ -20,8 +23,14 @@ public class GoogleDriveSearchController {
     @Autowired
     private GoogleDriveAuth googleDriveAuth;
 
+    /**
+     * Endpoint for google drive search service
+     * @param query phrase that is searched for
+     * @return ProviderResponse
+     * @throws GoogleDriveSearchException thrown in case of Internal Server Error
+     */
     @RequestMapping(value = "/res/{query}", method = GET)
-    public GoogleDriveSearchResponse getResponseFromGoogleDrive(@PathVariable String query) throws GoogleDriveSearchException {
+    public ProviderResponse getResponseFromGoogleDrive(@PathVariable String query) throws GoogleDriveSearchException {
         Drive drive = googleDriveAuth.getAuthDriveService();
         return googleDriveSearch.getResponseFromGoogleDriveByQuery(drive, query);
     }

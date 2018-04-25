@@ -8,6 +8,10 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.*;
 
+/**
+ * Class intended for being processed by the Spring container
+ * to generate bean definitions and service requests for those beans at runtime
+ */
 @Configuration
 public class GoogleDriveSearchConfig {
 

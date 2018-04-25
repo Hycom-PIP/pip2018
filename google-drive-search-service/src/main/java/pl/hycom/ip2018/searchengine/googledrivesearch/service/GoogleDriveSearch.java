@@ -11,5 +11,4 @@ public interface GoogleDriveSearch {
 
     GoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query);
     FileList listFiles(Drive service, String queryWord);
-    List<File> getFiles(FileList fileList);
 }

@@ -1,6 +1,5 @@
 package pl.hycom.ip2018.searchengine.googledrivesearch.controller;
 
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.drive.Drive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +21,7 @@ public class GoogleDriveSearchController {
 
     @RequestMapping(value = "/res/{query}", method = GET)
     public GoogleDriveSearchResponse getResponseFromGoogleDrive(@PathVariable String query) {
-        Credential credential = googleDriveAuth.getCredential();
-        Drive drive = googleDriveAuth.getDrive(credential);
+        Drive drive = googleDriveAuth.getAuthDriveService();
         return googleDriveSearch.getResponseFromGoogleDriveByQuery(drive, query);
     }
 }

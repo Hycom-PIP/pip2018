@@ -98,7 +98,7 @@ public class ResponsePropertiesExtractor {
             InputStream stream = service.files().get(file.getId()).executeMedia().getContent();
             snippet = stream.toString();
         } catch (IOException e) {
-            snippet = "<ERROR: Nie udało się odczytać zawartości pliku.>";
+            snippet = "<Nie udało się odczytać zawartości pliku.>";
             e.printStackTrace();
         }
         return snippet;

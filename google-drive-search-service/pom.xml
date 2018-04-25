@@ -58,12 +58,7 @@
             <groupId>com.google.oauth-client</groupId>
             <artifactId>google-oauth-client-servlet</artifactId>
             <version>1.23.0</version>
-        </dependency><!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-drive -->
-        <!--<dependency>-->
-            <!--<groupId>com.google.apis</groupId>-->
-            <!--<artifactId>google-api-services-drive</artifactId>-->
-            <!--<version>v2-rev65-1.13.2-beta</version>-->
-        <!--</dependency>-->
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.http-client/google-http-client -->
         <dependency>
             <groupId>com.google.http-client</groupId>
@@ -93,6 +88,12 @@
             <groupId>pl.hycom.ip-2018</groupId>
             <artifactId>provider-contract</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

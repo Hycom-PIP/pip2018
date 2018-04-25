@@ -2,86 +2,66 @@ package pl.hycom.ip2018.searchengine.googledrivesearch.service;
 
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.FileList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.ResourceAccessException;
+import org.springframework.core.env.Environment;
+import pl.hycom.ip2018.searchengine.googledrivesearch.converter.GoogleDriveResponseConverter;
+import pl.hycom.ip2018.searchengine.googledrivesearch.exception.GoogleDriveSearchException;
+import pl.hycom.ip2018.searchengine.googledrivesearch.googledrivemodel.GoogleDriveResponse;
 import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchResponse;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 
-@Service
+@Slf4j
 public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
-
-    private static final Logger logger = LoggerFactory.getLogger(DefaultGoogleDriveSearch.class);
-
-    @Value("${rest.api.baseUrl}")
-    private String baseUrl;
-
-    @Value("${rest.api.size}")
-    private String size;
-
-    @Value("${rest.api.pageToken}")
-    private String pageToken;
-
-    @Value("${rest.api.fields}")
-    private String fields;
-
-    @Value("${rest.api.authUrl}")
-    private String authUrl;
-
-    @Value("${rest.api.clientId}")
-    private String clientId;
 
     @Autowired
     private JsonResponse jsonResponse;
 
     @Autowired
+    private GoogleDriveResponseConverter googleDriveResponseConverter;
+
+    @Autowired
     private ResponsePropertiesExtractor responsePropertiesExtractor;
 
-    @Override
-    public GoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query) {
+    @Autowired
+    private Environment environment;
 
-        logger.info("Requesting searching results for {}", query);
+    @Override
+    public GoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query) throws GoogleDriveSearchException {
+
+        if (log.isInfoEnabled()) {
+            log.info("Requesting searching results for {}", query);
+        }
+
         GoogleDriveSearchResponse result;
         try {
+            GoogleDriveResponse googleDriveResponse;
             FileList fileList = listFiles(service, query);
             Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromFileList(service, fileList);
             String fromSimpleMapToJson = jsonResponse.getAsString(simpleMap);
-            result = jsonResponse.getAsObject(fromSimpleMapToJson, GoogleDriveSearchResponse.TYPE);
-            result.setCode(200);
-            result.setMessage("OK");
-            result.setDate(new Date().toString());
-        } catch (ResourceAccessException | HttpClientErrorException e) {
-            logger.error("Searching results for {} are not available from Google Drive", query);
-            result = new GoogleDriveSearchResponse();
-            result.setCode(500);
-            result.setMessage("Internal Server Error");
-            result.setDate(new Date().toString());
-        } catch (ClassCastException e) {
-            logger.error("Google Drive changed their API");
-            result = new GoogleDriveSearchResponse();
-            result.setCode(500);
-            result.setMessage("Wikipedia changed their API");
-            result.setDate(new Date().toString());
+            googleDriveResponse = jsonResponse.getAsObject(fromSimpleMapToJson, GoogleDriveSearchResponse.TYPE);
+
+            result = googleDriveResponseConverter.convert(googleDriveResponse);
+        } catch (Exception e) {
+            if (log.isErrorEnabled()) {
+                log.error("Searching results for {} are not available from Google Drive", query);
+            }
+            throw new GoogleDriveSearchException();
         }
 
         return result;
     }
 
-    @Override
-    public FileList listFiles(Drive service, String queryWord) {
+    private FileList listFiles(Drive service, String queryWord) {
         FileList result = null;
         try {
             String q = "fullText contains '%s'";
             result = service.files().list()
-                    .setPageSize(Integer.getInteger(size))
-                    .setFields(fields)
+                    .setPageSize(Integer.getInteger(environment.getProperty("rest.api.size")))
+                    .setFields(environment.getProperty("rest.api.fields"))
                     .setQ(String.format(q, queryWord))
                     .execute();
 

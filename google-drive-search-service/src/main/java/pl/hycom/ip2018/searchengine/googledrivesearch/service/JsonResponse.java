@@ -16,9 +16,6 @@ import java.util.Map;
 public class JsonResponse {
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
     private Gson gson;
 
     public String getAsString(Map map) {
@@ -27,18 +24,5 @@ public class JsonResponse {
 
     public <T> T getAsObject(String json, Type resultType) {
         return gson.fromJson(json, resultType);
-    }
-
-    public Map getAsMap(URI url) {
-        return invoke(url, Map.class);
-    }
-
-    private <T> T invoke(URI url, Class<T> responseType) {
-        RequestEntity<?> request = RequestEntity
-                .get(url)
-                .accept(MediaType.APPLICATION_JSON)
-                .build();
-        ResponseEntity<T> exchange = restTemplate.exchange(request, responseType);
-        return exchange.getBody();
     }
 }

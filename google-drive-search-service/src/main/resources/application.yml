@@ -26,6 +26,11 @@ eureka:
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
 
-  ribbon:
-    eureka:
-      enabled: true
+ribbon:
+  eureka:
+    enabled: true
+
+rest:
+  api:
+    size: 100
+    fields: nextPageToken, files(id, name, mimeType, createdTime, webViewLink, webContentLink, modifiedTime, description, iconLink, size)

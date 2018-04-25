@@ -9,6 +9,8 @@ jobs:
     env: MODULE_DIR=discovery-service
   - stage: Edge Service
     env: MODULE_DIR=edge-service
+  - stage: Hello World
+    env: MODULE_DIR=hello-service
   - stage: Wiki Service
     env: MODULE_DIR=wikipedia-search-service
     script:

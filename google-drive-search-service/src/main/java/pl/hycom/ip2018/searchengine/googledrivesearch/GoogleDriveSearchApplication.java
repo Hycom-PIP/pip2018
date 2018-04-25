@@ -13,10 +13,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import pl.hycom.ip2018.searchengine.googledrivesearch.converter.GoogleDriveResponseConverter;
-import pl.hycom.ip2018.searchengine.googledrivesearch.service.DefaultGoogleDriveSearch;
-import pl.hycom.ip2018.searchengine.googledrivesearch.service.GoogleDriveSearch;
-import pl.hycom.ip2018.searchengine.googledrivesearch.service.JsonResponse;
-import pl.hycom.ip2018.searchengine.googledrivesearch.service.ResponsePropertiesExtractor;
+import pl.hycom.ip2018.searchengine.googledrivesearch.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +62,7 @@ public class GoogleDriveSearchApplication {
     }
 
     @Bean
-    public GoogleDriveResponseConverter googleDriveResponseConverter() {
-        return new GoogleDriveResponseConverter();
+    public GoogleDriveAuth googleDriveAuth() {
+        return new DefaultGoogleDriveAuth();
     }
 }

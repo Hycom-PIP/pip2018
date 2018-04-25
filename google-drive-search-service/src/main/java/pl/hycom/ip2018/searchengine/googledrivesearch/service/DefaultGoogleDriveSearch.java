@@ -4,11 +4,8 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.FileList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import pl.hycom.ip2018.searchengine.googledrivesearch.converter.GoogleDriveResponseConverter;
 import pl.hycom.ip2018.searchengine.googledrivesearch.exception.GoogleDriveSearchException;
-import pl.hycom.ip2018.searchengine.googledrivesearch.googledrivemodel.GoogleDriveResponse;
 import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchResponse;
 
 import java.io.IOException;
@@ -21,9 +18,6 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
     private JsonResponse jsonResponse;
 
     @Autowired
-    private GoogleDriveResponseConverter googleDriveResponseConverter;
-
-    @Autowired
     private ResponsePropertiesExtractor responsePropertiesExtractor;
 
     @Autowired
@@ -31,20 +25,16 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
 
     @Override
     public GoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query) throws GoogleDriveSearchException {
-
         if (log.isInfoEnabled()) {
             log.info("Requesting searching results for {}", query);
         }
 
         GoogleDriveSearchResponse result;
         try {
-            GoogleDriveResponse googleDriveResponse;
             FileList fileList = listFiles(service, query);
             Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromFileList(service, fileList);
             String fromSimpleMapToJson = jsonResponse.getAsString(simpleMap);
-            googleDriveResponse = jsonResponse.getAsObject(fromSimpleMapToJson, GoogleDriveSearchResponse.TYPE);
-
-            result = googleDriveResponseConverter.convert(googleDriveResponse);
+            result = jsonResponse.getAsObject(fromSimpleMapToJson, GoogleDriveSearchResponse.TYPE);
         } catch (Exception e) {
             if (log.isErrorEnabled()) {
                 log.error("Searching results for {} are not available from Google Drive", query);

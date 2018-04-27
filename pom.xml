@@ -68,16 +68,16 @@
 	</build>
 
 	<modules>
-		<module>provider-contract</module>
-		<module>hello-service</module>
 		<module>edge-service</module>
 		<module>discovery-service</module>
+		<module>provider-contract</module>
+		<module>hello-service</module>
 		<module>google-drive-search-service</module>
 		<module>google-search-service</module>
 		<module>wikipedia-search-service</module>
 		<module>local-search-service</module>
-		<module>selenium-tests</module>
 		<module>aggregate-service</module>
+		<module>selenium-tests</module>
 	</modules>
 
 

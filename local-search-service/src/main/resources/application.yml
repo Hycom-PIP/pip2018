@@ -26,10 +26,16 @@ eureka:
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
 
-  ribbon:
-    eureka:
-      enabled: true
----
+ribbon:
+  eureka:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
 
 rest:
   api:

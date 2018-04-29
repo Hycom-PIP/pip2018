@@ -48,12 +48,25 @@
 			<version>1.16.20</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-hystrix</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-netflix-hystrix-dashboard</artifactId>
+			<version>1.4.3.RELEASE</version>
+		</dependency>
         <dependency>
             <groupId>pl.hycom.ip-2018</groupId>
             <artifactId>provider-contract</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-    </dependencies>
+	</dependencies>
 
 	<build>
         <plugins>

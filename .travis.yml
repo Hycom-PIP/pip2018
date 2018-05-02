@@ -41,4 +41,4 @@ addons:
 
 script:
  - mvn test
- - mvn sonar:sonar -Dsonar.branch
+ - mvn sonar:sonar -Dsonar.branch=$TRAVIS_BRANCH

@@ -28,7 +28,7 @@
                 <configuration>
                     <rootStandaloneServerDirectory>./webdrivers/binaries</rootStandaloneServerDirectory>
                     <downloadedZipFileDirectory>./webdrivers/zips</downloadedZipFileDirectory>
-                    <customRepositoryMap>./src/main/resources/RepositoryMap.xml</customRepositoryMap>
+                    <customRepositoryMap>RepositoryMap.xml</customRepositoryMap>
                     <thirtyTwoBitBinaries>false</thirtyTwoBitBinaries>
                     <sixtyFourBitBinaries>true</sixtyFourBitBinaries>
                 </configuration>

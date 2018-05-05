@@ -3,6 +3,7 @@ package pl.hycom.ip2018.searchengine.selenium.utils;
 import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class DriverFactory {
 
@@ -12,7 +13,9 @@ public class DriverFactory {
     public static WebDriver getChromeDriver() {
         String chromeDriverPath = getChromeDriverPath();
         System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-        return new ChromeDriver();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--no-sandbox", "--headless");
+        return new ChromeDriver(chromeOptions);
     }
 
     private static String getChromeDriverPath() {

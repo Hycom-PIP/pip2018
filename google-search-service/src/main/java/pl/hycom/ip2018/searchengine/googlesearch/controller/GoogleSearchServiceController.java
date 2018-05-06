@@ -1,5 +1,6 @@
 package pl.hycom.ip2018.searchengine.googlesearch.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,8 @@ import pl.hycom.ip2018.searchengine.googlesearch.exception.GoogleSearchException
 import pl.hycom.ip2018.searchengine.googlesearch.model.GoogleSearchResponse;
 import pl.hycom.ip2018.searchengine.googlesearch.service.GoogleSearch;
 import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
+
+import java.util.ArrayList;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -28,8 +31,13 @@ public class GoogleSearchServiceController {
      * @param query phrase which we search
      * @return GoogleSearchResponse
      */
+    @HystrixCommand(fallbackMethod = "getResponseFromGoogleFallBack",commandKey = "Google-Search-Service", groupKey = "Google-Response")
     @RequestMapping(value = "/res/{query}", method = GET)
     public ProviderResponse getResponseFromGoogle(@PathVariable String query) throws GoogleSearchException {
         return googleSearch.getResponse(query);
+    }
+
+    public ProviderResponse getResponseFromGoogleFallBack(String query) {
+        return new ProviderResponse(new ArrayList<>());
     }
 }

@@ -1,5 +1,6 @@
 package pl.hycom.ip2018.searchengine.localsearch.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,8 @@ import pl.hycom.ip2018.searchengine.localsearch.model.LocalSearchResponse;
 import pl.hycom.ip2018.searchengine.localsearch.service.DefaultLocalSearch;
 import pl.hycom.ip2018.searchengine.localsearch.service.LocalSearch;
 import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
+
+import java.util.ArrayList;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -29,8 +32,13 @@ public class LocalSearchServiceController {
      * @param query we are searching for
      * @return object representation of response
      */
+    @HystrixCommand(fallbackMethod = "getResponseFromLocalFallBack",commandKey = "Local-Search-Service", groupKey = "Local-Response")
     @RequestMapping(value = "/res/{query}", method = GET)
     public ProviderResponse getResponseFromLocal(@PathVariable String query) throws LocalSearchException {
         return defaultLocalSearch.getResponse(query);
+    }
+
+    public ProviderResponse getResponseFromLocalFallBack(String query) {
+        return new ProviderResponse(new ArrayList<>());
     }
 }

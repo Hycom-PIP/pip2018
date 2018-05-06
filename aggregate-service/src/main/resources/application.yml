@@ -30,6 +30,13 @@ ribbon:
   eureka:
     enabled: true
 
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+
 client:
   wikiClient:
     enabled: true

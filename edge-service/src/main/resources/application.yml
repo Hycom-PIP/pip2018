@@ -35,6 +35,9 @@ endpoints:
 zuul:
   prefix: /api
   routes:
+    hello:
+      path: /hello/**
+      serviceId: hello-service
     googlesearch:
       path: /googlesearch/**
       serviceId: google-search-service
@@ -53,10 +56,11 @@ zuul:
 
 
 ribbon:
-    ConnectTimeout: 120000
-    ReadTimeout: 120000
+    ConnectTimeout: 10000
+    ReadTimeout: 10000
     eureka:
          enabled: true
+
 
 eureka:
   client:

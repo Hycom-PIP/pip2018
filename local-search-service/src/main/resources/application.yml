@@ -39,7 +39,7 @@ hystrix:
 
 rest:
   api:
-    localPath: C:\Users\Durszlak\Desktop\Uczelnia\Hy\pip2018\
+    localPath: C:\Users\Durszlak\Desktop\Uczelnia\Hycom\pip2018\
     infoLanguage: en
 
 

@@ -1,4 +1,5 @@
-package pl.hycom.ip2018.searchengine.wiki.config;
+package pl.hycom.ip2018.searchengine.localsearch;
+
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,14 +11,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig {
+public class SwaggerConfing {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("pl.hycom.ip2018.searchengine.wiki.controller"))
+                .apis(RequestHandlerSelectors.basePackage("pl.hycom.ip2018.searchengine.localsearch.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
 }
-

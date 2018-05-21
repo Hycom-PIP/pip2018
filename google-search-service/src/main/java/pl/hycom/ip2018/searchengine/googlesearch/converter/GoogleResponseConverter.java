@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static pl.hycom.ip2018.searchengine.googlesearch.model.Result.*;
+
 public class GoogleResponseConverter implements Converter<GoogleResponse, GoogleSearchResponse> {
 
     @Override
@@ -19,14 +21,15 @@ public class GoogleResponseConverter implements Converter<GoogleResponse, Google
         GoogleSearchResponse result = new GoogleSearchResponse();
         List<SimpleResult> simpleItems = new ArrayList<>();
 
+
         Optional.ofNullable(googleResponse)
                 .map(GoogleResponse::getResults)
                 .ifPresent(googleItems -> googleItems
                         .forEach(googleItem -> {
                             Result item = new Result();
                             item.setHeader(googleItem.getHeader());
-                            item.setSnippet(googleItem.getSnippet());
-                            item.setTimestamp(Optional.ofNullable(googleItem.getPageMap())
+                            item.addToAdditionalData(SNIPPET_KEY, googleItem.getSnippet());
+                            item.addToAdditionalData(TIMESTAMP_KEY, Optional.ofNullable(googleItem.getPageMap())
                                     .map(GooglePageMap::getMetaTags)
                                     .map(googleMetaTags -> googleMetaTags.get(0))
                                     .map(GoogleMetaTag::getTimestamp).orElse(null));

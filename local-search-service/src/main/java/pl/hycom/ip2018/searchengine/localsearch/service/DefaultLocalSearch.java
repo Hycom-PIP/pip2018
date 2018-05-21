@@ -14,12 +14,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+
+import static pl.hycom.ip2018.searchengine.localsearch.model.Result.*;
 
 /**
  * Implementation of {@link LocalSearch} to get data by query
@@ -197,12 +200,36 @@ public class DefaultLocalSearch implements LocalSearch {
      * @return Result
      */
     private Result getResultByPath(Path path, String snippet) {
+
+        BasicFileAttributes fileAttributes = null;
+        long creationTime = 0;
+        try {
+            fileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
+            creationTime = fileAttributes.creationTime().toMillis();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Result res = new Result();
         res.setHeader(getNameFromPath(path));
-        res.setSnippet(snippet);
-        res.setTimestamp(converter.toStringFromLong(path.toFile().lastModified()));
+        res.addToAdditionalData(SNIPPET_KEY, snippet);
+        res.addToAdditionalData(CREATED_DATE_KEY, (converter.toStringFromLong(creationTime)));
+        res.addToAdditionalData(MODIFIED_DATE_KEY, (converter.toStringFromLong(path.toFile().lastModified())));
+        res.addToAdditionalData(FILE_TYPE_KEY, getFileExtension(path));
         res.setUrl(path.toAbsolutePath().toString());
         return res;
+    }
+
+    /**
+     * Get extension from File
+     *
+     * @param path path to File
+     * @return String
+     */
+    private String getFileExtension(Path path) {
+        String fileName = path.toString();
+        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+            return fileName.substring(fileName.lastIndexOf(".")+1);
+        else return "";
     }
 
     /**

@@ -32,7 +32,7 @@ public class SwaggerAggregatedResourcesProvider implements SwaggerResourcesProvi
         for (Object key : routesProperties.keySet()) {
             String keyStr = (String) key;
             String property = "zuul.routes.".concat(keyStr);
-            String name = environment.getProperty(property.concat("serviceId"));
+            String name = environment.getProperty(property.concat(".serviceId"));
             String location = (prefix + environment.getProperty(property + ".path")).replace("**", "v2/api-docs");
             resources.add(buildSwaggerResource(name, location, "2.0"));
         }

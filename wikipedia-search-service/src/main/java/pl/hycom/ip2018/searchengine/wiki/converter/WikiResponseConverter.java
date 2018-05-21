@@ -8,9 +8,11 @@ import pl.hycom.ip2018.searchengine.wiki.model.WikiSearchResponse;
 import pl.hycom.ip2018.searchengine.wiki.wikimodel.WikiItem;
 import pl.hycom.ip2018.searchengine.wiki.wikimodel.WikiResponse;
 import pl.hycom.ip2018.searchengine.wiki.wikimodel.WikiResponseData;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
+
+import static pl.hycom.ip2018.searchengine.wiki.model.Result.SNIPPET_KEY;
+import static pl.hycom.ip2018.searchengine.wiki.model.Result.TIMESTAMP_KEY;
 
 /**
  * A converter converts a source object of type {@link WikiResponse } to a target of type {@link WikiSearchResponse}
@@ -60,11 +62,14 @@ public class WikiResponseConverter implements Converter<WikiResponse, WikiSearch
      * @return SimpleResult provider contract object with recent data
      */
     private SimpleResult getBuild(WikiItem wikiItem) {
+        Map<String, String> additionalParams = new HashMap<>();
+        additionalParams.put(SNIPPET_KEY, wikiItem.getSnippet());
+        additionalParams.put(TIMESTAMP_KEY, wikiItem.getTimestamp());
+
         return Result.builder()
             .provider(Result.PROVIDER)
             .header(wikiItem.getHeader())
-            .snippet(wikiItem.getSnippet())
-            .timestamp(wikiItem.getTimestamp())
+            .additionalData(additionalParams)
             .url(environment.getProperty("rest.api.defaultUrl") + wikiItem.getHeader())
             .build();
     }

@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *  Base class representing our model
  */
@@ -20,10 +23,11 @@ public class SimpleResult {
 
     protected String header;
 
-    protected String snippet;
-
-    protected String timestamp;
+    protected Map<String, String> additionalData = new HashMap<>();
 
     protected String url;
 
+    public void addToAdditionalData(String key, String value) {
+        additionalData.put(key, value);
+    }
 }

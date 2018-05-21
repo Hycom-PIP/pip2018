@@ -51,8 +51,8 @@ zuul:
       path: /localsearch/**
       serviceId: local-search-service
 
-    threadPool:
-        useSeparateThreadPools: true
+  threadPool:
+      useSeparateThreadPools: true
 
 
 ribbon:

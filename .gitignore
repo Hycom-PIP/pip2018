@@ -112,3 +112,10 @@ hs_err_pid*
 
 
 # End of https://www.gitignore.io/api/java,intellij+all
+selenium-tests/webdrivers/binaries/windows/edge/64bit/MicrosoftWebDriver.exe
+selenium-tests/webdrivers/binaries/windows/googlechrome/64bit/chromedriver.exe
+selenium-tests/webdrivers/binaries/windows/internetexplorer/64bit/IEDriverServer.exe
+selenium-tests/webdrivers/binaries/windows/marionette/64bit/geckodriver.exe
+selenium-tests/webdrivers/binaries/windows/operachromium/64bit/operadriver.exe
+selenium-tests/webdrivers/binaries/windows/phantomjs/64bit/phantomjs.exe
+selenium-tests/webdrivers/zips/MicrosoftWebDriver.exe

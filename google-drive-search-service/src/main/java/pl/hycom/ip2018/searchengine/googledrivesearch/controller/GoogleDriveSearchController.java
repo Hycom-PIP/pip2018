@@ -7,11 +7,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.hycom.ip2018.searchengine.googledrivesearch.exception.GoogleDriveSearchException;
+import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchResponse;
+import pl.hycom.ip2018.searchengine.googledrivesearch.model.Result;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.GoogleDriveAuth;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.GoogleDriveSearch;
 import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
+import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -32,11 +36,11 @@ public class GoogleDriveSearchController {
      * @return ProviderResponse
      * @throws GoogleDriveSearchException thrown in case of Internal Server Error
      */
-    @HystrixCommand(fallbackMethod = "getResponseFromGoogleDriveFallBack",commandKey = "fallback", groupKey = "fallback")
+    @HystrixCommand(fallbackMethod = "getResponseFromGoogleDriveFallBack",commandKey = "Google-Drive-Search-Service", groupKey = "Google-Drive-Response")
     @RequestMapping(value = "/res/{query}", method = GET)
     public ProviderResponse getResponseFromGoogleDrive(@PathVariable String query) throws GoogleDriveSearchException {
         Drive drive = googleDriveAuth.getAuthDriveService();
-        return googleDriveSearch.getResponseFromGoogleDriveByQuery(drive, query);
+        return googleDriveSearch.getResponse(drive, query);
     }
 
     public ProviderResponse getResponseFromGoogleDriveFallBack(String query) {

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import pl.hycom.ip2018.searchengine.aggregate.intercomm.GoogleClient;
+import pl.hycom.ip2018.searchengine.aggregate.intercomm.GoogleDriveClient;
 import pl.hycom.ip2018.searchengine.aggregate.intercomm.LocalClient;
 import pl.hycom.ip2018.searchengine.aggregate.intercomm.WikiClient;
 import pl.hycom.ip2018.searchengine.aggregate.notation.Usage;
@@ -33,9 +34,8 @@ public class DefaultAggregateSearch implements AggregateSearch {
     @Usage
     LocalClient localClient;
 
-//    @Usage
-//    @Autowired
-//    GoogleDriveClient googleDriveClient;
+    @Usage
+    GoogleDriveClient googleDriveClient;
 
 
     /**
@@ -63,10 +63,11 @@ public class DefaultAggregateSearch implements AggregateSearch {
 
                             try {
                                   ProviderSearch value = (ProviderSearch)field.get(this);
-                                  output.add(value.getResponse(query));
+                                  ProviderResponse response= value.getResponse(query);
+                                  output.add(response);
                             } catch (FeignException e) {
                                 if (log.isErrorEnabled()) {
-                                    log.error("Client {} hasn't been registered", message);
+                                    log.error("Client {} hasn't been registered", message, e);
                                 }
                             }
 

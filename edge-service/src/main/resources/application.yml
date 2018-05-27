@@ -50,6 +50,9 @@ zuul:
     localsearch:
       path: /localsearch/**
       serviceId: local-search-service
+    googledrivesearch:
+      path: /googledrivesearch/**
+      serviceId: google-drive-search-service
 
   threadPool:
       useSeparateThreadPools: true

@@ -4,13 +4,15 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import org.springframework.beans.factory.annotation.Value;
+import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchResponse;
+import pl.hycom.ip2018.searchengine.googledrivesearch.model.Result;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static pl.hycom.ip2018.searchengine.googledrivesearch.model.Result.PROVIDER;
+import static pl.hycom.ip2018.searchengine.googledrivesearch.model.Result.PROVIDER_KEY;
 
 /**
  * Class created to extract properties from response obtained from Google Drive API.
@@ -28,9 +30,6 @@ public class ResponsePropertiesExtractor {
 
     @Value("${prop.googledrive.snippet}")
     private String snippet;
-
-    @Value("${prop.googledrive.timestamp}")
-    private String timestamp;
 
     @Value("${prop.googledrive.webViewLink}")
     private String webViewLink;
@@ -62,16 +61,27 @@ public class ResponsePropertiesExtractor {
      * @param response object of model that specifies how to parse into the JSON when working with Drive API
      * @return map containing field header and its content
      */
-    public Map<String, List<Map<String, String>>> makeSimpleMapFromFileList(Drive service, FileList response) {
-        Map<String, List<Map<String, String>>> extractedResult = new LinkedHashMap<>();
+    public Map<String, List<Map<String, Object>>> makeSimpleMapFromFileList(Drive service, FileList response) {
+        Map<String, List<Map<String, Object>>> extractedResult = new LinkedHashMap<>();
         List<File> filesList = response.getFiles();
-        List<Map<String, String>> extractedFiles = new ArrayList<>();
+        List<Map<String, Object>> extractedFiles = new ArrayList<>();
         for (File file : filesList) {
-            Map<String, String> singleItem = new LinkedHashMap<>();
+            Map<String, Object> singleItem = new LinkedHashMap<>();
+            Map<String, String> additionalData = new LinkedHashMap<>();
+
+            singleItem.put(PROVIDER_KEY, PROVIDER);
             singleItem.put(header, file.getName());
-            singleItem.put(snippet, createSnippet(service, file));
-            singleItem.put(timestamp, file.getModifiedTime().toString());
             singleItem.put(url, file.getWebViewLink());
+            additionalData.put(snippet, createSnippet(service, file));
+            additionalData.put(mimeType, file.getMimeType());
+            additionalData.put(description, file.getDescription());
+            additionalData.put(webContentLink, file.getWebContentLink());
+            //additionalData.put(webViewLink, file.getWebViewLink());
+            additionalData.put(iconLink, file.getIconLink());
+            additionalData.put(createdTime, file.getCreatedTime().toString());
+            additionalData.put(modifiedTime, file.getModifiedTime().toString());
+            additionalData.put(size, String.valueOf(file.size()));
+            singleItem.put("additionalData", additionalData);
             extractedFiles.add(singleItem);
         }
         extractedResult.put(results, extractedFiles);
@@ -104,7 +114,8 @@ public class ResponsePropertiesExtractor {
         String snippet;
         try {
             InputStream stream = service.files().get(file.getId()).executeMedia().getContent();
-            snippet = stream.toString();
+            Scanner s = new Scanner(stream).useDelimiter("\\A");
+            snippet = s.hasNext() ? s.next() : "";
         } catch (IOException e) {
             snippet = "<Nie udało się odczytać zawartości pliku.>";
             e.printStackTrace();

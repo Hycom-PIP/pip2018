@@ -4,8 +4,6 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import org.springframework.beans.factory.annotation.Value;
-import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchResponse;
-import pl.hycom.ip2018.searchengine.googledrivesearch.model.Result;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,7 +74,6 @@ public class ResponsePropertiesExtractor {
             additionalData.put(mimeType, file.getMimeType());
             additionalData.put(description, file.getDescription());
             additionalData.put(webContentLink, file.getWebContentLink());
-            //additionalData.put(webViewLink, file.getWebViewLink());
             additionalData.put(iconLink, file.getIconLink());
             additionalData.put(createdTime, file.getCreatedTime().toString());
             additionalData.put(modifiedTime, file.getModifiedTime().toString());

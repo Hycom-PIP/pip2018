@@ -9,7 +9,6 @@ public class Result extends SimpleResult {
     public static final String MIME_TYPE_KEY = "mimeType";
     public static final String DESCRIPTION_KEY = "description";
     public static final String WEB_CONTENT_LINK_KEY = "webContentLink";
-    //public static final String WEB_VIEW_LINK_KEY = "webViewLink";
     public static final String ICON_LINK_KEY = "iconLink";
     public static final String CREATED_TIME_KEY = "createdTime";
     public static final String MODIFIED_TIME_KEY = "modifiedTime";

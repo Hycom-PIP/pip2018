@@ -7,15 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.hycom.ip2018.searchengine.googledrivesearch.exception.GoogleDriveSearchException;
-import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchResponse;
-import pl.hycom.ip2018.searchengine.googledrivesearch.model.Result;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.GoogleDriveAuth;
 import pl.hycom.ip2018.searchengine.googledrivesearch.service.GoogleDriveSearch;
 import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
-import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 

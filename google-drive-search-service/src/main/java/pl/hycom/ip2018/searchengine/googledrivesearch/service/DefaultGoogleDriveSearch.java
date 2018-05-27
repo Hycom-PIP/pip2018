@@ -34,7 +34,7 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
      * @throws GoogleDriveSearchException thrown in case of Internal Server Error
      */
     @Override
-    public GoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query) throws GoogleDriveSearchException {
+    public GoogleDriveSearchResponse getResponse(Drive service, String query) throws GoogleDriveSearchException {
         if (log.isInfoEnabled()) {
             log.info("Requesting searching results for {}", query);
         }

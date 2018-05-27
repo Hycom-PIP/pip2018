@@ -32,11 +32,11 @@ public class GoogleDriveSearchController {
      * @return ProviderResponse
      * @throws GoogleDriveSearchException thrown in case of Internal Server Error
      */
-    @HystrixCommand(fallbackMethod = "getResponseFromGoogleDriveFallBack",commandKey = "fallback", groupKey = "fallback")
+    @HystrixCommand(fallbackMethod = "getResponseFromGoogleDriveFallBack",commandKey = "Google-Drive-Search-Service", groupKey = "Google-Drive-Response")
     @RequestMapping(value = "/res/{query}", method = GET)
     public ProviderResponse getResponseFromGoogleDrive(@PathVariable String query) throws GoogleDriveSearchException {
         Drive drive = googleDriveAuth.getAuthDriveService();
-        return googleDriveSearch.getResponseFromGoogleDriveByQuery(drive, query);
+        return googleDriveSearch.getResponse(drive, query);
     }
 
     public ProviderResponse getResponseFromGoogleDriveFallBack(String query) {

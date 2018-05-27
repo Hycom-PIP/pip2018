@@ -16,5 +16,5 @@ public interface GoogleDriveSearch {
      * @return GoogleDriveSearchResponse
      * @throws GoogleDriveSearchException thrown in case of Internal Server Error
      */
-    GoogleDriveSearchResponse getResponseFromGoogleDriveByQuery(Drive service, String query) throws GoogleDriveSearchException;
+    GoogleDriveSearchResponse getResponse(Drive service, String query) throws GoogleDriveSearchException;
 }

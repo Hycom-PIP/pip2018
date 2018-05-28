@@ -57,8 +57,8 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
 
     private FileList listFiles(Drive service, String queryWord) {
         FileList result = null;
+        String q = "fullText contains '%s'";
         try {
-            String q = "fullText contains '%s'";
             result = service.files().list()
                     .setPageSize(Integer.getInteger(environment.getProperty("rest.api.size")))
                     .setFields(environment.getProperty("rest.api.fields"))
@@ -66,7 +66,7 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
                     .execute();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error while retrieving file list for query {}", String.format(q, queryWord), e);
         }
         return result;
     }

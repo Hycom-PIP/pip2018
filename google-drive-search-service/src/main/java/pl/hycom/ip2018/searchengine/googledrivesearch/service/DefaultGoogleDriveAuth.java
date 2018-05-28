@@ -30,7 +30,7 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         } catch (Throwable t) {
-            t.printStackTrace();
+            log.error("Error while creating NetHttpTransport", t);
             System.exit(1);
         }
     }
@@ -62,9 +62,8 @@ public class DefaultGoogleDriveAuth implements GoogleDriveAuth{
                     .createScoped(Collections.singleton(DriveScopes.DRIVE));
         } catch (IOException e) {
             if (log.isErrorEnabled()) {
-                log.error("Could not load google credentials from {}", SERVICE_ACCOUNT_SECRET);
+                log.error("Could not load google credentials from {}", SERVICE_ACCOUNT_SECRET, e);
             }
-            e.printStackTrace();
         }
         return googleCredential;
     }

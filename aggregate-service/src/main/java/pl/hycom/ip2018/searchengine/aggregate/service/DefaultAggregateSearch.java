@@ -44,7 +44,7 @@ public class DefaultAggregateSearch implements AggregateSearch {
                 continue;
             }
 
-            String name = services.get(0).getUri().toString();
+            String name = "http://" + provider;
             ProviderSearch feignClient = Feign.builder().target(ProviderSearch.class, name);
 
 

@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
 
 import javax.annotation.PostConstruct;
+import pl.hycom.ip2018.searchengine.providercontract.service.ProviderSearch;
 
 /**
  * Implementation of {@link AggregateSearch} to get appropriate data type from i.e String query
@@ -32,9 +33,9 @@ public class DefaultAggregateSearch implements AggregateSearch {
         providers = new ArrayList<>(Arrays.asList(environment.getProperty("clients").split(",")));
     }
 
-    private Set<AggregateSearch> getClients() {
+    private Set<ProviderSearch> getClients() {
 
-        Set<AggregateSearch> clients = new HashSet<>();
+        Set<ProviderSearch> clients = new HashSet<>();
 
         for (String provider : providers) {
             List<ServiceInstance> services = discoveryClient.getInstances(provider);
@@ -44,7 +45,7 @@ public class DefaultAggregateSearch implements AggregateSearch {
             }
 
             String name = services.get(0).getUri().toString();
-            AggregateSearch feignClient = Feign.builder().target(AggregateSearch.class, name);
+            ProviderSearch feignClient = Feign.builder().target(ProviderSearch.class, name);
 
 
             if (feignClient != null) {
@@ -71,7 +72,7 @@ public class DefaultAggregateSearch implements AggregateSearch {
 
         List<ProviderResponse> output = new ArrayList<>();
 
-        for (AggregateSearch client : getClients()) {
+        for (ProviderSearch client : getClients()) {
             output.add(client.getResponse(query));
         }
 

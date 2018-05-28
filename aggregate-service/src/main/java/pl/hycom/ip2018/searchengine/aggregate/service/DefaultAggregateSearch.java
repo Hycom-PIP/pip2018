@@ -9,9 +9,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import feign.Feign;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
-import pl.hycom.ip2018.searchengine.aggregate.intercomm.AnyFeign;
 import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
-import pl.hycom.ip2018.searchengine.providercontract.service.ProviderSearch;
 
 import javax.annotation.PostConstruct;
 
@@ -34,9 +32,9 @@ public class DefaultAggregateSearch implements AggregateSearch {
         providers = new ArrayList<>(Arrays.asList(environment.getProperty("clients").split(",")));
     }
 
-    private Set<ProviderSearch> getClients() {
+    private Set<AggregateSearch> getClients() {
 
-        Set<ProviderSearch> clients = new HashSet<>();
+        Set<AggregateSearch> clients = new HashSet<>();
 
         for (String provider : providers) {
             List<ServiceInstance> services = discoveryClient.getInstances(provider);
@@ -45,8 +43,8 @@ public class DefaultAggregateSearch implements AggregateSearch {
                 continue;
             }
 
-            String name = "http://" + provider;
-            ProviderSearch feignClient = Feign.builder().target(AnyFeign.class, name);
+            String name = services.get(0).getUri().toString();
+            AggregateSearch feignClient = Feign.builder().target(AggregateSearch.class, name);
 
 
             if (feignClient != null) {
@@ -73,7 +71,7 @@ public class DefaultAggregateSearch implements AggregateSearch {
 
         List<ProviderResponse> output = new ArrayList<>();
 
-        for (ProviderSearch client : getClients()) {
+        for (AggregateSearch client : getClients()) {
             output.add(client.getResponse(query));
         }
 

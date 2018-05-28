@@ -18,15 +18,17 @@ public class FileChecker {
      * @return answer file is plain text or binary
      */
     public boolean isBinaryFile(File file) {
-        try {
-            FileInputStream stream = new FileInputStream(file);
+        try (FileInputStream stream = new FileInputStream(file);
+        ){
             int size = stream.available();
             if (size > 1024) {
                 size = 1024;
             }
             byte[] data = new byte[size];
-            stream.read(data);
-            stream.close();
+            int bytesReadCount = stream.read(data);
+            if (bytesReadCount < size) {
+                throw new LocalSearchIOException();
+            }
             int ascii = 0;
             int other = 0;
             for (byte b : data) {

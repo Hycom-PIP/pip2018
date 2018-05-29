@@ -38,7 +38,7 @@ hystrix:
         timeout:
           enabled: false
 
-clients: local-search-service,google-search-service,wikipedia-search-service
+clients: local-search-service, google-search-service, wikipedia-search-service
 #client:
 #  wikiClient:
 #    enabled: true

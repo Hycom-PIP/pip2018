@@ -23,7 +23,7 @@ eureka:
     service-url.defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka/
 
 turbine:
-  app-config: wikipedia-search-service,google-search-service,local-search-service,aggregate-service,google-drive-search-service
+  app-config: wikipedia-search-service,google-search-service,local-search-service,aggregate-service,google-drive-search-service,ui-service
 
   cluster-name-expression: new String("default")
 

@@ -93,6 +93,7 @@
 		<module>aggregate-service</module>
 		<module>hystrix-turbine</module>
 		<module>selenium-tests</module>
+		<module>ui-service</module>
 	</modules>
 
 

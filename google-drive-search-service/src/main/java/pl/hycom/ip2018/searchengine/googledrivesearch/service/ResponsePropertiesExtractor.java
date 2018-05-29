@@ -3,6 +3,7 @@ package pl.hycom.ip2018.searchengine.googledrivesearch.service;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import static pl.hycom.ip2018.searchengine.googledrivesearch.model.Result.PROVID
 /**
  * Class created to extract properties from response obtained from Google Drive API.
  */
+@Slf4j
 public class ResponsePropertiesExtractor {
 
     @Value("${prop.googledrive.results}")
@@ -114,6 +116,7 @@ public class ResponsePropertiesExtractor {
             Scanner s = new Scanner(stream).useDelimiter("\\A");
             snippet = s.hasNext() ? s.next() : "";
         } catch (IOException e) {
+            log.error("Error while retrieving snippet from file {} from service {}", file, service, e);
             snippet = "<Nie udało się odczytać zawartości pliku.>";
             e.printStackTrace();
         }

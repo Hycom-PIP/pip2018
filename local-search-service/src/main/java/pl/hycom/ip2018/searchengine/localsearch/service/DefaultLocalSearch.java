@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static pl.hycom.ip2018.searchengine.localsearch.model.Result.*;
 
@@ -54,9 +55,9 @@ public class DefaultLocalSearch implements LocalSearch {
         if (log.isInfoEnabled()) {
             log.info("Requesting searching results for {}", query);
         }
-        try {
+        try (Stream<Path> pathStream = Files.walk(Paths.get(environment.getProperty("rest.api.localPath")))){
             // Get recursively all files in root
-            List<Path> paths = Files.walk(Paths.get(environment.getProperty("rest.api.localPath"))).collect(Collectors.toList());
+            List<Path> paths = pathStream.collect(Collectors.toList());
 
             // Get regular files from paths (not directory)
             List<Path> regulars = paths.stream().filter(Files::isRegularFile).collect(Collectors.toList());
@@ -207,7 +208,9 @@ public class DefaultLocalSearch implements LocalSearch {
             fileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
             creationTime = fileAttributes.creationTime().toMillis();
         } catch (IOException e) {
-            e.printStackTrace();
+            if (log.isErrorEnabled()) {
+                log.error("Searching results by path {} failed", path, e);
+            }
         }
         Result res = new Result();
         res.setHeader(getNameFromPath(path));
@@ -227,8 +230,8 @@ public class DefaultLocalSearch implements LocalSearch {
      */
     private String getFileExtension(Path path) {
         String fileName = path.toString();
-        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-            return fileName.substring(fileName.lastIndexOf(".")+1);
+        if(fileName.lastIndexOf('.') != -1 && fileName.lastIndexOf('.') != 0)
+            return fileName.substring(fileName.lastIndexOf('.')+1);
         else return "";
     }
 

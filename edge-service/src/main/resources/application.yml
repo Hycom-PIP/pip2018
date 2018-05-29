@@ -53,6 +53,9 @@ zuul:
     googledrivesearch:
       path: /googledrivesearch/**
       serviceId: google-drive-search-service
+    ui:
+      path: /ui/**
+      serviceId: ui-service
 
   threadPool:
       useSeparateThreadPools: true

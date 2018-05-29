@@ -23,6 +23,8 @@ eureka:
     serviceUrl:
       defaultZone: ${EUREKA_URL:http://localhost:8761}/eureka/
   instance:
+    hostname: ${DOMAIN_NAME:localhost}
+    nonSecurePort: ${NON_SECURE_PORT:0}
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
 

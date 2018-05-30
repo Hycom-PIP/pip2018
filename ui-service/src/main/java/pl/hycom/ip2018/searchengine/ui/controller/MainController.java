@@ -14,7 +14,17 @@ public class MainController {
     }
 
     @RequestMapping(value = "/analytics", method = GET)
-    public String analytics(){
+    public String analytics() {
         return "analytics";
+    }
+
+    @RequestMapping(value = "/history", method = GET)
+    public String history() {
+        return "history";
+    }
+
+    @RequestMapping(value = "/results", method = GET)
+    public String results() {
+        return "results";
     }
 }

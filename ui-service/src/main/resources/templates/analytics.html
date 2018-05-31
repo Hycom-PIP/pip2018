@@ -68,7 +68,7 @@
     <div class="my-div">
         <div class="dropdown">
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                Choose time period
+                {{ timePeriod }}
             </button>
             <div class="dropdown-menu">
                 <a class="dropdown-item" v-on:click="fill('7days')">Last 7 days</a>
@@ -108,16 +108,12 @@
         data() {
             return {
                 numberOfViews: null,
-                rows: null
+                rows: null,
+                timePeriod: null
             }
         },
         mounted() {
-            axios
-                .get('/test?period=xd')
-                .then(response => (this.numberOfViews = response.data));
-            axios
-                .get('/statistics?period=xd')
-                .then(response => (this.rows = response.data))
+            this.fill('3months')
         },
         methods: {
             fill: function (message) {
@@ -126,7 +122,14 @@
                     .then(response => (this.numberOfViews = response.data));
                 axios
                     .get('/statistics?period=' + message)
-                    .then(response => (this.rows = response.data))
+                    .then(response => (this.rows = response.data));
+                if (message === '7days') {
+                    this.timePeriod = 'Last 7 days'
+                } else if (message === '30days') {
+                    this.timePeriod = 'Last 30 days'
+                } else if (message === '3months') {
+                    this.timePeriod = 'Last 3 months'
+                }
             }
         }
     })

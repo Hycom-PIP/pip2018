@@ -35,9 +35,6 @@ endpoints:
 zuul:
   prefix: /api
   routes:
-    hello:
-      path: /hello/**
-      serviceId: hello-service
     googlesearch:
       path: /googlesearch/**
       serviceId: google-search-service

@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import pl.hycom.ip2018.searchengine.googledrivesearch.exception.GoogleDriveSearchException;
 import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchResponse;
-
+import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Implementation of {@link GoogleDriveSearch} to get data by query
@@ -39,12 +39,13 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
             log.info("Requesting searching results for {}", query);
         }
 
-        GoogleDriveSearchResponse result;
+        GoogleDriveSearchResponse response = new GoogleDriveSearchResponse();
         try {
             FileList fileList = listFiles(service, query);
-            Map simpleMap = responsePropertiesExtractor.makeSimpleMapFromFileList(service, fileList);
-            String fromSimpleMapToJson = jsonResponse.getAsString(simpleMap);
-            result = jsonResponse.getAsObject(fromSimpleMapToJson, GoogleDriveSearchResponse.TYPE);
+            List<SimpleResult> results = responsePropertiesExtractor.getResultsList(service, fileList);
+            response.setResults(results);
+            String fromSimpleMapToJson = jsonResponse.getAsString(response);
+            response = jsonResponse.getAsObject(fromSimpleMapToJson, GoogleDriveSearchResponse.TYPE);
         } catch (Exception e) {
             if (log.isErrorEnabled()) {
                 log.error("Searching results for {} are not available from Google Drive", query);
@@ -52,7 +53,7 @@ public class DefaultGoogleDriveSearch implements GoogleDriveSearch {
             throw new GoogleDriveSearchException();
         }
 
-        return result;
+        return response;
     }
 
     private FileList listFiles(Drive service, String queryWord) {

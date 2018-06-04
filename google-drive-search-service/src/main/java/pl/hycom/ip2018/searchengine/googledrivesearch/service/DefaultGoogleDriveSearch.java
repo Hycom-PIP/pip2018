@@ -7,12 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import pl.hycom.ip2018.searchengine.googledrivesearch.exception.GoogleDriveSearchException;
 import pl.hycom.ip2018.searchengine.googledrivesearch.model.GoogleDriveSearchResponse;
-import pl.hycom.ip2018.searchengine.googledrivesearch.model.Result;
 import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Implementation of {@link GoogleDriveSearch} to get data by query

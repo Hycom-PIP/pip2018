@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--suppress JSUnusedGlobalSymbols, HtmlUnknownAttribute -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"/>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <style>
+        div.my-div {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: purple;
+        }
+
+        a {
+            color: black;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            display: block;
+            margin: 0 auto;
+            background-color: white;
+            border-color: purple;
+            color: black;
+        }
+
+        .btn-primary:hover {
+            background-color: purple;
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        .table td,
+        .table th {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1000px;
+        }
+    </style>
+</head>
+<body>
+<div id="root" class="container">
+    <div class="my-div">
+        <ul class="nav nav-pills justify-content-center">
+            <li class="nav-item"><a class="nav-link" href="#">
+                Home&nbsp;<i class="fas fa-search"></i>
+            </a></li>
+            <li class="nav-item"><a class="nav-link" href="#">
+                History&nbsp;<i class="fas fa-history"></i>
+            </a></li>
+            <li class="nav-item"><a class="nav-link active" href="#">
+                Analytics&nbsp;<i class="fab fa-leanpub"></i>
+            </a></li>
+        </ul>
+    </div>
+    <div class="my-div">
+        <div class="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                {{ timePeriod }}
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" v-on:click="fill('7days')">Last 7 days</a>
+                <a class="dropdown-item" v-on:click="fill('30days')">Last 30 days</a>
+                <a class="dropdown-item" v-on:click="fill('3months')">Last 3 months</a>
+            </div>
+        </div>
+    </div>
+    <div class="my-div">
+        <h3>Number of views: {{ numberOfViews }}</h3>
+    </div>
+    <div class="my-div">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Search Term</th>
+                <th scope="col">Total Unique Searches</th>
+                <th scope="col">Percent of Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="row in rows">
+                <td>{{ row.term }}</td>
+                <td>{{ row.searches }}</td>
+                <td>{{ row.percent }}&percnt;</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: '#root',
+        data() {
+            return {
+                numberOfViews: null,
+                rows: null,
+                timePeriod: null
+            }
+        },
+        mounted() {
+            this.fill('3months')
+        },
+        methods: {
+            fill: function (message) {
+                axios
+                    .get('/test?period=' + message)
+                    .then(response => (this.numberOfViews = response.data));
+                axios
+                    .get('/statistics?period=' + message)
+                    .then(response => (this.rows = response.data));
+                if (message === '7days') {
+                    this.timePeriod = 'Last 7 days'
+                } else if (message === '30days') {
+                    this.timePeriod = 'Last 30 days'
+                } else if (message === '3months') {
+                    this.timePeriod = 'Last 3 months'
+                }
+            }
+        }
+    })
+</script>
+</html>

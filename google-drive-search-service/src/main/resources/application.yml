@@ -43,3 +43,20 @@ rest:
   api:
     size: 100
     fields: nextPageToken, files(id, name, mimeType, createdTime, webViewLink, webContentLink, modifiedTime, description, iconLink, size)
+
+prop:
+  googledrive:
+    url: url
+    results: results
+    header: header
+    webViewLink: webViewLink
+    webContentLink: webContentLink
+    mimeType: mimeType
+    createdTime: createdTime
+    timestamp: timestamp
+    snippet: snippet
+    additionalData: additionalData
+    description: description
+    iconLink: iconLink
+    modifiedTime: modifiedTime
+    size: size

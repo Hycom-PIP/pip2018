@@ -17,19 +17,21 @@ public class JsonResponse {
     private Gson gson;
 
     /**
-     * Serializes a given map
-     * @param map map intended to serialize
+     * Serializes given object
+     *
+     * @param obj object to be serialized
      * @return Json String
      */
-    public String getAsString(Map map) {
-        return gson.toJson(map);
+    public String getAsString(Object obj) {
+        return gson.toJson(obj);
     }
 
     /**
      * Converts Json String to desired type
-     * @param json Json String to convert
+     *
+     * @param json       Json String to convert
      * @param resultType common superinterface for all types
-     * @param <T> desired type
+     * @param <T>        desired type
      * @return Json String in form of object of a desired type
      */
     public <T> T getAsObject(String json, Type resultType) {

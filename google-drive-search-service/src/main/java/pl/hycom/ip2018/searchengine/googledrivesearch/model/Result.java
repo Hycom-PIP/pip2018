@@ -15,6 +15,4 @@ public class Result extends SimpleResult {
     public static final String SIZE_KEY = "size";
 
     public static final String PROVIDER = "googledrive";
-    public static final String PROVIDER_KEY = "provider";
-    private String provider = PROVIDER;
 }

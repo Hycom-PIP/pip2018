@@ -5,14 +5,14 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import pl.hycom.ip2018.searchengine.googledrivesearch.model.Result;
+import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
 import static pl.hycom.ip2018.searchengine.googledrivesearch.model.Result.PROVIDER;
-import static pl.hycom.ip2018.searchengine.googledrivesearch.model.Result.PROVIDER_KEY;
-
 /**
  * Class created to extract properties from response obtained from Google Drive API.
  */
@@ -61,17 +61,11 @@ public class ResponsePropertiesExtractor {
      * @param response object of model that specifies how to parse into the JSON when working with Drive API
      * @return map containing field header and its content
      */
-    public Map<String, List<Map<String, Object>>> makeSimpleMapFromFileList(Drive service, FileList response) {
-        Map<String, List<Map<String, Object>>> extractedResult = new LinkedHashMap<>();
+    public List<SimpleResult> getResultsList(Drive service, FileList response) {
         List<File> filesList = response.getFiles();
-        List<Map<String, Object>> extractedFiles = new ArrayList<>();
+        List<SimpleResult> results = new ArrayList<>();
         for (File file : filesList) {
-            Map<String, Object> singleItem = new LinkedHashMap<>();
             Map<String, String> additionalData = new LinkedHashMap<>();
-
-            singleItem.put(PROVIDER_KEY, PROVIDER);
-            singleItem.put(header, file.getName());
-            singleItem.put(url, file.getWebViewLink());
             additionalData.put(snippet, createSnippet(service, file));
             additionalData.put(mimeType, file.getMimeType());
             additionalData.put(description, file.getDescription());
@@ -80,11 +74,16 @@ public class ResponsePropertiesExtractor {
             additionalData.put(createdTime, file.getCreatedTime().toString());
             additionalData.put(modifiedTime, file.getModifiedTime().toString());
             additionalData.put(size, String.valueOf(file.size()));
-            singleItem.put("additionalData", additionalData);
-            extractedFiles.add(singleItem);
+
+            Result result = new Result();
+            result.setUrl(file.getWebViewLink());
+            result.setHeader(file.getName());
+            result.setProvider(PROVIDER);
+            result.setAdditionalData(additionalData);
+
+            results.add(result);
         }
-        extractedResult.put(results, extractedFiles);
-        return extractedResult;
+        return results;
     }
 
     private String createSnippet(Drive service, File file) {

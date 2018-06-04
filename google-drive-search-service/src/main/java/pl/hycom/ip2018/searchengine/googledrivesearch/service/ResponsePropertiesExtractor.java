@@ -5,13 +5,9 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-<<<<<<< HEAD
 import pl.hycom.ip2018.searchengine.googledrivesearch.model.Result;
 import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
-=======
 import org.springframework.core.env.Environment;
->>>>>>> develop
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,9 +36,9 @@ public class ResponsePropertiesExtractor {
             Map<String, String> additionalData = new LinkedHashMap<>();
             additionalData.put(environment.getProperty("prop.googledrive.snippet"), createSnippet(service, file));
             additionalData.put(environment.getProperty("prop.googledrive.mimeType"), file.getMimeType());
-            additionalData.put(environment.getProperty("prop.googledrive.description", file.getDescription());
+            additionalData.put(environment.getProperty("prop.googledrive.description"), file.getDescription());
             additionalData.put(environment.getProperty("prop.googledrive.webContentLink"), file.getWebContentLink());
-            additionalData.put(environment.getProperty("prop.googledrive.iconLink", file.getIconLink());
+            additionalData.put(environment.getProperty("prop.googledrive.iconLink"), file.getIconLink());
             additionalData.put(environment.getProperty("prop.googledrive.createdTime"), file.getCreatedTime().toString());
             additionalData.put(environment.getProperty("prop.googledrive.modifiedTime"), file.getModifiedTime().toString());
             additionalData.put(environment.getProperty("prop.googledrive.size"), String.valueOf(file.size()));

@@ -10,27 +10,49 @@
 <div id="root" class="container">
     <div class="container-for-elements">
         <ul class="nav nav-pills justify-content-center">
-            <li class="nav-item"><a class="nav-link" href="home">
+            <li class="nav-item"><a class="nav-link active" href="/">
                 Home&nbsp;<i class="fas fa-search"></i>
             </a></li>
-            <li class="nav-item"><a class="nav-link" href="history">
+            <li class="nav-item"><a class="nav-link" href="/history">
                 History&nbsp;<i class="fas fa-history"></i>
             </a></li>
-            <li class="nav-item"><a class="nav-link active" href="analytics">
+            <li class="nav-item"><a class="nav-link" href="/analytics">
                 Analytics&nbsp;<i class="fab fa-leanpub"></i>
             </a></li>
         </ul>
+    </div>
+    <div class="container-for-elements">
+        <form name="query-form" class="form-horizontal" action="/results">
+            <div class="input-group ">
+                <input type="text" class="form-control" name="query" placeholder="Search">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-secondary"><span class="fas fa-arrow-right"></span></button>
+                </div>
+            </div>
+            <div class="btn-group-toggle container-for-elements text-center" data-toggle="buttons">
+                <label class="btn btn-lg">
+                    <input type="checkbox" name="provider" value="wikipedia"><i class="fab fa-wikipedia-w"></i></input>
+                </label>
+                <label class="btn btn-lg">
+                    <input type="checkbox" name="provider" value="google"><i class="fab fa-google"></i></input>
+                </label>
+                <label class="btn btn-lg">
+                    <input type="checkbox" name="provider" value="local-drive"/><i class="fas fa-hdd"></i></input>
+                </label>
+                <label class="btn btn-lg">
+                    <input type="checkbox" name="provider" value="google-drive"/><i class="fab fa-google-drive"></i></input>
+                </label>
+            </div>
+        </form>
     </div>
 </div>
 <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.13/css/all.css"/>
 <link rel="stylesheet" href="css/search-engine.css"/>
-<link rel="stylesheet" href="css/home.css"/>
 <script defer src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script defer src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script defer src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script defer src="//unpkg.com/axios/dist/axios.min.js"></script>
 <script defer src="//cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
-<script defer src="js/home-vue.js"></script>
 </body>
 </html>

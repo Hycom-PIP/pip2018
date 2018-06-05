@@ -8,6 +8,8 @@ import pl.hycom.ip2018.searchengine.ui.rest.inner.TestResult;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -52,5 +54,13 @@ public class TestRest {
         } else {
             return null;
         }
+    }
+
+    @RequestMapping(value = "historyMock", method = GET)
+    public List<String> history() {
+        return Stream.of("The Celtic Holocaust", "The Destroyer of Worlds", "Blueprint for Armageddon",
+                "Painfotainment", "A Basic Look At Post-Modernism", "Structuralism and Mythology",
+                "The Frankfurt School", "Schopenhauer", "Henry David Thoreau's views on the individual, society and civil disobedience"
+        ).collect(Collectors.toList());
     }
 }

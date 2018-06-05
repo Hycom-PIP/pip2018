@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -23,8 +24,8 @@ public class AggregateController {
     private AggregateSearch aggregateSearch;
 
     @HystrixCommand(fallbackMethod = "getMessageFallBack", commandKey = "Aggregate-Search-Service", groupKey = "GetMessage")
-    @RequestMapping(value = "/res/{query}", method = GET)
-    public ProviderResponse getMessage(@PathVariable String query) {
+    @RequestMapping(value = "/res", method = GET)
+    public ProviderResponse getMessage(@RequestParam("query") String query) {
         return aggregateSearch.getResponse(query);
     }
 

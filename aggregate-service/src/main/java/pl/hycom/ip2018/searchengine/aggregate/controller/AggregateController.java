@@ -13,7 +13,10 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 import io.swagger.annotations.Api;
 import pl.hycom.ip2018.searchengine.aggregate.service.AggregateSearch;
+import pl.hycom.ip2018.searchengine.aggregate.service.CookieService;
 import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @Api
@@ -22,13 +25,18 @@ public class AggregateController {
     @Autowired
     private AggregateSearch aggregateSearch;
 
+    @Autowired
+    private CookieService cookieService;
+
     @HystrixCommand(fallbackMethod = "getMessageFallBack", commandKey = "Aggregate-Search-Service", groupKey = "GetMessage")
     @RequestMapping(value = "/res/{query}", method = GET)
-    public ProviderResponse getMessage(@PathVariable String query) {
+    public ProviderResponse getMessage(@PathVariable String query, HttpServletResponse response) {
+        response.addCookie(cookieService.createCookieWithQuery(query));
         return aggregateSearch.getResponse(query);
     }
 
-    public ProviderResponse getMessageFallBack(String query) {
+    public ProviderResponse getMessageFallBack(String query, HttpServletResponse response) {
         return new ProviderResponse(new ArrayList<>());
     }
+
 }

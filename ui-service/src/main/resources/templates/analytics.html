@@ -9,46 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <style>
-        div.my-div {
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        .nav-pills .nav-link.active {
-            background-color: purple;
-        }
-
-        a {
-            color: black;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            display: block;
-            margin: 0 auto;
-            background-color: white;
-            border-color: purple;
-            color: black;
-        }
-
-        .btn-primary:hover {
-            background-color: purple;
-        }
-
-        h3 {
-            text-align: center;
-        }
-
-        .table td,
-        .table th {
-            text-align: center;
-        }
-
-        .container {
-            max-width: 1000px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/analytics-stylesheet.css"/>
 </head>
 <body>
 <div id="root" class="container">
@@ -102,36 +63,5 @@
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
-<script>
-    new Vue({
-        el: '#root',
-        data() {
-            return {
-                numberOfViews: null,
-                rows: null,
-                timePeriod: null
-            }
-        },
-        mounted() {
-            this.fill('3months')
-        },
-        methods: {
-            fill: function (message) {
-                axios
-                    .get('/test?period=' + message)
-                    .then(response => (this.numberOfViews = response.data));
-                axios
-                    .get('/statistics?period=' + message)
-                    .then(response => (this.rows = response.data));
-                if (message === '7days') {
-                    this.timePeriod = 'Last 7 days'
-                } else if (message === '30days') {
-                    this.timePeriod = 'Last 30 days'
-                } else if (message === '3months') {
-                    this.timePeriod = 'Last 3 months'
-                }
-            }
-        }
-    })
-</script>
+<script src="js/analytics-vue.js"></script>
 </html>

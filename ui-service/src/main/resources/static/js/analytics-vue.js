@@ -12,17 +12,22 @@ new Vue({
     },
     methods: {
         fill: function (message) {
+            // noinspection JSUnusedGlobalSymbols
             axios
                 .get('/test?period=' + message)
                 .then(response => (this.numberOfViews = response.data));
+            // noinspection JSUnusedGlobalSymbols
             axios
                 .get('/statistics?period=' + message)
                 .then(response => (this.rows = response.data));
             if (message === '7days') {
+                // noinspection JSUnusedGlobalSymbols
                 this.timePeriod = 'Last 7 days'
             } else if (message === '30days') {
+                // noinspection JSUnusedGlobalSymbols
                 this.timePeriod = 'Last 30 days'
             } else if (message === '3months') {
+                // noinspection JSUnusedGlobalSymbols
                 this.timePeriod = 'Last 3 months'
             }
         }

@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import feign.codec.Decoder;
 import feign.codec.Encoder;
 import lombok.extern.slf4j.Slf4j;
 import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
+import pl.hycom.ip2018.searchengine.providercontract.SimpleResult;
 import pl.hycom.ip2018.searchengine.providercontract.service.ProviderSearch;
 
 /**
@@ -59,7 +61,7 @@ public class AggregateSearch {
      *            we are searching for
      * @return ProviderResponse object
      */
-    public ProviderResponse getResponse(final String query) {
+    public ProviderResponse getResponse(final String query, final List<String> provider) {
 
         if (log.isInfoEnabled()) {
             log.info("Requesting aggregate search for [{}]", query);
@@ -87,7 +89,18 @@ public class AggregateSearch {
 
         result.setMetadata(ImmutableMap.of(META_TIME, System.currentTimeMillis() - startTime));
 
-        return result;
+        final ProviderResponse output = new ProviderResponse();
+
+        // filtered results
+        List<SimpleResult> tmp = new ArrayList<>();
+
+        provider.forEach(providerr -> tmp.addAll(result.getResults().stream().filter(simpleResult ->
+                simpleResult.getProvider().toLowerCase().equals(providerr.toLowerCase())).collect(Collectors.toList())));
+
+        output.setMetadata(result.getMetadata());
+        output.setResults(tmp);
+
+        return output;
     }
 
     private Set<ProviderSearch> getClients() {

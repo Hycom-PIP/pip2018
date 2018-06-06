@@ -3,10 +3,11 @@ package pl.hycom.ip2018.searchengine.aggregate.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -30,15 +31,23 @@ public class AggregateController {
     private CookieService cookieService;
 
     @HystrixCommand(fallbackMethod = "getMessageFallBack", commandKey = "Aggregate-Search-Service", groupKey = "GetMessage")
-    @RequestMapping(value = "/res/{query}", method = GET)
-    public ProviderResponse getMessage(@PathVariable String query, HttpServletResponse response, HttpServletRequest req) {
+    @RequestMapping(value = "/res", method = GET)
+    public ProviderResponse getMessage(@RequestParam("query") String query,
+                                       @RequestParam List<String> provider,
+                                       HttpServletResponse response, HttpServletRequest req) {
         cookieService.readCurrentCookies(req.getCookies());
         response.addCookie(cookieService.createCookieWithQuery(query));
-        return aggregateSearch.getResponse(query);
+        return aggregateSearch.getResponse(query, provider);
     }
 
-    public ProviderResponse getMessageFallBack(String query, HttpServletResponse response, HttpServletRequest req) {
+    public ProviderResponse getMessageFallBack(String query, List<String> providers,
+                                               HttpServletResponse response, HttpServletRequest req) {
         return new ProviderResponse(new ArrayList<>());
     }
 
 }
+
+
+//    @RequestParam("drive") String drive,
+//    @RequestParam("wikipedia") String wikipedia,
+//    @RequestParam("local") String local

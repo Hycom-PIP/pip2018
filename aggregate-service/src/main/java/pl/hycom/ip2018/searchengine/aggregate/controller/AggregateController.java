@@ -16,6 +16,7 @@ import pl.hycom.ip2018.searchengine.aggregate.service.AggregateSearch;
 import pl.hycom.ip2018.searchengine.aggregate.service.CookieService;
 import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -30,12 +31,13 @@ public class AggregateController {
 
     @HystrixCommand(fallbackMethod = "getMessageFallBack", commandKey = "Aggregate-Search-Service", groupKey = "GetMessage")
     @RequestMapping(value = "/res/{query}", method = GET)
-    public ProviderResponse getMessage(@PathVariable String query, HttpServletResponse response) {
+    public ProviderResponse getMessage(@PathVariable String query, HttpServletResponse response, HttpServletRequest req) {
+        cookieService.readCurrentCookies(req.getCookies());
         response.addCookie(cookieService.createCookieWithQuery(query));
         return aggregateSearch.getResponse(query);
     }
 
-    public ProviderResponse getMessageFallBack(String query, HttpServletResponse response) {
+    public ProviderResponse getMessageFallBack(String query, HttpServletResponse response, HttpServletRequest req) {
         return new ProviderResponse(new ArrayList<>());
     }
 

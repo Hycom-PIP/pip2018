@@ -15,8 +15,6 @@ import java.util.concurrent.TimeUnit;
 @EnableCaching
 public class CacheConfig {
 
-    public static final String QUERY_CACHE_NAME = "query_cache";
-
     @Bean
     public LoadingCache<String, List<String>> queryCache() {
         CacheLoader<String, List<String>> loader;
@@ -33,9 +31,5 @@ public class CacheConfig {
                 .expireAfterAccess(1, TimeUnit.HOURS)
                 .build(loader);
         return cache;
-    }
-
-    private List<String> createExpensiveGrapgh(String key) {
-        return null;
     }
 }

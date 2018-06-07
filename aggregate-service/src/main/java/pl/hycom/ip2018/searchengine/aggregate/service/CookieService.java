@@ -4,36 +4,48 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Service
 public class CookieService {
 
-    private static final String QUERY_COOKIE_NAME = "query";
+    private static final String USER_ID_COOKIE_NAME = "USER_ID";
 
     private Cookie[] cookies;
 
-    public Cookie createCookieWithQuery(String query) {
-        List<String> queriesList = new ArrayList<>(getQueryCookies());
-        queriesList.add(query);
-
-//        https://stackoverflow.com/questions/9572795/convert-list-to-array-in-java?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-        Cookie cookie = new Cookie(QUERY_COOKIE_NAME, queriesList.toString());
-        return cookie;
+    public void createCookiesIfDoNotExist(HttpServletResponse response, HttpServletRequest req) {
+        this.readCurrentCookies(req.getCookies());
+        if (this.shouldCreateCookie())
+            response.addCookie(this.createCookieWithUserId());
     }
 
-    public void readCurrentCookies(Cookie[] cookies) {
+    private void readCurrentCookies(Cookie[] cookies) {
         this.cookies = cookies;
     }
 
-    private List<String> getQueryCookies() {
-        List<String> result = new ArrayList<>();
+    private boolean shouldCreateCookie() {
+        if (cookies == null)
+            return true;
+
         for (Cookie cookie : cookies) {
-            if(cookie.getName().equals(QUERY_COOKIE_NAME))
-                result.add(cookie.getValue().replaceAll("\\p{P}",""));
+            if(cookie.getName().equals(USER_ID_COOKIE_NAME))
+                return false;
         }
-        return result;
+        return true;
+    }
+
+    private Cookie createCookieWithUserId() {
+        String generatedUUID = UUID.randomUUID().toString().replace("-", "");
+        String currentDate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String cookieValue = generatedUUID + currentDate;
+        Cookie cookie = new Cookie(USER_ID_COOKIE_NAME, cookieValue);
+        int secondsInYear = 366 * 24 * 3600;
+        cookie.setMaxAge(secondsInYear);
+        return cookie;
     }
 }

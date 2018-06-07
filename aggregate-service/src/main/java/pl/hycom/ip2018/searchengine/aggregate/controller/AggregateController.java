@@ -34,14 +34,15 @@ public class AggregateController {
     @RequestMapping(value = "/res", method = GET)
     public ProviderResponse getMessage(@RequestParam("query") String query,
                                        @RequestParam List<String> provider,
-                                       HttpServletResponse response, HttpServletRequest req) {
-        cookieService.readCurrentCookies(req.getCookies());
-        response.addCookie(cookieService.createCookieWithQuery(query));
+                                       HttpServletResponse response, HttpServletRequest req
+    ) {
+        cookieService.createCookiesIfDoNotExist(response, req);
         return aggregateSearch.getResponse(query, provider);
     }
 
     public ProviderResponse getMessageFallBack(String query, List<String> providers,
-                                               HttpServletResponse response, HttpServletRequest req) {
+                                               HttpServletResponse response, HttpServletRequest req
+    ) {
         return new ProviderResponse(new ArrayList<>());
     }
 

@@ -25,4 +25,13 @@ public class CacheService {
             e.printStackTrace();
         }
     }
+
+    public List<String> getUserHistoryValues(String userId) {
+        try {
+            return queryCache.get(userId);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.hycom.ip2018.searchengine.aggregate.service.AggregateSearch;
 import pl.hycom.ip2018.searchengine.aggregate.service.CacheService;
@@ -49,6 +50,14 @@ public class AggregateController {
         return new ProviderResponse(new ArrayList<>());
     }
 
+
+    @RequestMapping(value = "/history", method = GET)
+    @ResponseBody
+    public List<String> getHistory(HttpServletResponse response, HttpServletRequest req) {
+        cookieService.createCookiesIfDoNotExist(response, req);
+        String userId = cookieService.getUserId();
+        return cacheService.getUserHistoryValues(userId);
+    }
 }
 
 

@@ -20,7 +20,6 @@ public class CacheService {
             List<String> userQueries = queryCache.get(userId);
             userQueries.add(query);
             queryCache.put(userId, userQueries);
-            System.out.println(queryCache.get(userId).toString());
         } catch (ExecutionException e) {
             e.printStackTrace();
         }

@@ -7,6 +7,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -16,20 +18,24 @@ public class CacheConfig {
     public static final String QUERY_CACHE_NAME = "query_cache";
 
     @Bean
-    public LoadingCache<String, String> queryCache() {
-        CacheLoader<String, String> loader;
-        loader = new CacheLoader<String, String>() {
+    public LoadingCache<String, List<String>> queryCache() {
+        CacheLoader<String, List<String>> loader;
+        loader = new CacheLoader<String, List<String>>() {
             @Override
-            public String load(String key) {
-                return key.toUpperCase();
+            public List<String> load(String key) {
+                return new ArrayList<>();
             }
         };
 
-        LoadingCache<String, String> cache;
+        LoadingCache<String, List<String>> cache;
         cache = CacheBuilder.newBuilder()
                 .maximumSize(100)
                 .expireAfterAccess(1, TimeUnit.HOURS)
                 .build(loader);
         return cache;
+    }
+
+    private List<String> createExpensiveGrapgh(String key) {
+        return null;
     }
 }

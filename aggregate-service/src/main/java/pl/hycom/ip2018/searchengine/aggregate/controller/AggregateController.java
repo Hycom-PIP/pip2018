@@ -38,7 +38,8 @@ public class AggregateController {
                                        HttpServletResponse response, HttpServletRequest req
     ) {
         cookieService.createCookiesIfDoNotExist(response, req);
-        cacheService.createCache(query);
+        String userId = cookieService.getUserId();
+        cacheService.addQueryToCache(userId, query);
         return aggregateSearch.getResponse(query, provider);
     }
 

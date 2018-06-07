@@ -48,4 +48,12 @@ public class CookieService {
         cookie.setMaxAge(secondsInYear);
         return cookie;
     }
+
+    public String getUserId() {
+        for (Cookie cookie : cookies) {
+            if(cookie.getName().equals(USER_ID_COOKIE_NAME))
+                return cookie.getValue();
+        }
+        return null;
+    }
 }

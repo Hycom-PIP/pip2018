@@ -1,47 +1,31 @@
 <!DOCTYPE html>
-<!--suppress JSUnusedGlobalSymbols, HtmlUnknownAttribute -->
-<html lang="en">
+<!--suppress ALL -->
+<html lang="pl">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Title</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"/>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/analytics-stylesheet.css"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Analytics</title>
 </head>
 <body>
 <div id="root" class="container">
-    <div class="my-div">
-        <ul class="nav nav-pills justify-content-center">
-            <li class="nav-item"><a class="nav-link" href="#">
-                Home&nbsp;<i class="fas fa-search"></i>
-            </a></li>
-            <li class="nav-item"><a class="nav-link" href="#">
-                History&nbsp;<i class="fas fa-history"></i>
-            </a></li>
-            <li class="nav-item"><a class="nav-link active" href="#">
-                Analytics&nbsp;<i class="fab fa-leanpub"></i>
-            </a></li>
-        </ul>
-    </div>
-    <div class="my-div">
+    <div th:replace="../fragments/header :: header"></div>
+    <div class="container-for-elements">
         <div class="dropdown">
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 {{ timePeriod }}
             </button>
             <div class="dropdown-menu">
-                <a class="dropdown-item" v-on:click="fill('7days')">Last 7 days</a>
-                <a class="dropdown-item" v-on:click="fill('30days')">Last 30 days</a>
-                <a class="dropdown-item" v-on:click="fill('3months')">Last 3 months</a>
+                <a class="dropdown-item" v-on:click="fill('7')">Last 7 days</a>
+                <a class="dropdown-item" v-on:click="fill('30')">Last 30 days</a>
+                <a class="dropdown-item" v-on:click="fill('90')">Last 3 months</a>
             </div>
         </div>
     </div>
-    <div class="my-div">
+    <div class="container-for-elements">
         <h3>Number of views: {{ numberOfViews }}</h3>
     </div>
-    <div class="my-div">
+    <div class="container-for-elements">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -60,8 +44,15 @@
         </table>
     </div>
 </div>
+<link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.13/css/all.css"/>
+<link rel="stylesheet" href="css/analytics-stylesheet.css"/>
+<script defer src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script defer src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script defer src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script defer src="//unpkg.com/axios/dist/axios.min.js"></script>
+<script defer src="//cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script defer src="js/analytics-vue.js"></script>
+<script>document.getElementById("link-to-analytics").className += " active"</script>
 </body>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
-<script src="js/analytics-vue.js"></script>
 </html>

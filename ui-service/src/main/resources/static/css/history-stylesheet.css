@@ -1,6 +1,6 @@
 div.container-for-elements {
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 .nav-pills .nav-link.active {
@@ -10,18 +10,6 @@ div.container-for-elements {
 a {
     color: black;
     cursor: pointer;
-}
-
-.btn-primary {
-    display: block;
-    margin: 0 auto;
-    background-color: white;
-    border-color: purple;
-    color: black;
-}
-
-.btn-primary:hover {
-    background-color: purple;
 }
 
 h3 {
@@ -35,4 +23,11 @@ h3 {
 
 .container {
     max-width: 1000px;
+}
+
+div.my-history-list {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 100px;
 }

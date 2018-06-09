@@ -40,15 +40,15 @@ public class AggregateController {
     @HystrixCommand(fallbackMethod = "getMessageFallBack", commandKey = "Aggregate-Search-Service", groupKey = "GetMessage")
     @RequestMapping(value = "/res", method = GET)
     public ProviderResponse getMessage(@RequestParam("query") String query,
-            @RequestParam List<String> providers,
+            @RequestParam List<String> provider,
             HttpServletResponse resp, HttpServletRequest req) {
 
         cacheService.addQueryToCache(cookieService.getUserId(req, resp), query);
 
-        return aggregateSearch.getResponse(query, providers);
+        return aggregateSearch.getResponse(query, provider);
     }
 
-    public ProviderResponse getMessageFallBack(String query, List<String> providers, HttpServletResponse response, HttpServletRequest req) {
+    public ProviderResponse getMessageFallBack(String query, List<String> provider, HttpServletResponse response, HttpServletRequest req) {
         if (log.isWarnEnabled()) {
             log.warn("Using fallbac for query[" + query + "]");
         }

@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "provider": "wikipedia",
+      "header": "Symulacja",
+      "additionalData": {
+        "snippet": "Symulacja",
+        "timestamp": "2018-05-12T18:32:51Z"
+      },
+      "url": "tp.wikipedia.org/xd/Symulacja"
+    },
+    {
+      "provider": "wikipedia",
+      "header": "Zarty i Aligatory",
+      "additionalData": {
+        "snippet": "Zarty",
+        "timestamp": "2017-10-17T01:16:08Z"
+      },
+      "url": "tp.wikipedia.org/xd/Zarty_i_Aligatory"
+    }
+  ],
+  "metadata": {
+    "time": 2137
+  }
+}

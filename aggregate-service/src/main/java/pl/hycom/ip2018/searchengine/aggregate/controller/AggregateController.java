@@ -34,8 +34,3 @@ public class AggregateController {
         return new ProviderResponse(new ArrayList<>());
     }
 }
-
-
-//    @RequestParam("drive") String drive,
-//    @RequestParam("wikipedia") String wikipedia,
-//    @RequestParam("local") String local

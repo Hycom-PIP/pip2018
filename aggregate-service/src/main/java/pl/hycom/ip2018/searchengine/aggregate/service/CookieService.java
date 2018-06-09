@@ -1,59 +1,56 @@
 package pl.hycom.ip2018.searchengine.aggregate.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class CookieService {
 
-    private static final String USER_ID_COOKIE_NAME = "USER_ID";
+    private static final int COOKIE_MAX_AGE = 366 * 24 * 3600;
 
-    private Cookie[] cookies;
+    private static final String COOKIE_NAME = "USER_ID";
 
-    public void createCookiesIfDoNotExist(HttpServletResponse response, HttpServletRequest req) {
-        this.readCurrentCookies(req.getCookies());
-        if (this.shouldCreateCookie())
-            response.addCookie(this.createCookieWithUserId());
-    }
-
-    private void readCurrentCookies(Cookie[] cookies) {
-        this.cookies = cookies;
-    }
-
-    private boolean shouldCreateCookie() {
-        if (cookies == null)
-            return true;
-
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals(USER_ID_COOKIE_NAME))
-                return false;
+    public String getUserId(HttpServletRequest req, HttpServletResponse resp) {
+        if (shouldCreateCookie(req)) {
+            Cookie cookie = createCookieWithUserId();
+            resp.addCookie(cookie);
+            return cookie.getValue();
         }
-        return true;
+
+        return getUserIdFromRequest(req);
+    }
+
+    private boolean shouldCreateCookie(final HttpServletRequest req) {
+        return Arrays.stream(req.getCookies()).noneMatch(cookie -> COOKIE_NAME.equals(cookie.getName()));
     }
 
     private Cookie createCookieWithUserId() {
         String generatedUUID = UUID.randomUUID().toString().replace("-", "");
         String currentDate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String cookieValue = generatedUUID + currentDate;
-        Cookie cookie = new Cookie(USER_ID_COOKIE_NAME, cookieValue);
-        int secondsInYear = 366 * 24 * 3600;
-        cookie.setMaxAge(secondsInYear);
+
+        Cookie cookie = new Cookie(COOKIE_NAME, generatedUUID + currentDate);
+        cookie.setMaxAge(COOKIE_MAX_AGE);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
         return cookie;
     }
 
-    public String getUserId() {
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals(USER_ID_COOKIE_NAME))
-                return cookie.getValue();
-        }
-        return null;
+    private String getUserIdFromRequest(HttpServletRequest req) {
+        return Arrays.stream(req.getCookies())
+                .filter(cookie -> COOKIE_NAME.equals(cookie.getName()))
+                .map(Cookie::getValue)
+                .findAny()
+                .orElse(null);
     }
 }

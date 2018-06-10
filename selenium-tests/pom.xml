@@ -6,10 +6,7 @@
 
     <groupId>pl.hycom.ip-2018</groupId>
     <artifactId>selenium-tests</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
     <packaging>jar</packaging>
-
     <name>Selenium Tests</name>
 
     <parent>
@@ -24,7 +21,6 @@
             <plugin>
                 <groupId>com.lazerycode.selenium</groupId>
                 <artifactId>driver-binary-downloader-maven-plugin</artifactId>
-                <version>1.0.17</version>
                 <configuration>
                     <rootStandaloneServerDirectory>./webdrivers/binaries</rootStandaloneServerDirectory>
                     <downloadedZipFileDirectory>./webdrivers/zips</downloadedZipFileDirectory>
@@ -50,21 +46,17 @@
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>3.11.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.7</version>
         </dependency>
 
     </dependencies>

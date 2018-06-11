@@ -35,6 +35,9 @@ new Vue({
                 // noinspection JSUnusedGlobalSymbols
                 this.timePeriod = 'Last 3 months'
             }
+        },
+        myRound: function (val) {
+            return val.toFixed(2);
         }
     }
 });

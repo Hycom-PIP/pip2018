@@ -2,7 +2,7 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
 <head>
     <title>Analytics</title>
-	<script type="text/javascript" defer src="js/analytics-vue.js"></script>
+	<script type="text/javascript" defer th:src="@{js/analytics-vue.js}"></script>
 </head>
 <body>
 	<div class="content" layout:fragment="content">
@@ -34,7 +34,7 @@
 	            <tr v-for="row in rows">
 	                <td>{{ row.term }}</td>
 	                <td>{{ row.searches }}</td>
-	                <td>{{ row.percent }}&percnt;</td>
+	                <td>{{ myRound(row.percent) }}&percnt;</td>
 	            </tr>
 	            </tbody>
 	        </table>

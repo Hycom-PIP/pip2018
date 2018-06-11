@@ -1,66 +1,73 @@
 package pl.hycom.ip2018.searchengine.ui.rest;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pl.hycom.ip2018.searchengine.ui.rest.inner.TestResult;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import lombok.extern.slf4j.Slf4j;
+import pl.hycom.ip2018.searchengine.ui.model.PhraseStatistics;
+import pl.hycom.ip2018.searchengine.ui.model.StatisticsResult;
+import pl.hycom.ip2018.searchengine.ui.model.ViewsNumberResult;
+import pl.hycom.ip2018.searchengine.ui.rest.inner.Result;
+import pl.hycom.ip2018.searchengine.ui.service.AnalyticsService;
 
 @RestController
+@Slf4j
 public class TestRest {
 
+    @Autowired
+    private AnalyticsService analyticsService;
+
+    /**
+     * @param period
+     *            number of days to take into consideration
+     * @return json object containing {@link ViewsNumberResult}
+     */
     @RequestMapping(value = "test", method = GET)
     public int test(@RequestParam("period") String period) {
-        if ("7".equals(period)) {
-            return 1234;
-        } else if ("30".equals(period)) {
-            return 12345;
-        } else if ("90".equals(period)) {
-            return 123456;
-        } else {
+        try {
+            return analyticsService.getNumberOfViewsInPeriod(period).getViewsNumber();
+        } catch (Exception e) {
+            if (log.isErrorEnabled()) {
+                log.error("Failed to get number of views", e);
+            }
             return 0;
         }
     }
 
+    /**
+     * @param period
+     *            number of days to take into consideration
+     * @return json object containing {@link ViewsNumberResult}
+     */
     @RequestMapping(value = "statistics", method = GET)
-    public List<TestResult> statistics(@RequestParam("period") String period) {
-        if ("7".equals(period)) {
-            return Arrays.asList(
-                    new TestResult("tiger", 50, 50f),
-                    new TestResult("t-34", 50, 50f));
-        } else if ("30".equals(period)) {
-            return Arrays.asList(
-                    new TestResult("eliza", 33, 33.33f),
-                    new TestResult("marie", 33, 33.33f),
-                    new TestResult("lindsey", 33, 33.33f));
-        } else if ("90".equals(period)) {
-            return Arrays.asList(
-                    new TestResult("studio", 6, 2.34f),
-                    new TestResult("color", 5, 1.95f),
-                    new TestResult("portrait", 4, 1.56f),
-                    new TestResult("hair", 3, 1.17f),
-                    new TestResult("leaves", 3, 1.17f),
-                    new TestResult("night", 3, 1.17f),
-                    new TestResult("weeding", 3, 1.17f),
-                    new TestResult("young", 3, 1.17f),
-                    new TestResult("aerial view", 2, 0.78f));
-        } else {
-            return null;
-        }
-    }
+    public List<Result> statistics(@RequestParam("period") String period) {
+        try {
 
-    @RequestMapping(value = "historyMock", method = GET)
-    public List<String> history() {
-        return Stream.of("The Celtic Holocaust", "The Destroyer of Worlds", "Blueprint for Armageddon",
-                "Painfotainment", "A Basic Look At Post-Modernism", "Structuralism and Mythology",
-                "The Frankfurt School", "Schopenhauer", "Henry David Thoreau's views on the individual, society and civil disobedience"
-        ).collect(Collectors.toList());
+            List<Result> results = new ArrayList<>();
+
+            StatisticsResult stats = analyticsService.getStatisticsFromPeriod(period);
+
+            for (Map.Entry<String, PhraseStatistics> entry : stats.getPhrases().entrySet()) {
+                results.add(new Result(entry.getKey(),
+                        entry.getValue().getViewsNumber(),
+                        (float) entry.getValue().getViewsNumberOfTotal() * 100));
+            }
+
+            return results;
+
+        } catch (Exception e) {
+            if (log.isErrorEnabled()) {
+                log.error("Failed to get views of specific pages", e);
+            }
+            return new ArrayList<>();
+        }
     }
 }

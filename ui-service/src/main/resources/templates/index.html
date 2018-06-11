@@ -2,7 +2,7 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
 <head>
     <title>Search Home</title>
-	<script type="text/javascript" defer src="js/index-vue.js"></script>
+	<script type="text/javascript" defer th:src="@{js/index-vue.js}"></script>
 </head>
 <body>
 	<div class="content" layout:fragment="content">

@@ -32,7 +32,7 @@ public class CookieService {
     }
 
     private boolean shouldCreateCookie(final HttpServletRequest req) {
-        return Arrays.stream(req.getCookies()).noneMatch(cookie -> COOKIE_NAME.equals(cookie.getName()));
+        return req.getCookies() == null ? true : Arrays.stream(req.getCookies()).noneMatch(cookie -> COOKIE_NAME.equals(cookie.getName()));
     }
 
     private Cookie createCookieWithUserId() {

@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import pl.hycom.ip2018.searchengine.aggregate.service.AggregateSearch;
@@ -34,7 +32,7 @@ public class AggregateController {
     @Autowired
     private CacheService cacheService;
 
-    @HystrixCommand(fallbackMethod = "getMessageFallBack", commandKey = "Aggregate-Search-Service", groupKey = "GetMessage")
+    // @HystrixCommand(fallbackMethod = "getMessageFallBack", commandKey = "Aggregate-Search-Service", groupKey = "GetMessage")
     @RequestMapping(value = "/res", method = GET)
     public ProviderResponse getMessage(@RequestParam("query") String query,
             @RequestParam(required = false) List<String> provider,

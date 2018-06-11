@@ -2,12 +2,37 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
 <head>
     <title>Title</title>
+    <script type="text/javascript" defer th:src="@{js/results-vue.js}"></script>
 </head>
 <body>
 	<div class="content" layout:fragment="content">
-
-		RESULTS
-		
+	    <div class="container-for-elements">
+	        <form name="query-form" class="form-horizontal" v-on:submit.prevent="submit">
+	            <div class="input-group ">
+	                <input id="query" type="text" class="form-control" name="query" placeholder="Search">
+	                <div class="input-group-append">
+	                    <button type="submit" class="btn btn-outline-secondary"><span class="fas fa-arrow-right"></span></button>
+	                </div>
+	            </div>
+	            <div class="btn-group-toggle container-for-elements text-center" data-toggle="buttons">
+	                <label class="btn btn-lg">
+	                    <input class="provider-checkbox" type="checkbox" name="provider" value="wikipedia"><i class="fab fa-wikipedia-w"></i></input>
+	                </label>
+	                <label class="btn btn-lg">
+	                    <input class="provider-checkbox" type="checkbox" name="provider" value="google"><i class="fab fa-google"></i></input>
+	                </label>
+	                <label class="btn btn-lg">
+	                    <input class="provider-checkbox" type="checkbox" name="provider" value="local-drive"><i class="fas fa-hdd"></i></input>
+	                </label>
+	                <label class="btn btn-lg">
+	                    <input class="provider-checkbox" type="checkbox" name="provider" value="google-drive"><i class="fab fa-google-drive"></i></input>
+	                </label>
+	            </div>
+	        </form>
+	        
+	        RESULTS!!!
+	        
+	    </div>
 	</div>
 </body>
 </html>

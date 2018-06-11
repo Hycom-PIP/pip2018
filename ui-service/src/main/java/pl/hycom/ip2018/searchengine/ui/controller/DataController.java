@@ -25,12 +25,12 @@ public class DataController {
     @Autowired
     private AggregateServiceFeignClient aggregateServiceFeignClient;
 
-    @RequestMapping(value = "/history-data", method = GET)
+    @RequestMapping(value = { "/ui/history-data", "/history-data" }, method = GET)
     public List<String> historyData(HttpServletRequest req, HttpServletResponse resp) {
         return aggregateServiceFeignClient.getHistory(cookieService.getUserId(req, resp));
     }
 
-    @RequestMapping(value = "/query-data", method = GET)
+    @RequestMapping(value = { "/ui/query-data", "/query-data" }, method = GET)
     public ProviderResponse queryData(@RequestParam("query") String query, @RequestParam(required = false, value = "provider") List<String> provider, HttpServletRequest req, HttpServletResponse resp) {
         return aggregateServiceFeignClient.getMessage(query, provider, cookieService.getUserId(req, resp));
     }

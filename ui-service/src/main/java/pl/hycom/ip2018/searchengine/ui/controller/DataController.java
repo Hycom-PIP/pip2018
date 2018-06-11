@@ -31,7 +31,7 @@ public class DataController {
     }
 
     @RequestMapping(value = "/query-data", method = GET)
-    public ProviderResponse queryData(@RequestParam("query") String query, @RequestParam("provider") List<String> provider, HttpServletRequest req, HttpServletResponse resp) {
+    public ProviderResponse queryData(@RequestParam("query") String query, @RequestParam(required = false, value = "provider") List<String> provider, HttpServletRequest req, HttpServletResponse resp) {
         return aggregateServiceFeignClient.getMessage(query, provider, cookieService.getUserId(req, resp));
     }
 }

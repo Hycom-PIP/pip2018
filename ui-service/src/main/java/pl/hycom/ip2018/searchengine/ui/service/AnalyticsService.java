@@ -65,7 +65,7 @@ public class AnalyticsService {
      * @return Result object with start and endTime and pairs (query, number of searches)
      * @throws IOException in case of error in executing query to analytics
      */
-    public StatisticsResult getStatisticsFromPeriod(String daysAgo) throws IOException {
+    public StatisticsResult getStatisticsFromPeriod(String daysAgo) throws IOException, ArithmeticException {
         if (log.isInfoEnabled()) {
             log.info("Requesting statistics from Google Analytics for site");
         }
@@ -86,6 +86,9 @@ public class AnalyticsService {
             String query = trimSiteToQuery(specificSite);
             specificPagesViews.put(query, new PhraseStatistics(specificSiteViews, 0));
             totalViews += specificSiteViews;
+        }
+        if(totalViews == 0) {
+            throw new ArithmeticException("Division by zero");
         }
         for(Map.Entry<String, PhraseStatistics> specificPage : specificPagesViews.entrySet()) {
             PhraseStatistics phraseStatistics = specificPagesViews.get(specificPage.getKey());

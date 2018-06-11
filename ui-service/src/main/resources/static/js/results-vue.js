@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $("#link-to-results").addClass('active');
+    $('#link-to-home').addClass('active');
 });
 
 // noinspection JSUnusedGlobalSymbols

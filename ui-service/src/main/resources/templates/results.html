@@ -7,8 +7,8 @@
 <body>
 <div class="content" layout:fragment="content">
     <ul>
-        <li v-repeat="items" class="item-{{$index}}">
-            {{$index}} - {{parentMsg}} {{childMsg}}
+        <li v-for="(item, index) in items">
+            {{index}} - {{parentMsg}} {{item.childMsg}}
         </li>
     </ul>
 </div>

@@ -34,7 +34,7 @@
 	            <tr v-for="row in rows">
 	                <td>{{ row.term }}</td>
 	                <td>{{ row.searches }}</td>
-	                <td>{{ row.percent }}&percnt;</td>
+	                <td>{{ myRound(row.percent) }}&percnt;</td>
 	            </tr>
 	            </tbody>
 	        </table>

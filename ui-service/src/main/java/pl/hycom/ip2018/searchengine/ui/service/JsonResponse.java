@@ -16,6 +16,16 @@ public class JsonResponse {
     private Gson gson;
 
     /**
+     * Serializes given object
+     *
+     * @param obj object to be serialized
+     * @return Json String
+     */
+    public String getAsString(Object obj) {
+        return gson.toJson(obj);
+    }
+
+    /**
      * Converts Json String to desired type
      *
      * @param json       Json String to convert

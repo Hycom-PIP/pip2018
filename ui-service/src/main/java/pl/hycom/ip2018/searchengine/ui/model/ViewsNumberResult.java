@@ -1,11 +1,11 @@
 package pl.hycom.ip2018.searchengine.ui.model;
 
 import lombok.Data;
-import org.apache.tomcat.jni.Local;
-
+import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
 public class ViewsNumberResult {
 
     private int viewsNumber;

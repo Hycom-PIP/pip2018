@@ -1,58 +1,65 @@
 package pl.hycom.ip2018.searchengine.ui.rest;
 
+import com.google.api.services.analytics.Analytics;
+import com.google.api.services.analytics.model.GaData;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pl.hycom.ip2018.searchengine.ui.rest.inner.TestResult;
+import pl.hycom.ip2018.searchengine.ui.model.StatisticsResult;
+import pl.hycom.ip2018.searchengine.ui.model.ViewsNumberResult;
+import pl.hycom.ip2018.searchengine.ui.service.AnalyticsService;
+import pl.hycom.ip2018.searchengine.ui.service.GoogleAnalyticsAuth;
+import pl.hycom.ip2018.searchengine.ui.service.JsonResponse;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static pl.hycom.ip2018.searchengine.ui.service.GoogleAnalyticsAuth.getFirstProfileId;
+import static pl.hycom.ip2018.searchengine.ui.service.GoogleAnalyticsAuth.initializeAnalytics;
 
 @RestController
+@Slf4j
 public class TestRest {
 
+    @Autowired
+    private AnalyticsService analyticsService;
+
+    @Autowired
+    private JsonResponse jsonConverter;
+
+    /**
+     * @param period number of days to take into consideration
+     * @return json object containing {@link ViewsNumberResult}
+     */
     @RequestMapping(value = "test", method = GET)
-    public int test(@RequestParam("period") String period) {
-        if ("7days".equals(period)) {
-            return 1234;
-        } else if ("30days".equals(period)) {
-            return 12345;
-        } else if ("3months".equals(period)) {
-            return 123456;
-        } else {
-            return 0;
+    public String test(@RequestParam("period") String period) {
+        try {
+            return jsonConverter.getAsString(analyticsService.getNumberOfViewsInPeriod(period));
+        } catch (Exception e) {
+            if (log.isErrorEnabled()) {
+                log.error("Failed to get number of views", e);
+            }
+            return jsonConverter.getAsString(new ViewsNumberResult());
         }
     }
 
+    /**
+     * @param period number of days to take into consideration
+     * @return json object containing {@link ViewsNumberResult}
+     */
     @RequestMapping(value = "statistics", method = GET)
-    public List<TestResult> statistics(@RequestParam("period") String period) {
-        if ("7days".equals(period)) {
-            return Arrays.asList(
-                    new TestResult("tiger", 50, 50f),
-                    new TestResult("t-34", 50, 50f));
-        } else if ("30days".equals(period)) {
-            return Arrays.asList(
-                    new TestResult("eliza", 33, 33.33f),
-                    new TestResult("marie", 33, 33.33f),
-                    new TestResult("lindsey", 33, 33.33f));
-        } else if ("3months".equals(period)) {
-            return Arrays.asList(
-                    new TestResult("studio", 6, 2.34f),
-                    new TestResult("color", 5, 1.95f),
-                    new TestResult("portrait", 4, 1.56f),
-                    new TestResult("hair", 3, 1.17f),
-                    new TestResult("leaves", 3, 1.17f),
-                    new TestResult("night", 3, 1.17f),
-                    new TestResult("weeding", 3, 1.17f),
-                    new TestResult("young", 3, 1.17f),
-                    new TestResult("aerial view", 2, 0.78f));
-        } else {
-            return null;
+    public String statistics(@RequestParam("period") String period) {
+        try {
+        return jsonConverter.getAsString(analyticsService.getStatisticsFromPeriod(period));
+        } catch (Exception e) {
+            if (log.isErrorEnabled()) {
+                log.error("Failed to get views of specific pages", e);
+            }
+            return jsonConverter.getAsString(new StatisticsResult());
         }
     }
 

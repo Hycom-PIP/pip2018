@@ -2,6 +2,7 @@ package pl.hycom.ip2018.searchengine.ui.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Data

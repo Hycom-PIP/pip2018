@@ -1,10 +1,6 @@
 package pl.hycom.ip2018.searchengine.ui.model;
 
-import javafx.util.Pair;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;

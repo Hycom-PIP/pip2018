@@ -6,22 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import pl.hycom.ip2018.searchengine.ui.model.StatisticsResult;
 import pl.hycom.ip2018.searchengine.ui.model.ViewsNumberResult;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static pl.hycom.ip2018.searchengine.ui.service.GoogleAnalyticsAuth.getFirstProfileId;
-import static pl.hycom.ip2018.searchengine.ui.service.GoogleAnalyticsAuth.initializeAnalytics;
 
 @Slf4j
 @Component

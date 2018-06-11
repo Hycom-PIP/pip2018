@@ -22,5 +22,4 @@ public class ProviderResponse {
         super();
         this.results = results;
     }
-
 }

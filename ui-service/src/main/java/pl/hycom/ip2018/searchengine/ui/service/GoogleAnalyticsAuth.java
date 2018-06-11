@@ -11,8 +11,8 @@ import com.google.api.services.analytics.model.Accounts;
 import com.google.api.services.analytics.model.Profiles;
 import com.google.api.services.analytics.model.Webproperties;
 import lombok.extern.slf4j.Slf4j;
-import pl.hycom.ip2018.searchengine.ui.UiApplication;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
@@ -21,7 +21,7 @@ import java.security.GeneralSecurityException;
 public class GoogleAnalyticsAuth {
     private static final String APPLICATION_NAME = "Search engine";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final String KEY_FILE_LOCATION = "/service_account_secret.json";
+    private static final String KEY_FILE_LOCATION = "ui-service/src/main/resources/service_account_secret.json";
 
     /**
      * Initializes an Analytics service object.
@@ -31,7 +31,8 @@ public class GoogleAnalyticsAuth {
      */
     public Analytics initializeAnalytics() throws GeneralSecurityException, IOException {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        InputStream in = UiApplication.class.getResourceAsStream(KEY_FILE_LOCATION);
+
+        InputStream in = new FileInputStream(KEY_FILE_LOCATION);
         GoogleCredential credential = GoogleCredential
                 .fromStream(in)
                 .createScoped(AnalyticsScopes.all());

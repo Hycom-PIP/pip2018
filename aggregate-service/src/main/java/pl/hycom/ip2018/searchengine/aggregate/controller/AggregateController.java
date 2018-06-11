@@ -40,7 +40,7 @@ public class AggregateController {
     @HystrixCommand(fallbackMethod = "getMessageFallBack", commandKey = "Aggregate-Search-Service", groupKey = "GetMessage")
     @RequestMapping(value = "/res", method = GET)
     public ProviderResponse getMessage(@RequestParam("query") String query,
-            @RequestParam List<String> provider,
+            @RequestParam(required = false) List<String> provider,
             HttpServletResponse resp, HttpServletRequest req) {
 
         cacheService.addQueryToCache(cookieService.getUserId(req, resp), query);

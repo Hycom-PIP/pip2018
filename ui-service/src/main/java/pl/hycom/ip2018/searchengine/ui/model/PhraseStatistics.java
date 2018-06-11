@@ -16,4 +16,8 @@ public class PhraseStatistics {
     public int getViewsNumber() {
         return viewsNumber;
     }
+
+    public double getViewsNumberOfTotal() {
+        return viewsNumberOfTotal;
+    }
 }

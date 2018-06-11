@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import pl.hycom.ip2018.searchengine.providercontract.ProviderResponse;
 import pl.hycom.ip2018.searchengine.ui.service.AggregateServiceFeignClient;
 import pl.hycom.ip2018.searchengine.ui.service.CookieService;
 
@@ -26,5 +28,10 @@ public class DataController {
     @RequestMapping(value = "/history-data", method = GET)
     public List<String> historyData(HttpServletRequest req, HttpServletResponse resp) {
         return aggregateServiceFeignClient.getHistory(cookieService.getUserId(req, resp));
+    }
+
+    @RequestMapping(value = "/query-data", method = GET)
+    public ProviderResponse queryData(@RequestParam("query") String query, @RequestParam("provider") List<String> provider, HttpServletRequest req, HttpServletResponse resp) {
+        return aggregateServiceFeignClient.getMessage(query, provider, cookieService.getUserId(req, resp));
     }
 }

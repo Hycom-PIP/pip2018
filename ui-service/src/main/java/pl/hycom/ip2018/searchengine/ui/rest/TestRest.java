@@ -5,12 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.hycom.ip2018.searchengine.ui.model.PhraseStatistics;
 import pl.hycom.ip2018.searchengine.ui.model.StatisticsResult;
 import pl.hycom.ip2018.searchengine.ui.model.ViewsNumberResult;
+import pl.hycom.ip2018.searchengine.ui.rest.inner.Result;
 import pl.hycom.ip2018.searchengine.ui.service.AnalyticsService;
 import pl.hycom.ip2018.searchengine.ui.service.JsonResponse;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,14 +35,14 @@ public class TestRest {
      * @return json object containing {@link ViewsNumberResult}
      */
     @RequestMapping(value = "test", method = GET)
-    public String test(@RequestParam("period") String period) {
+    public int test(@RequestParam("period") String period) {
         try {
-            return jsonConverter.getAsString(analyticsService.getNumberOfViewsInPeriod(period));
+            return analyticsService.getNumberOfViewsInPeriod(period).getViewsNumber();
         } catch (Exception e) {
             if (log.isErrorEnabled()) {
                 log.error("Failed to get number of views", e);
             }
-            return jsonConverter.getAsString(new ViewsNumberResult());
+            return 0;
         }
     }
 
@@ -47,14 +51,26 @@ public class TestRest {
      * @return json object containing {@link ViewsNumberResult}
      */
     @RequestMapping(value = "statistics", method = GET)
-    public String statistics(@RequestParam("period") String period) {
+    public List<Result> statistics(@RequestParam("period") String period) {
         try {
-            return jsonConverter.getAsString(analyticsService.getStatisticsFromPeriod(period));
+
+            List<Result> results = new ArrayList<>();
+
+            StatisticsResult stats = analyticsService.getStatisticsFromPeriod(period);
+
+            for (Map.Entry<String, PhraseStatistics> entry : stats.getPhrases().entrySet()) {
+                results.add(new Result(entry.getKey(),
+                        entry.getValue().getViewsNumber(),
+                        (float) entry.getValue().getViewsNumberOfTotal() * 100));
+            }
+
+            return results;
+
         } catch (Exception e) {
             if (log.isErrorEnabled()) {
                 log.error("Failed to get views of specific pages", e);
             }
-            return jsonConverter.getAsString(new StatisticsResult());
+            return new ArrayList<>();
         }
     }
 

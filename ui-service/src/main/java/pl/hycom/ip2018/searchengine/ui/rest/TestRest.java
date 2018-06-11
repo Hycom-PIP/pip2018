@@ -1,24 +1,22 @@
 package pl.hycom.ip2018.searchengine.ui.rest;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.extern.slf4j.Slf4j;
 import pl.hycom.ip2018.searchengine.ui.model.PhraseStatistics;
 import pl.hycom.ip2018.searchengine.ui.model.StatisticsResult;
 import pl.hycom.ip2018.searchengine.ui.model.ViewsNumberResult;
 import pl.hycom.ip2018.searchengine.ui.rest.inner.Result;
 import pl.hycom.ip2018.searchengine.ui.service.AnalyticsService;
-import pl.hycom.ip2018.searchengine.ui.service.JsonResponse;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @Slf4j
@@ -27,11 +25,9 @@ public class TestRest {
     @Autowired
     private AnalyticsService analyticsService;
 
-    @Autowired
-    private JsonResponse jsonConverter;
-
     /**
-     * @param period number of days to take into consideration
+     * @param period
+     *            number of days to take into consideration
      * @return json object containing {@link ViewsNumberResult}
      */
     @RequestMapping(value = "test", method = GET)
@@ -47,7 +43,8 @@ public class TestRest {
     }
 
     /**
-     * @param period number of days to take into consideration
+     * @param period
+     *            number of days to take into consideration
      * @return json object containing {@link ViewsNumberResult}
      */
     @RequestMapping(value = "statistics", method = GET)
@@ -72,13 +69,5 @@ public class TestRest {
             }
             return new ArrayList<>();
         }
-    }
-
-    @RequestMapping(value = "historyMock", method = GET)
-    public List<String> history() {
-        return Stream.of("The Celtic Holocaust", "The Destroyer of Worlds", "Blueprint for Armageddon",
-                "Painfotainment", "A Basic Look At Post-Modernism", "Structuralism and Mythology",
-                "The Frankfurt School", "Schopenhauer", "Henry David Thoreau's views on the individual, society and civil disobedience"
-        ).collect(Collectors.toList());
     }
 }

@@ -9,6 +9,8 @@ spring:
 
 spring:
   profiles: production
+server:
+  contextPath: /api/ui
 ---
 
 spring:

@@ -44,6 +44,7 @@ zuul:
     aggregate:
       path: /aggregate/**
       serviceId: aggregate-service
+      sensitiveHeaders:
     localsearch:
       path: /localsearch/**
       serviceId: local-search-service

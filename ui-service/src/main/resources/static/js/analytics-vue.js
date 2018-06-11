@@ -1,3 +1,8 @@
+$(document).ready(function(){
+	$("#link-to-analytics").addClass('active');
+});
+
+// noinspection JSUnusedGlobalSymbols
 new Vue({
     el: '#root',
     data() {
@@ -8,7 +13,7 @@ new Vue({
         }
     },
     mounted() {
-        this.fill('3months')
+        this.fill('90')
     },
     methods: {
         fill: function (message) {
@@ -20,13 +25,13 @@ new Vue({
             axios
                 .get('/statistics?period=' + message)
                 .then(response => (this.rows = response.data));
-            if (message === '7days') {
+            if (message === '7') {
                 // noinspection JSUnusedGlobalSymbols
                 this.timePeriod = 'Last 7 days'
-            } else if (message === '30days') {
+            } else if (message === '30') {
                 // noinspection JSUnusedGlobalSymbols
                 this.timePeriod = 'Last 30 days'
-            } else if (message === '3months') {
+            } else if (message === '90') {
                 // noinspection JSUnusedGlobalSymbols
                 this.timePeriod = 'Last 3 months'
             }

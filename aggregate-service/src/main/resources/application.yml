@@ -31,8 +31,8 @@ eureka:
 ribbon:
   eureka:
     enabled: true
-  ConnectTimeout: 3000
-  ReadTimeout: 7000
+  ConnectTimeout: 10000
+  ReadTimeout: 10000
 hystrix:
   command:
     default:

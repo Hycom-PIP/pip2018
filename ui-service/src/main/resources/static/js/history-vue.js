@@ -11,7 +11,7 @@ new Vue({
     methods: {
         fill: function () {
             axios
-                .get('/historyMock')
+                .get('/history-data')
                 .then(response => (this.rows = response.data))
         }
     }

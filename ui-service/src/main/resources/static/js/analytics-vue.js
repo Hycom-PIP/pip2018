@@ -1,3 +1,7 @@
+$(document).ready(function(){
+	$("#link-to-analytics").addClass('active');
+});
+
 // noinspection JSUnusedGlobalSymbols
 new Vue({
     el: '#root',

@@ -1,3 +1,7 @@
+$(document).ready(function(){
+	$("#link-to-history").addClass('active');
+});
+
 new Vue({
     el: '#root',
     data() {
@@ -11,7 +15,7 @@ new Vue({
     methods: {
         fill: function () {
             axios
-                .get('/historyMock')
+                .get('/history-data')
                 .then(response => (this.rows = response.data))
         }
     }

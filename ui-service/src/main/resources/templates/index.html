@@ -2,8 +2,7 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
 <head>
     <title>Search Home</title>
-	<link rel="stylesheet" href="css/search-engine.css"/>	
-	<script type="text/javascript" defer>$('#link-to-home').addClass('active')</script>
+	<script type="text/javascript" defer src="js/index-vue.js"></script>
 </head>
 <body>
 	<div class="content" layout:fragment="content">
@@ -23,10 +22,10 @@
 	                    <input type="checkbox" name="provider" value="google"><i class="fab fa-google"></i></input>
 	                </label>
 	                <label class="btn btn-lg">
-	                    <input type="checkbox" name="provider" value="local-drive"/><i class="fas fa-hdd"></i></input>
+	                    <input type="checkbox" name="provider" value="local-drive"><i class="fas fa-hdd"></i></input>
 	                </label>
 	                <label class="btn btn-lg">
-	                    <input type="checkbox" name="provider" value="google-drive"/><i class="fab fa-google-drive"></i></input>
+	                    <input type="checkbox" name="provider" value="google-drive"><i class="fab fa-google-drive"></i></input>
 	                </label>
 	            </div>
 	        </form>

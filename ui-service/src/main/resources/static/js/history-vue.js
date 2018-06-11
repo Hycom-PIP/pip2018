@@ -1,3 +1,7 @@
+$(document).ready(function(){
+	$("#link-to-history").addClass('active');
+});
+
 new Vue({
     el: '#root',
     data() {

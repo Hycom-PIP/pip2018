@@ -64,9 +64,8 @@ public class AnalyticsService {
      * @param daysAgo number indicating how many days before take into consideration
      * @return Result object with start and endTime and pairs (query, number of searches)
      * @throws IOException in case of error in executing query to analytics
-     * @throws ArithmeticException when dividing by zero
      */
-    public StatisticsResult getStatisticsFromPeriod(String daysAgo) throws IOException, ArithmeticException {
+    public StatisticsResult getStatisticsFromPeriod(String daysAgo) throws IOException {
         if (log.isInfoEnabled()) {
             log.info("Requesting statistics from Google Analytics for site");
         }

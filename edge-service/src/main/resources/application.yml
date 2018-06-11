@@ -54,6 +54,7 @@ zuul:
     ui:
       path: /ui/**
       serviceId: ui-service
+      stripPrefix: false
 
   threadPool:
       useSeparateThreadPools: true

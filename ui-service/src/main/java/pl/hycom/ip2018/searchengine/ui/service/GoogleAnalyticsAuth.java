@@ -1,5 +1,8 @@
 package pl.hycom.ip2018.searchengine.ui.service;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
@@ -10,42 +13,41 @@ import com.google.api.services.analytics.AnalyticsScopes;
 import com.google.api.services.analytics.model.Accounts;
 import com.google.api.services.analytics.model.Profiles;
 import com.google.api.services.analytics.model.Webproperties;
-import lombok.extern.slf4j.Slf4j;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.GeneralSecurityException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class GoogleAnalyticsAuth {
     private static final String APPLICATION_NAME = "Search engine";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final String KEY_FILE_LOCATION = "ui-service/src/main/resources/service_account_secret.json";
+    private static final String KEY_FILE_LOCATION = "/service_account_secret.json";
 
     /**
      * Initializes an Analytics service object.
+     *
      * @return An authorized Analytics service object.
-     * @throws IOException in case of error in Analytics or invalid path to key file
-     * @throws GeneralSecurityException in case of error in Analytics
+     * @throws IOException
+     *             in case of error in Analytics or invalid path to key file
+     * @throws GeneralSecurityException
+     *             in case of error in Analytics
      */
     public Analytics initializeAnalytics() throws GeneralSecurityException, IOException {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
-        InputStream in = new FileInputStream(KEY_FILE_LOCATION);
         GoogleCredential credential = GoogleCredential
-                .fromStream(in)
+                .fromStream(GoogleAnalyticsAuth.class.getResourceAsStream(KEY_FILE_LOCATION))
                 .createScoped(AnalyticsScopes.all());
 
         return new Analytics.Builder(httpTransport, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME).build();
     }
 
-
     /**
-     * @param analytics authorized service object
+     * @param analytics
+     *            authorized service object
      * @return profileId
-     * @throws IOException in case of error in Analytics
+     * @throws IOException
+     *             in case of error in Analytics
      */
     public String getFirstProfileId(Analytics analytics) throws IOException {
         String profileId = null;

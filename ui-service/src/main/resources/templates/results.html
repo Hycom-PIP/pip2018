@@ -6,11 +6,13 @@
 </head>
 <body>
 <div class="content" layout:fragment="content">
-    <ul>
-        <li v-for="(item, index) in items">
-            {{index}} - {{parentMsg}} {{item.childMsg}}
-        </li>
-    </ul>
+    <div class="container-for-elements">
+        <div class="my-list-group">
+            <ul class="list-group" v-for="(item, index) in items">
+                <li class="list-group-item">{{item.childMsg}}</li>
+            </ul>
+        </div>
+    </div>
 </div>
 </body>
 </html>

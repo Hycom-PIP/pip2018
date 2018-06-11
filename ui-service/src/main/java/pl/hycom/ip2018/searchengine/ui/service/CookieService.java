@@ -1,4 +1,4 @@
-package pl.hycom.ip2018.searchengine.aggregate.service;
+package pl.hycom.ip2018.searchengine.ui.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -32,14 +32,14 @@ public class CookieService {
     }
 
     private boolean shouldCreateCookie(final HttpServletRequest req) {
-        return req.getCookies() == null ? true : Arrays.stream(req.getCookies()).noneMatch(cookie -> COOKIE_NAME.equals(cookie.getName()));
+        return req.getCookies() == null || Arrays.stream(req.getCookies()).noneMatch(cookie -> COOKIE_NAME.equals(cookie.getName()));
     }
 
     private Cookie createCookieWithUserId() {
         String generatedUUID = UUID.randomUUID().toString().replace("-", "");
         String currentDate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 
-        Cookie cookie = new Cookie(COOKIE_NAME, generatedUUID + currentDate);
+        Cookie cookie = new Cookie(COOKIE_NAME, generatedUUID + '-' + currentDate);
         cookie.setMaxAge(COOKIE_MAX_AGE);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);

@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 import pl.hycom.ip2018.searchengine.ui.model.StatisticsResult;
 import pl.hycom.ip2018.searchengine.ui.model.ViewsNumberResult;
 
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static pl.hycom.ip2018.searchengine.ui.service.GoogleAnalyticsAuth.getFirstProfileId;
 
 @Slf4j
 @Component
@@ -21,36 +21,38 @@ public class AnalyticsService {
 
     private Analytics analytics;
     private String profileId;
+    private static final String PAGE_VIEWS = "ga:pageviews";
 
     /**
      * Initialize Google Analytics service by getting credentials and profileId
-     * @throws Exception in case of invalid credentials
+     * @throws IOException in case of invalid credentials
      */
-    public AnalyticsService() throws Exception{
+    public AnalyticsService() throws IOException{
         try {
-            analytics = GoogleAnalyticsAuth.initializeAnalytics();
-            profileId = getFirstProfileId(analytics);
+            GoogleAnalyticsAuth auth = new GoogleAnalyticsAuth();
+            analytics = auth.initializeAnalytics();
+            profileId = auth.getFirstProfileId(analytics);
         } catch (GeneralSecurityException e) {
             if(log.isErrorEnabled()) {
                 log.error("Error initializing analytics credentials", e);
             }
-            throw new Exception(e);
+            throw new IOException(e);
         }
     }
 
     /**
      * @param daysAgo number indicating how many days before take into consideration
      * @return Result object with start and endTime and number of visits
-     * @throws Exception in case of error in executing query to analytics
+     * @throws IOException in case of error in executing query to analytics
      */
-    public ViewsNumberResult getNumberOfViewsInPeriod(String daysAgo) throws Exception {
+    public ViewsNumberResult getNumberOfViewsInPeriod(String daysAgo) throws IOException {
         if (log.isInfoEnabled()) {
             log.info("Requesting number of views from Google Analytics for site");
         }
         GaData result = analytics.data().ga()
-                .get("ga:" + profileId, daysAgo + "daysAgo", "today", "ga:pageviews")
+                .get("ga:" + profileId, daysAgo + "daysAgo", "today", PAGE_VIEWS)
                 .execute();
-        int viewsNumber = Integer.parseInt(result.getTotalsForAllResults().get("ga:pageviews"));
+        int viewsNumber = Integer.parseInt(result.getTotalsForAllResults().get(PAGE_VIEWS));
 
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(Integer.parseInt(daysAgo));
@@ -60,14 +62,14 @@ public class AnalyticsService {
     /**
      * @param daysAgo number indicating how many days before take into consideration
      * @return Result object with start and endTime and pairs (query, number of searches)
-     * @throws Exception in case of error in executing query to analytics
+     * @throws IOException in case of error in executing query to analytics
      */
-    public StatisticsResult getStatisticsFromPeriod(String daysAgo) throws Exception {
+    public StatisticsResult getStatisticsFromPeriod(String daysAgo) throws IOException {
         if (log.isInfoEnabled()) {
             log.info("Requesting statistics from Google Analytics for site");
         }
         GaData result = analytics.data().ga()
-                .get("ga:" + profileId, daysAgo + "daysAgo", "today","ga:pageviews")
+                .get("ga:" + profileId, daysAgo + "daysAgo", "today",PAGE_VIEWS)
                 .setDimensions("ga:pagePath")
                 .setSort("-ga:pageviews")
                 .execute();

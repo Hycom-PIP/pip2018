@@ -50,7 +50,7 @@ public class AggregateController {
 
     public ProviderResponse getMessageFallBack(String query, List<String> provider, HttpServletResponse response, HttpServletRequest req) {
         if (log.isWarnEnabled()) {
-            log.warn("Using fallbac for query[" + query + "]");
+            log.warn("Using fallback for query[" + query + "]");
         }
 
         return new ProviderResponse(new ArrayList<>());

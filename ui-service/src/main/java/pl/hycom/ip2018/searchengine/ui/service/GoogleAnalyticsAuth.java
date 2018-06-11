@@ -27,7 +27,7 @@ public class GoogleAnalyticsAuth {
      * @throws IOException in case of error in Analytics or invalid path to key file
      * @throws GeneralSecurityException in case of error in Analytics
      */
-    public static Analytics initializeAnalytics() throws GeneralSecurityException, IOException {
+    public Analytics initializeAnalytics() throws GeneralSecurityException, IOException {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         GoogleCredential credential = GoogleCredential
                 .fromStream(GoogleAnalyticsAuth.class.getResourceAsStream(KEY_FILE_LOCATION))
@@ -43,7 +43,7 @@ public class GoogleAnalyticsAuth {
      * @return profileId
      * @throws IOException in case of error in Analytics
      */
-    public static String getFirstProfileId(Analytics analytics) throws IOException {
+    public String getFirstProfileId(Analytics analytics) throws IOException {
         String profileId = null;
         Accounts accounts = analytics.management().accounts().list().execute();
         if (accounts.getItems().isEmpty()) {

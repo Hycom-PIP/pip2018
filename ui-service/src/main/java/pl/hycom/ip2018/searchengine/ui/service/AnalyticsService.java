@@ -4,6 +4,7 @@ import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.model.GaData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import pl.hycom.ip2018.searchengine.ui.model.PhraseStatistics;
 import pl.hycom.ip2018.searchengine.ui.model.StatisticsResult;
 import pl.hycom.ip2018.searchengine.ui.model.ViewsNumberResult;
 
@@ -73,16 +74,24 @@ public class AnalyticsService {
                 .setDimensions("ga:pagePath")
                 .setSort("-ga:pageviews")
                 .execute();
-        Map<String, Integer> specificPagesViews = new LinkedHashMap<>();
+
+        Map<String, PhraseStatistics> specificPagesViews = new LinkedHashMap<>();
+        int totalViews = 0;
+
         for(List<String> specificPage : result.getRows()) {
             String specificSite = specificPage.get(0);
             if(!specificSite.contains("query"))
                 continue;
-            String specificSiteViews = specificPage.get(1);
+            int specificSiteViews = Integer.parseInt(specificPage.get(1));
             String query = trimSiteToQuery(specificSite);
-            specificPagesViews.put(query, Integer.parseInt(specificSiteViews));
+            specificPagesViews.put(query, new PhraseStatistics(specificSiteViews, 0));
+            totalViews += specificSiteViews;
         }
-
+        for(Map.Entry<String, PhraseStatistics> specificPage : specificPagesViews.entrySet()) {
+            PhraseStatistics phraseStatistics = specificPagesViews.get(specificPage.getKey());
+            double percent = (double)phraseStatistics.getViewsNumber() / totalViews;
+            specificPagesViews.get(specificPage.getKey()).setViewsNumberOfTotal(percent);
+        }
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(Integer.parseInt(daysAgo));
         return new StatisticsResult(specificPagesViews, startDate, endDate);

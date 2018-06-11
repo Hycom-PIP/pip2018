@@ -11,8 +11,10 @@ import com.google.api.services.analytics.model.Accounts;
 import com.google.api.services.analytics.model.Profiles;
 import com.google.api.services.analytics.model.Webproperties;
 import lombok.extern.slf4j.Slf4j;
+import pl.hycom.ip2018.searchengine.ui.UiApplication;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 
 @Slf4j
@@ -29,8 +31,9 @@ public class GoogleAnalyticsAuth {
      */
     public Analytics initializeAnalytics() throws GeneralSecurityException, IOException {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        InputStream in = UiApplication.class.getResourceAsStream(KEY_FILE_LOCATION);
         GoogleCredential credential = GoogleCredential
-                .fromStream(GoogleAnalyticsAuth.class.getResourceAsStream(KEY_FILE_LOCATION))
+                .fromStream(in)
                 .createScoped(AnalyticsScopes.all());
 
         return new Analytics.Builder(httpTransport, JSON_FACTORY, credential)

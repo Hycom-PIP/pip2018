@@ -45,7 +45,7 @@ new Vue({
     	fill: function () {
         	var searchParams = getSearchParams();        	
             axios
-                .get('/query-data', searchParams)
+                .get('/query-data', {params: searchParams})
                 .then(response => (this.rows = response.data))
         },
         submit: function (submitEvent) {
@@ -60,7 +60,7 @@ new Vue({
         	
         	window.history.pushState('', '', new URL(window.location.href).pathname + '?query=' + encodeURIComponent(submitEvent.target.elements.query.value) + '&provider=' + providers.join());
         	axios
-	            .get('/query-data', {query: submitEvent.target.elements.query.value, provider: providers})
+	            .get('/query-data', {params: {query: submitEvent.target.elements.query.value, provider: providers}})
 	            .then(response => (this.result = response.data))
         }
     }

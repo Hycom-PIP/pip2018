@@ -48,9 +48,9 @@ public class AggregateController {
         return aggregateSearch.getResponse(query, provider);
     }
 
-    public ProviderResponse getMessageFallBack(String query, List<String> provider, HttpServletResponse response, HttpServletRequest req) {
+    public ProviderResponse getMessageFallBack(String query, List<String> provider, HttpServletResponse response, HttpServletRequest req, Throwable e) {
         if (log.isWarnEnabled()) {
-            log.warn("Using fallback for query[" + query + "]");
+            log.warn("Using fallback for query[" + query + "]", e);
         }
 
         return new ProviderResponse(new ArrayList<>());

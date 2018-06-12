@@ -28,12 +28,11 @@ public class SwaggerAggregatedResourcesProvider implements SwaggerResourcesProvi
     public List<SwaggerResource> get() {
         List resources = new ArrayList<SwaggerResource>();
 
-        String prefix = environment.getProperty("zuul.prefix");
         for (Object key : routesProperties.keySet()) {
             String keyStr = (String) key;
             String property = "zuul.routes.".concat(keyStr);
             String name = environment.getProperty(property.concat(".serviceId"));
-            String location = (prefix + environment.getProperty(property + ".path")).replace("**", "v2/api-docs");
+            String location = environment.getProperty(property + ".path").replace("**", "v2/api-docs");
             resources.add(buildSwaggerResource(name, location, "2.0"));
         }
         return resources;

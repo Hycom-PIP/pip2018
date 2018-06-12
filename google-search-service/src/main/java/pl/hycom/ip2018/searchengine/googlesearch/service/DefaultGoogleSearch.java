@@ -59,7 +59,7 @@ public class DefaultGoogleSearch implements GoogleSearch {
             return join(partialList);
         } catch (Exception e) {
             if (log.isErrorEnabled()) {
-                log.error("Searching results for {} are not available from Google", query);
+                log.error("Searching results for {} are not available from Google", query, e);
             }
             throw new GoogleSearchException();
         }

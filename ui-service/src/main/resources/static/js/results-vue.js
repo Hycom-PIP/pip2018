@@ -35,7 +35,7 @@ new Vue({
     el: '#root',
     data() {
         return {
-            result: null,
+            result: {},
         }
     },
     mounted() {
@@ -43,10 +43,10 @@ new Vue({
     },
     methods: {
     	fill: function () {
-        	var searchParams = getSearchParams();        	
+        	var searchParams = getSearchParams();   
             axios
-                .get('/query-data', {params: searchParams})
-                .then(response => (this.rows = response.data))
+                .get('/query-data', {params: {query: searchParams.query, provider: searchParams.provider.join()}})
+                .then(response => (this.result = response.data))
         },
         submit: function (submitEvent) {
         	submitEvent.preventDefault();
@@ -59,8 +59,10 @@ new Vue({
         	});
         	
         	window.history.pushState('', '', new URL(window.location.href).pathname + '?query=' + encodeURIComponent(submitEvent.target.elements.query.value) + '&provider=' + providers.join());
+        	gtag('config', GTAG_ID, {page_path: window.location.href, page_location: window.location.href});
+        	
         	axios
-	            .get('/query-data', {params: {query: submitEvent.target.elements.query.value, provider: providers}})
+	            .get('/query-data', {params: {query: submitEvent.target.elements.query.value, provider: providers.join()}})
 	            .then(response => (this.result = response.data))
         }
     }

@@ -32,9 +32,14 @@
 
             <div class="list-group" v-for="result in result.results">
                 <a :href="result.url" class="list-group-item">
+					<i v-if="result.provider === 'wikipedia'" class="fab fa-wikipedia-w"/>
+					<i v-if="result.provider === 'google'" class="fab fa-google"/>
+					<i v-if="result.provider === 'local-drive'" class="fab fa-hdd"/>
+					<i v-if="result.provider === 'google-drive'" class="fab fa-google-drive"/> 
                     <h4 class="list-group-item-heading">{{result.header}}</h4>
                     <p class="list-group-item-text">{{result.additionalData.snippet}}</p>
                     <span class="badge" v-if="result.timestamp !== null">{{result.timestamp}}</span>
+
                 </a>
             </div>
 	        

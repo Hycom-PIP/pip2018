@@ -158,6 +158,11 @@
 				<artifactId>google-http-client-gson</artifactId>
 				<version>1.23.0</version>
 			</dependency>
+			<dependency>
+				<groupId>com.google.apis</groupId>
+				<artifactId>google-api-services-analytics</artifactId>
+				<version>v3-rev155-1.23.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

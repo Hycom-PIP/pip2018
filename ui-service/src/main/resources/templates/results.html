@@ -51,8 +51,8 @@
 								<h4 class="list-group-item-heading">{{result.header}}</h4>
 								<p class="list-group-item-text"><span v-html="result.additionalData.snippet"/></p>
 								<ul>
-									<li v-for="(key, value) in result.additionalData">
-										{{key}}: {{value}}
+									<li v-for="(value, key) in result.additionalData">
+										<span v-if="key !== snippet">{{key}}: {{value}}</span>
 									</li>
 								</ul>
 							</a>

@@ -32,7 +32,9 @@
 	            </thead>
 	            <tbody>
 	            <tr v-for="row in rows">
-	                <td>{{ row.term }}</td>
+	                <td>	                	
+	                	<a :href="'/results?query=' + row.term">{{ row.term }}</a>
+	                </td>
 	                <td>{{ row.searches }}</td>
 	                <td>{{ myRound(row.percent) }}&percnt;</td>
 	            </tr>

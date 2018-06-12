@@ -35,16 +35,16 @@
                 <div class="list-group-item">
 					<div class="media">
 						<template v-if="result.provider === 'wikipedia'">
-							<i class="fab fa-wikipedia-w"/>
+							<i style="margin: 0 0 5px 20px; float: right;" class="fab fa-wikipedia-w"/>
 						</template>
 						<template v-else-if="result.provider === 'google'">
-							<i class="fab fa-google"/>
+							<i style="margin: 0 0 5px 20px; float: right;" class="fab fa-google"/>
 						</template>
 						<template v-else-if="result.provider === 'local'">
-							<i class="fab fa-hdd"/>
+							<i style="margin: 0 0 5px 20px; float: right;" class="fab fa-hdd"/>
 						</template>
 						<template v-else-if="result.provider === 'googledrive'">
-							<i class="fab fa-google-drive"/>
+							<i style="margin: 0 0 5px 20px; float: right;" class="fab fa-google-drive"/>
 						</template>
 						<div class="media-body">
 							<a :href="result.url">

@@ -49,7 +49,7 @@
 						<div class="media-body">
 							<a :href="result.url">
 								<h4 class="list-group-item-heading">{{result.header}}</h4>
-								<p class="list-group-item-text">{{result.additionalData.snippet}}</p>
+								<p class="list-group-item-text"><span v-html="result.additionalData.snippet"></span></p>
 								<span class="badge" v-if="result.timestamp !== null">{{result.timestamp}}</span>
 							</a>
 						</div>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layout" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <title>Search results</title>
     <script type="text/javascript" defer th:src="@{js/results-vue.js}"></script>
@@ -33,10 +34,18 @@
             <div class="list-group" v-for="result in result.results">
                 <div class="list-group-item">
 					<div class="media">
-						<i v-if="result.provider === 'wikipedia'" class="fab fa-wikipedia-w"/>
-						<i v-else-if="result.provider === 'google'" class="fab fa-google"/>
-						<i v-else-if="result.provider === 'local-drive'" class="fab fa-hdd"/>
-						<i v-else-if="result.provider === 'google-drive'" class="fab fa-google-drive"/>
+						<template v-if="result.provider === 'wikipedia'">
+							<i class="fab fa-wikipedia-w"/>
+						</template>
+						<template v-else-if="result.provider === 'google'">
+							<i class="fab fa-google"/>
+						</template>
+						<template v-else-if="result.provider === 'local-drive'">
+							<i class="fab fa-hdd"/>
+						</template>
+						<template v-else-if="result.provider === 'google-drive'">
+							<i class="fab fa-google-drive"/>
+						</template>
 						<div class="media-body">
 							<a :href="result.url">
 								<h4 class="list-group-item-heading">{{result.header}}</h4>
@@ -45,9 +54,10 @@
 							</a>
 						</div>
 					</div>
-            </div>
+            	</div>
 	        
-	    </div>
+	    	</div>
+		</div>
 	</div>
 </body>
 </html>

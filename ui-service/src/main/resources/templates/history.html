@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<head>
+    <title>History</title>
+	<link rel="stylesheet" href="css/history-stylesheet.css"/>
+	<script type="text/javascript" defer th:src="@{js/history-vue.js}"></script>
+</head>
+<body>
+
+	<div class="content" layout:fragment="content">
+		<div class="container-for-elements">
+	        <h3>Search history</h3>
+	    </div>
+	    <div class="container-for-elements">
+	        <div class="my-history-list">
+	           <table class="table table-striped">
+	            <thead>
+		            <tr>
+		                <th scope="col">Search Term</th>
+		            </tr>
+		            </thead>
+		            <tbody>
+		            <tr v-for="row in rows">
+		                <td>	                	
+		                	<a :href="'/results?query=' + row">{{ row }}</a>
+		                </td>
+		            </tr>
+		            </tbody>
+		        </table>
+	        </div>
+	    </div>
+	    
+	</div>
+
+</body>
+</html>

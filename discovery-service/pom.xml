@@ -7,6 +7,7 @@
 		<groupId>pl.hycom.ip-2018</groupId>
 		<artifactId>search-engine</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>discovery-service</artifactId>
@@ -16,6 +17,11 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka-server</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

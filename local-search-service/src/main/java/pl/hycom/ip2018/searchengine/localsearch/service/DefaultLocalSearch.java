@@ -90,11 +90,17 @@ public class DefaultLocalSearch implements LocalSearch {
             response.setResults(getFileResultsAsync(query,
                     paths, notReadableFiles, readableBinariesFiles, readablePlainTextsFiles));
             return response;
-        } catch (IOException | InterruptedException | ExecutionException | LocalSearchIOException e) {
+        } catch (IOException | ExecutionException | LocalSearchIOException e) {
             if (log.isErrorEnabled()) {
                 log.error("Searching results for {} are not available from Local", query);
             }
-            throw new LocalSearchException();
+            throw new LocalSearchException(e);
+        } catch (InterruptedException e) {
+            if (log.isErrorEnabled()) {
+                log.error("Searching results for {} from Local was interrupted!", query);
+            }
+            Thread.currentThread().interrupt();
+            throw new LocalSearchException(e);
         }
     }
 

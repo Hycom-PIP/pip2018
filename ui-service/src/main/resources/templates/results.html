@@ -50,7 +50,7 @@
 							<a :href="result.url">
 								<h4 class="list-group-item-heading">{{result.header}}</h4>
 								<p class="list-group-item-text"><span v-html="result.additionalData.snippet"></span></p>
-								<span class="badge" v-if="result.timestamp">{{result.timestamp}}</span>
+								<span v-if="result.timestamp">{{result.timestamp}}</span>
 							</a>
 						</div>
 					</div>

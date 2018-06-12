@@ -52,7 +52,7 @@
 								<p class="list-group-item-text"><span v-html="result.additionalData.snippet"/></p>
 								<ul>
 									<li v-for="(value, key) in result.additionalData">
-										<span v-if="key !== snippet">{{key}}: {{value}}</span>
+										<span v-if="key !== 'snippet'">{{key}}: {{value}}</span>
 									</li>
 								</ul>
 							</a>

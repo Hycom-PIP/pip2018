@@ -35,7 +35,7 @@ new Vue({
     el: '#root',
     data() {
         return {
-            result: null,
+            result: {},
         }
     },
     mounted() {

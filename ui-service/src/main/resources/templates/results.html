@@ -49,8 +49,12 @@
 						<div class="media-body">
 							<a :href="result.url">
 								<h4 class="list-group-item-heading">{{result.header}}</h4>
-								<p class="list-group-item-text"><span v-html="result.additionalData.snippet"></span></p>
-								<span v-if="result.timestamp">{{result.timestamp}}</span>
+								<p class="list-group-item-text"><span v-html="result.additionalData.snippet"/></p>
+								<ul>
+									<li v-for="(key, value) in result.additionalData">
+										{{key}}: {{value}}
+									</li>
+								</ul>
 							</a>
 						</div>
 					</div>

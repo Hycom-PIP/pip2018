@@ -31,7 +31,7 @@
 	        </form>
 
             <div class="list-group" v-for="result in results">
-                <a href={{result.url}} class="list-group-item">
+                <a :href="result.url" class="list-group-item">
                     <h4 class="list-group-item-heading">{{result.header}}</h4>
                     <p class="list-group-item-text">{{result.additionalData.snippet}}</p>
                     <span class="badge">{{result.timestamp}}</span>

@@ -45,7 +45,7 @@ new Vue({
     	fill: function () {
         	var searchParams = getSearchParams();   
             axios
-                .get('/query-data', {params: searchParams})
+                .get('/query-data', {params: {query: searchParams.query, provider: searchParams.provider.join()}})
                 .then(response => (this.result = response.data))
         },
         submit: function (submitEvent) {
@@ -62,7 +62,7 @@ new Vue({
         	gtag('config', GTAG_ID, {page_path: window.location.href, page_location: window.location.href});
         	
         	axios
-	            .get('/query-data', {params: {query: submitEvent.target.elements.query.value, provider: providers}})
+	            .get('/query-data', {params: {query: submitEvent.target.elements.query.value, provider: providers.join()}})
 	            .then(response => (this.result = response.data))
         }
     }

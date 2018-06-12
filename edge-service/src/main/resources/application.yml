@@ -33,27 +33,27 @@ endpoints:
     sensitive: false
 
 zuul:
-  prefix: /api
   routes:
     googlesearch:
-      path: /googlesearch/**
+      path: /api/googlesearch/**
       serviceId: google-search-service
     wikisearch:
-      path: /wikisearch/**
+      path: /api/wikisearch/**
       serviceId: wikipedia-search-service
     aggregate:
-      path: /aggregate/**
+      path: /api/aggregate/**
       serviceId: aggregate-service
       sensitiveHeaders:
     localsearch:
-      path: /localsearch/**
+      path: /api/localsearch/**
       serviceId: local-search-service
     googledrivesearch:
-      path: /googledrivesearch/**
+      path: /api/googledrivesearch/**
       serviceId: google-drive-search-service
     ui:
       path: /ui/**
       serviceId: ui-service
+      stripPrefix: false
 
   threadPool:
       useSeparateThreadPools: true

@@ -1,5 +1,8 @@
 package pl.hycom.ip2018.searchengine.ui.service;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
@@ -10,10 +13,8 @@ import com.google.api.services.analytics.AnalyticsScopes;
 import com.google.api.services.analytics.model.Accounts;
 import com.google.api.services.analytics.model.Profiles;
 import com.google.api.services.analytics.model.Webproperties;
-import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class GoogleAnalyticsAuth {
@@ -23,12 +24,16 @@ public class GoogleAnalyticsAuth {
 
     /**
      * Initializes an Analytics service object.
+     *
      * @return An authorized Analytics service object.
-     * @throws IOException in case of error in Analytics or invalid path to key file
-     * @throws GeneralSecurityException in case of error in Analytics
+     * @throws IOException
+     *             in case of error in Analytics or invalid path to key file
+     * @throws GeneralSecurityException
+     *             in case of error in Analytics
      */
     public Analytics initializeAnalytics() throws GeneralSecurityException, IOException {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+
         GoogleCredential credential = GoogleCredential
                 .fromStream(GoogleAnalyticsAuth.class.getResourceAsStream(KEY_FILE_LOCATION))
                 .createScoped(AnalyticsScopes.all());
@@ -37,11 +42,12 @@ public class GoogleAnalyticsAuth {
                 .setApplicationName(APPLICATION_NAME).build();
     }
 
-
     /**
-     * @param analytics authorized service object
+     * @param analytics
+     *            authorized service object
      * @return profileId
-     * @throws IOException in case of error in Analytics
+     * @throws IOException
+     *             in case of error in Analytics
      */
     public String getFirstProfileId(Analytics analytics) throws IOException {
         String profileId = null;

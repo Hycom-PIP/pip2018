@@ -2,12 +2,12 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
 <head>
     <title>Search Home</title>
-	<script type="text/javascript" defer src="js/index-vue.js"></script>
+	<script type="text/javascript" defer th:src="@{js/index-vue.js}"></script>
 </head>
 <body>
 	<div class="content" layout:fragment="content">
 	    <div class="container-for-elements">
-	        <form name="query-form" class="form-horizontal" action="/results">
+	        <form name="query-form" class="form-horizontal" action="/results" method="get">
 	            <div class="input-group ">
 	                <input type="text" class="form-control" name="query" placeholder="Search">
 	                <div class="input-group-append">
@@ -22,10 +22,10 @@
 	                    <input type="checkbox" name="provider" value="google"><i class="fab fa-google"></i></input>
 	                </label>
 	                <label class="btn btn-lg">
-	                    <input type="checkbox" name="provider" value="local-drive"><i class="fas fa-hdd"></i></input>
+	                    <input type="checkbox" name="provider" value="local"><i class="fas fa-hdd"></i></input>
 	                </label>
 	                <label class="btn btn-lg">
-	                    <input type="checkbox" name="provider" value="google-drive"><i class="fab fa-google-drive"></i></input>
+	                    <input type="checkbox" name="provider" value="googledrive"><i class="fab fa-google-drive"></i></input>
 	                </label>
 	            </div>
 	        </form>

@@ -6,13 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"/>
 	<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.13/css/all.css"/>
-	<link rel="stylesheet" href="css/common.css"/> 
+	<link rel="stylesheet" th:href="@{css/common.css}"/> 
 	
 	<script defer src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script defer src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script defer src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 	<script defer src="//unpkg.com/axios/dist/axios.min.js"></script>
 	<script defer src="//cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+  	<script async="async" src="//www.googletagmanager.com/gtag/js?id=UA-119425726-1"></script>
+  	<script>
+  		var GTAG_ID = 'UA-119425726-1';
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', GTAG_ID);
+	</script>
   </head>
   <body>
   

@@ -1,13 +1,67 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layout" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Title</title>
+    <title>Search results</title>
+    <script type="text/javascript" defer th:src="@{js/results-vue.js}"></script>
 </head>
 <body>
 	<div class="content" layout:fragment="content">
+	    <div class="container-for-elements">
+	        <form name="query-form" class="form-horizontal" v-on:submit.prevent="submit">
+	            <div class="input-group ">
+	                <input id="query" type="text" class="form-control" name="query" placeholder="Search">
+	                <div class="input-group-append">
+	                    <button type="submit" class="btn btn-outline-secondary"><span class="fas fa-arrow-right"></span></button>
+	                </div>
+	            </div>
+	            <div class="btn-group-toggle container-for-elements text-center" data-toggle="buttons">
+	                <label class="btn btn-lg">
+	                    <input class="provider-checkbox" type="checkbox" name="provider" value="wikipedia"><i class="fab fa-wikipedia-w"></i></input>
+	                </label>
+	                <label class="btn btn-lg">
+	                    <input class="provider-checkbox" type="checkbox" name="provider" value="google"><i class="fab fa-google"></i></input>
+	                </label>
+	                <label class="btn btn-lg">
+	                    <input class="provider-checkbox" type="checkbox" name="provider" value="local"><i class="fas fa-hdd"></i></input>
+	                </label>
+	                <label class="btn btn-lg">
+	                    <input class="provider-checkbox" type="checkbox" name="provider" value="googledrive"><i class="fab fa-google-drive"></i></input>
+	                </label>
+	            </div>
+	        </form>
 
-		RESULTS
-		
+            <div class="list-group" v-for="result in result.results">
+                <div class="list-group-item">
+					<div class="media">
+						<template v-if="result.provider === 'wikipedia'">
+							<i style="margin: 20px 20px 0 0; float: right;" class="fab fa-wikipedia-w"/>
+						</template>
+						<template v-else-if="result.provider === 'google'">
+							<i style="margin: 20px 20px 0 0; float: right;" class="fab fa-google"/>
+						</template>
+						<template v-else-if="result.provider === 'local'">
+							<i style="margin: 20px 20px 0 0; float: right;" class="fas fa-hdd"/>
+						</template>
+						<template v-else-if="result.provider === 'googledrive'">
+							<i style="margin: 20px 20px 0 0; float: right;" class="fab fa-google-drive"/>
+						</template>
+						<div class="media-body">
+							<a :href="result.url">
+								<h4 class="list-group-item-heading">{{result.header}}</h4>
+								<p class="list-group-item-text"><span v-html="result.additionalData.snippet"/></p>
+								<ul>
+									<li v-for="(value, key) in result.additionalData" v-if="key !== 'snippet' && value !== null && value !== ''">
+										{{key}}: {{value}}
+									</li>
+								</ul>
+							</a>
+						</div>
+					</div>
+            	</div>
+	        
+	    	</div>
+		</div>
 	</div>
 </body>
 </html>

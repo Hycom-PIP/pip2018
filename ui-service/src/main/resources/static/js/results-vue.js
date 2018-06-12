@@ -46,7 +46,7 @@ new Vue({
         	var searchParams = getSearchParams();   
             axios
                 .get('/query-data', {params: searchParams})
-                .then(response => (this.rows = response.data))
+                .then(response => (this.result = response.data))
         },
         submit: function (submitEvent) {
         	submitEvent.preventDefault();

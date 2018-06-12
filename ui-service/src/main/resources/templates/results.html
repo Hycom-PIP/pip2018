@@ -34,7 +34,7 @@
                 <a :href="result.url" class="list-group-item">
                     <h4 class="list-group-item-heading">{{result.header}}</h4>
                     <p class="list-group-item-text">{{result.additionalData.snippet}}</p>
-                    <span class="badge">{{result.timestamp}}</span>
+                    <span class="badge" v-if="result.timestamp !== null">{{result.timestamp}}</span>
                 </a>
             </div>
 	        
